@@ -12,7 +12,6 @@
 </h:head>
 
 <h:body>
-
 	<header class="page-header">
 		<div class="header-center">
 			<h:graphicImage library="imagens" name="SoftenSistemas.png"
@@ -21,12 +20,16 @@
 	</header>
 
 	<f:metadata>
-		<f:viewParam name="parametro" value="#{bean.pessoa.nome}" />
+		<f:viewParam name="nome" value="#{bean.pessoa.nome}" />
+		<f:viewParam name="email" value="#{bean.pessoa.email}" />
 	</f:metadata>
 
-	<h1>Sucesso!</h1>
+	<h1>Dados cadastrais:</h1>
+	<h2>Nome do cadastro: #{bean.pessoa.nome}</h2>
+	<h2>CPF cadastrado: #{bean.pessoa.documento}</h2>
+	<h2>Email cadastrado: #{bean.pessoa.email}</h2>
 	<!-- para mostrar o valor na página que veio de um parametro da outra página!! -->
-		<p:button value="Voltar para página Cadastro Pessoa" outcome="/CadastroPessoa.xhtml"/>
-
+	<p:button value="Voltar para página Cadastro Pessoa"
+		outcome="/CadastroPessoa.xhtml" />
 </h:body>
 </html>

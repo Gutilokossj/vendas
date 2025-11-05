@@ -1,0 +1,44 @@
+@charset "utf-8";
+
+body {
+	font-size: 12px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 20px;
+}
+
+h1 {
+	font-size: 25px;
+	font-weight: 450;
+	color: #3b4d64 !important;
+	margin-bottom: 15px;
+}
+
+
+/* ======== HEADER ======== */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #f7f7f7;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 30px; /* 🔥 Espaço abaixo do header */
+}
+
+/* Garante que imagens do header fiquem alinhadas */
+.header-left img, .header-right img {
+    vertical-align: middle;
+}
+
+/* ======== CONTEÚDO ======== */
+.page-content {
+    padding: 20px 40px;
+}
+
+.ui-panelgrid td {
+    border: 1px solid #e0e0e0;
+    padding: 8px 12px;
+}
+.ui-panelgrid label, .ui-panelgrid .ui-outputlabel {
+    font-weight: bold;
+}

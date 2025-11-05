@@ -6,32 +6,62 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<h:outputStylesheet library="css" name="file.css" />
+	<!-- Obrigatório libray e name, com nome da pasta e nome do arquivo -->
+
+	<title>Insert title here</title>
 </h:head>
 <h:body>
+	<header class="page-header">
+		<div class="header-center">
+			<h:graphicImage library="imagens" name="SoftenSistemas.png"
+				width="200" />
+		</div>
+	</header>
 
 	<h:form id="form">
-	
-	<h1>Informações de cadastro</h1>
-		<h:panelGrid columns="3">
-			<p:outputLabel value="Nome"/>
-			<p:inputText value="#{bean.pessoa.nome}"/> <!-- Aqui estamos chamando o bean pelo nome do @named, fazemos um get pessoa aqui da classe Pessoa-->
-			<p:outputLabel value="E-mail"/>
-			<p:inputText value="#{bean.pessoa.email}"/>
-			<p:outputLabel />
-			<p:commandButton value="Adicionar" action="#{bean.adicionar}" update="form tabelaPessoa"/> <!-- Fiz a chamada do método adicionar da classe PessoaMB -->
-		</h:panelGrid>
+
+		<h1>Informações de cadastro</h1>
+
+		<p:panel header="Cadastro de clientes">
+			<h:panelGrid columns="5" cellpadding="5">
+				<p:outputLabel value="Nome" />
+				<p:inputText value="#{bean.pessoa.nome}" size="40" />
+				<!-- Aqui estamos chamando o bean pelo nome do @named, fazemos um get pessoa aqui da classe Pessoa-->
+				<p:outputLabel value="CPF" />
+				<p:inputText value="#{bean.pessoa.documento}" size="40" />
+				<p:outputLabel value="E-mail" />
+				<p:inputText value="#{bean.pessoa.email}" size="40" />
+				<p:commandButton value="Adicionar" action="#{bean.adicionar}"
+					update="form tabelaPessoa" />
+				<!-- Fiz a chamada do método adicionar da classe PessoaMB -->
+			</h:panelGrid>
+		</p:panel>
 	</h:form>
-	
+
 	<h1>Lista de pessoas</h1>
-	
-	<p:dataTable value="#{bean.pessoas}" var="p" border="1" id="tabelaPessoa">
+
+	<p:dataTable value="#{bean.pessoas}" var="p" border="1"
+		id="tabelaPessoa">
 		<p:column headerText="Nome">#{p.nome}</p:column>
 		<p:column headerText="E-mail">#{p.email}</p:column>
-		<p:column headerText="Editar">
-			 <!-- Exemplo de direcionamento de páginas! fixo, sem parametros <h:button value="Editar" outcome="/paginas/Sucesso.xhtml"/> -->
-			 <p:button value="Editar" outcome="/paginas/Sucesso.xhtml?parametro=#{p.nome}"/>
+		<p:column headerText="CPF">#{p.documento}</p:column>
+		<p:column headerText="Editar" width="80">
+			<!-- Exemplo de direcionamento de páginas! fixo, sem parametros <h:button value="Editar" outcome="/paginas/Sucesso.xhtml"/> -->
+			<p:button value="Editar" outcome="/paginas/Editar.xhtml">
+				<f:param name="nome" value="#{p.nome}" />
+				<f:param name="email" value="#{p.email}" />
+				<f:param name="documento" value="#{p.documento}"/>
+			</p:button>
+		</p:column>
+		<p:column headerText="Exclusão" width="80">
+			<p:commandButton value="Excluir" action="#{bean.deletar}"
+				process="@this" update="tabelaPessoa" icon="pi pi-trash">
+				<f:setPropertyActionListener value="#{p}" target="#{bean.pessoa}" />
+				<!-- Aqui o f:setPropertyActionListener envia a pessoa da linha (p) para o atributo bean.pessoa, antes de chamar deletar(). -->
+			</p:commandButton>
 		</p:column>
 	</p:dataTable>
 

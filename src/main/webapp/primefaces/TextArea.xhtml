@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet library="css" name="file.css" />
+	<title>Treinamento JSF e Primefaces</title>
+</h:head>
+
+<h:body>	
+	<header class="page-header">
+        <div class="header-center">
+            <h:graphicImage library="imagens" name="SoftenSistemas.png" width="200" />
+        </div>
+    </header>
+
+	<h:form id="form">
+		<h1>Area de texto</h1>
+
+
+		<p:inputTextarea rows="6" style="width: 50%" maxlength="10" placeholder="Descrição"
+			counter="saida" counterTemplate="{0} caracteres restantes(s)"/> <!--  Esse counter vai fazer referência ao ID do label que vai mostrar as informações de contagem caractere -->
+		
+		<br/>
+		
+		<p:outputLabel id="saida"/> <!-- Aqui é aonde o counter faz a refereência para sai os dados no outputlabel -->
+
+	</h:form>
+</h:body>
+</html>

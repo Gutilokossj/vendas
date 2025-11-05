@@ -10,6 +10,7 @@ public class Pessoa implements Serializable{
 	private Integer id;
 	private String nome;
 	private String email;
+	private String documento;
 	
 	
 	public Integer getId() {
@@ -31,6 +32,13 @@ public class Pessoa implements Serializable{
 		this.email = email;
 	}
 	
+	
+	public String getDocumento() {
+		return documento;
+	}
+	public void setDocumento(String documento) {
+		this.documento = documento;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -48,6 +56,4 @@ public class Pessoa implements Serializable{
 		return Objects.equals(id, other.id);
 	}
 	
-	
-
 }

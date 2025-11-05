@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.dominio.model.Pessoa;
@@ -16,20 +15,24 @@ public class PessoaMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Inject
-	private Pessoa pessoa;
-	
+	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> pessoas = new ArrayList<>();
+	private int contador = 0;
 	
-	public String adicionar() {
-		
+	public void adicionar() {
+		pessoa.setId(++contador);
 		pessoas.add(pessoa);
 		limpar();
-		return null;
+		//return "paginas/Sucesso";
+	}
+	
+	public void deletar() {
+		//System.out.println("Removendo: " + pessoa.getNome());
+		pessoas.remove(pessoa);
+		limpar();
 	}
 	
 	private void limpar() {
-		
 		pessoa = new Pessoa();
 	}
 
