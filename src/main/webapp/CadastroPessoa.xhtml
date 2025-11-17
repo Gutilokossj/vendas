@@ -24,17 +24,18 @@
 	<h:form id="form">
 
 		<h1>Informações de cadastro</h1>
-
-		<p:panel header="Cadastro de clientes">
+        <p:messages autoUpdate="true" showDetail="true" showSummary="false" />
+        <p:panel header="Cadastro de clientes">
 			<h:panelGrid columns="5" cellpadding="5">
 				<p:outputLabel value="Nome" />
-				<p:inputText value="#{bean.pessoa.nome}" size="40" />
+				<p:inputText id="nome" value="#{bean.pessoa.nome}" size="40" required="true" requiredMessage="Nome é obrigatório"/>
 				<!-- Aqui estamos chamando o bean pelo nome do @named, fazemos um get pessoa aqui da classe Pessoa-->
 				<p:outputLabel value="CPF" />
-				<p:inputText value="#{bean.pessoa.documento}" size="40" />
+				<p:inputMask id="documento" value="#{bean.pessoa.documento}" size="40" required="true"
+                             requiredMessage="Documento é obrigatório" mask="999.999.999-99"/>
 				<p:outputLabel value="E-mail" />
-				<p:inputText value="#{bean.pessoa.email}" size="40" />
-				<p:commandButton value="Adicionar" action="#{bean.adicionar}"
+				<p:inputText id="email" value="#{bean.pessoa.email}" size="40" required="true" requiredMessage="Email é obrigatório" />
+				<p:commandButton value="Adicionar" action="#{bean.adicionar}" process="@form"
 					update="form tabelaPessoa" />
 				<!-- Fiz a chamada do método adicionar da classe PessoaMB -->
 			</h:panelGrid>

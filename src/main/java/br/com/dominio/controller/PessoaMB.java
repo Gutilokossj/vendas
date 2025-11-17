@@ -21,13 +21,13 @@ public class PessoaMB implements Serializable {
 	
 	public void adicionar() {
 		pessoa.setId(++contador);
+        String cpfFormatado = pessoa.getDocumento().replaceAll("\\D", "");
+        pessoa.setDocumento(cpfFormatado);
 		pessoas.add(pessoa);
 		limpar();
-		//return "paginas/Sucesso";
 	}
 	
 	public void deletar() {
-		//System.out.println("Removendo: " + pessoa.getNome());
 		pessoas.remove(pessoa);
 		limpar();
 	}
