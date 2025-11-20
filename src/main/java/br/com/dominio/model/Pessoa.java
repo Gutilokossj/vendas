@@ -1,17 +1,25 @@
 package br.com.dominio.model;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Objects;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 public class Pessoa implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	
+	@NotBlank(message = "Nome é obrigatório")
 	private String nome;
+	
+	@NotBlank(message = "Email é obrigatório")
+	@Email(message = "Email inválido")
 	private String email;
+	
+	@NotBlank(message = "Documento é obrigatório")
 	private String documento;
 	
 	
@@ -26,10 +34,6 @@ public class Pessoa implements Serializable{
 		return nome;
 	}
 	public void setNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()){
-            new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", "Nome é um campo obrigatório");
-                    return;
-        }
 		this.nome = nome;
 	}
 
@@ -37,10 +41,6 @@ public class Pessoa implements Serializable{
 		return email;
 	}
 	public void setEmail(String email) {
-        if (email == null || email.trim().isEmpty()) {
-            new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", "Email é um campo obrigatório");
-            return;
-        }
 		this.email = email;
 	}
 
@@ -48,10 +48,6 @@ public class Pessoa implements Serializable{
 		return documento;
 	}
 	public void setDocumento(String documento) {
-        if (documento == null || documento.trim().isEmpty()){
-            new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro", "Documento é um campo obrigatório");
-            return;
-        }
 		this.documento = documento;
 	}
 

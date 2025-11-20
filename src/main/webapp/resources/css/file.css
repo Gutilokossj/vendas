@@ -1,21 +1,19 @@
 @charset "utf-8";
 
+/* ======== BASE ======== */
 body {
-	font-size: 12px;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	margin: 20px;
+    font-size: 12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 20px;
 }
 
 h1 {
-	font-size: 25px;
-	font-weight: 450;
-	color: #3b4d64 !im
-	portant;
-	margin-bottom: 15px;
+    font-size: 25px;
+    font-weight: 450;
+    color: #3b4d64 !important;
+    margin-bottom: 15px;
 }
 
-
-/* ======== HEADER ======== */
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -23,23 +21,77 @@ h1 {
     padding: 15px 30px;
     background-color: #f7f7f7;
     border-bottom: 2px solid #ddd;
-    margin-bottom: 30px; /* 🔥 Espaço abaixo do header */
+    margin-bottom: 30px;
 }
 
-/* Garante que imagens do header fiquem alinhadas */
-.header-left img, .header-right img {
+.header-left img,
+.header-right img {
     vertical-align: middle;
 }
 
-/* ======== CONTEÚDO ======== */
 .page-content {
     padding: 20px 40px;
 }
 
+/* PanelGrid do PrimeFaces */
 .ui-panelgrid td {
     border: 1px solid #e0e0e0;
     padding: 8px 12px;
 }
-.ui-panelgrid label, .ui-panelgrid .ui-outputlabel {
+
+.ui-panelgrid label,
+.ui-panelgrid .ui-outputlabel {
     font-weight: bold;
 }
+
+/* Grade principal (2 colunas responsivas) */
+.doc-grid {
+    width: 100%;
+    margin-top: 20px;
+    column-gap: 30px;
+    row-gap: 30px;
+}
+
+/* Deixa responsivo: 2 colunas → 1 coluna no mobile */
+@media (max-width: 900px) {
+    .doc-grid {
+        display: flex !important;
+        flex-direction: column;
+    }
+}
+
+/* Cada card da documentação */
+.doc-card {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f8f9fb;
+    border: 1px solid #dce1e8;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaçamento entre botões */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* sombra leve */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efeito hover elegante */
+.doc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+/* Título dos cards */
+.doc-card h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 5px;
+    border-left: 4px solid #3b82f6;
+    padding-left: 10px;
+}
+
+/* Ajuste de botões */
+.doc-card .ui-button {
+    width: 100%;
+    text-align: left;
+}
+

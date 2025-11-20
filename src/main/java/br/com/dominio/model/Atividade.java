@@ -8,7 +8,7 @@ public class Atividade implements Serializable{
 	
 	private long id;
 	private String nome;
-	//private TipoAtivdade tipoAtividade;
+	private TipoAtividade tipoAtividade;
 	
 	
 	public long getId() {
@@ -24,12 +24,12 @@ public class Atividade implements Serializable{
 		this.nome = nome;
 	}
 	
-//	public TipoAtivdade getTipoAtividade() {
-//		return tipoAtividade;
-//	}
-//	public void setTipoAtividade(TipoAtivdade tipoAtividade) {
-//		this.tipoAtividade = tipoAtividade;
-//	}
-//	
+	public TipoAtividade getTipoAtividade() {
+		return tipoAtividade;
+	}
+	public void setTipoAtividade(TipoAtividade tipoAtividade) {
+		this.tipoAtividade = tipoAtividade;
+	}
+	
 		
 }

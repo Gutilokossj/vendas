@@ -19,21 +19,17 @@
 		</div>
 	</header>
 
-	<h1>Campos de entrada de texto</h1>
+	<h1>Mensagens de sucesso e erro, efetuar cadastro, teste</h1>
 
-	<p:messages autoUpdate="true" id="msg" /> <!-- essa mensagem que aparece quando da alguma atualização na página erro/validação -->
-	
-	<h:form>
-	
-		<p:panelGrid columns="1">
-			<p:outputLabel value="Nome" for="nome"/>
-			
-			<p:inputText id="nome" required="true" requiredMessage="O nome é obrigatório!"
-			maxlength="10" size="30" placeholder="Insira o nome aqui" 
-			title="O mouse está sobre o componente" disabled="false" value="#{bean.pessoa.nome}"/>  <!-- O required vai fazer a validação pra ele obrigar o preenchimento, vários exemplos de componente do primefaces aqui-->
-		</p:panelGrid>
-		
+	<p:messages id="mensagemTeste" autoUpdate="true" closable="true" />
+	<!-- Mensagem que vai aparecer -->
+
+	<h:form id="form">
+		<p:commandButton value="Mensagem Padrão - Aviso" action="#{msg.salvar}"
+			update="mensagemTeste" />
+		<p:commandButton value="Mensagem Erro" action="#{msg.erro}"
+			update="mensagemTeste" />
 	</h:form>
-	
+
 </h:body>
 </html>

@@ -1,34 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <h:outputStylesheet library="css" name="file.css" />
-    <!-- Obrigatório libray e name, com nome da pasta e nome do arquivo -->
+	<h:outputStylesheet library="css" name="file.css" />
+	<!-- Obrigatório libray e name, com nome da pasta e nome do arquivo -->
 
-    <title>Página inicial</title>
+	<title>Página inicial</title>
 </h:head>
 <h:body>
-    <header class="page-header">
-        <div class="header-center">
-            <h:graphicImage library="imagens" name="SoftenSistemas.png"
-                            width="200" />
-        </div>
-    </header>
+	<header class="page-header">
+		<div class="header-center">
+			<h:graphicImage library="imagens" name="SoftenSistemas.png"
+				width="200" />
+		</div>
+	</header>
 
-    <h:form id="form">
+	<h:form id="form">
 
-        <h1>Seja bem vindo a vendinha da esquina! 👽</h1>
-        <div class="cardInicial">
-            <p:linkButton outcome="CadastroPessoa.xhtml" value="Cadastrar Cliente" style="margin-right:20px"/>
-            <p:linkButton outcome="CadastroPessoa.xhtml" value="Cadastrar Produto (futuramente)" style="margin-right:20px"/>
-        </div>
-    </h:form>
+		<p:panel header="Documentação Geral - Teste JSF + Primefaces" styleClass="doc-card">
+
+			<!-- Grade principal com 2 colunas -->
+			<h:panelGrid columns="2" columnClasses="col-esquerda, col-direita"
+				styleClass="doc-main-grid">
+
+				<!-- COLUNA 1 – Cadastro Testes -->
+				<h:panelGrid columns="1" styleClass="doc-section">
+					<h2>Cadastro Testes</h2>
+
+					<p:button outcome="CadastroPessoa.xhtml"
+						value="Cadastrar Cliente - Lista" />
+					<p:button outcome="Cadastro.xhtml" value="Editar" />
+				</h:panelGrid>
+
+				<!-- COLUNA 2 – Testes Primefaces (agrupados em 2 colunas internas) -->
+				<h:panelGrid columns="1" styleClass="doc-section">
+					<h2>Testes Primefaces - Componentes</h2>
+
+					<!-- SUB-GRID interno com 2 colunas para os botões -->
+					<h:panelGrid columns="2" styleClass="doc-sub-grid"
+						columnClasses="col1,col2">
+
+						<p:button outcome="primefaces/Botoes.xhtml" value="Botões" />
+						<p:button outcome="primefaces/EntradaTexto.xhtml"
+							value="EntradaTexto" />
+
+						<p:button outcome="primefaces/LayoutUnit.xhtml" value="LayoutUnit" />
+						<p:button outcome="primefaces/Messages.xhtml" value="Messages" />
+
+						<p:button outcome="primefaces/Password.xhtml" value="Password" />
+						<p:button outcome="primefaces/SelectManyCheckbox.xhtml"
+							value="SelectManyCheckbox" />
+
+						<p:button outcome="primefaces/SelectOneMenu.xhtml"
+							value="SelectOneMenu" />
+						<p:button outcome="primefaces/SelectOneRadio.xhtml"
+							value="SelectOneRadio" />
+
+						<p:button outcome="primefaces/TextArea.xhtml" value="TextArea" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:panel>
+
+
+	</h:form>
 
 </h:body>
 </html>

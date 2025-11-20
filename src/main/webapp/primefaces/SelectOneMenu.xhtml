@@ -22,24 +22,29 @@
 	<h1>SelectOne menu estudos! primefaces!</h1>
 
 	<h:form id="form">
-		<p:panelGrid columns="2" cellpadding="5" style="margin:20px auto; border-collapse: collapse;"
-                 styleClass="ui-panelgrid ui-widget">
 
-			<h:outputText value="Evento" />
-			<p:selectOneMenu value="#{atividadeMB.atividade.nome}" style="width:100%">
-				<f:selectItem itemLabel="Semana de Administração" itemValue="evento 1" />
-				<f:selectItem itemLabel="Semana do meio ambiente" itemValue="evento 2" />
-				<f:selectItem itemLabel="Workshop de programação" itemValue="evento 3" />
+		<p:panelGrid columns="1"
+			style="margin:20px auto; border-collapse: collapse;"
+			styleClass="ui-panelgrid ui-widget">
+
+			<h:outputText value="Selecionar Evento:" />
+			<p:selectOneMenu value="#{atividadeMB.atividade.tipoAtividade}"
+				style="width:30%">
+				<f:selectItems value="#{atividadeMB.tiposAtividades}" var="a"
+					itemValue="#{a}" itemLabel="#{a.descricao}" />
 			</p:selectOneMenu>
 
-			<p:commandButton value="Enviar" process="@form" update="label" icon="pi pi-check" />
+			<p:commandButton value="Enviar" process="@form" update="label"
+				icon="pi pi-check" />
 			<!-- process="@form" → diz ao PrimeFaces “pegue todos os valores dentro do form” (como o valor do combo) e mande pro bean.
 
 update="label" → depois que o bean foi atualizado, renderiza novamente apenas o componente com id label.
 
 id="label" → é o alvo da atualização Ajax. -->
 
-			<h:outputText id="label" value="#{atividadeMB.atividade.nome}" style="font-weight:bold; color:#007ad9;" />
+			<h:outputText id="label"
+				value="#{atividadeMB.atividade.tipoAtividade.descricao}"
+				style="font-weight:bold; color:#007ad9;" />
 			<!-- update vai atualizar o outputlabel com os valores que guardamos na variável nome do objeto atividade 
 			e o id que identifica pra sabermos aonde jogar. -->
 			<!-- Usei update="form:label" (com form: antes do id), porque o id="label" está dentro do form, 
