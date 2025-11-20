@@ -23,7 +23,8 @@
 
 	<h:form id="form">
 
-		<p:panel header="Documentação Geral - Teste JSF + Primefaces" styleClass="doc-card">
+		<p:panel header="Documentação Geral - Teste JSF + Primefaces"
+			styleClass="doc-card">
 
 			<!-- Grade principal com 2 colunas -->
 			<h:panelGrid columns="2" columnClasses="col-esquerda, col-direita"
@@ -35,7 +36,7 @@
 
 					<p:button outcome="CadastroPessoa.xhtml"
 						value="Cadastrar Cliente - Lista" />
-					<p:button outcome="Cadastro.xhtml" value="Editar" />
+					<p:button outcome="Cadastro.xhtml" value="Cadastro Cliente (antigo)" />
 				</h:panelGrid>
 
 				<!-- COLUNA 2 – Testes Primefaces (agrupados em 2 colunas internas) -->
@@ -50,19 +51,28 @@
 						<p:button outcome="primefaces/EntradaTexto.xhtml"
 							value="EntradaTexto" />
 
-						<p:button outcome="primefaces/LayoutUnit.xhtml" value="LayoutUnit" />
 						<p:button outcome="primefaces/Messages.xhtml" value="Messages" />
+						<p:button outcome="primefaces/Messages2.xhtml"
+							value="Messages com Growl" />
 
 						<p:button outcome="primefaces/Password.xhtml" value="Password" />
-						<p:button outcome="primefaces/SelectManyCheckbox.xhtml"
-							value="SelectManyCheckbox" />
+
 
 						<p:button outcome="primefaces/SelectOneMenu.xhtml"
 							value="SelectOneMenu" />
+						<p:button outcome="primefaces/LayoutUnit.xhtml" value="LayoutUnit" />
+						<p:button outcome="primefaces/SelectManyCheckbox.xhtml"
+							value="SelectManyCheckbox" />
+
+						<p:button outcome="primefaces/TextArea.xhtml" value="TextArea" />
 						<p:button outcome="primefaces/SelectOneRadio.xhtml"
 							value="SelectOneRadio" />
 
-						<p:button outcome="primefaces/TextArea.xhtml" value="TextArea" />
+						<p:button outcome="primefaces/Grid.xhtml" value="Grid" />
+						<p:button outcome="primefaces/Tab.xhtml" value="TabView" />
+						
+						<p:button outcome="primefaces/Confirmation.xhtml" value="Confirmation" />
+						<p:button outcome="primefaces/Composition.xhtml" value="Composition" />
 					</h:panelGrid>
 
 				</h:panelGrid>

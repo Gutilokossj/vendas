@@ -21,15 +21,14 @@
 
 	<h1>Mensagens de sucesso e erro, efetuar cadastro, teste</h1>
 
-	<p:messages id="mensagemTeste" autoUpdate="true" closable="true" />
+	<p:growl id="mensagemTeste" autoUpdate="true" closable="true" life="2000" />
 	<!-- Mensagem que vai aparecer -->
-
+	
 	<h:form id="form" style="display:flex; gap:10px; alling-items:center;">
 		<p:commandButton value="Mensagem Padrão - Aviso" action="#{msg.salvar}"
-			update="mensagemTeste" />
+			update="mensagemTeste"/>
 		<p:commandButton value="Mensagem Erro" action="#{msg.erro}"
 			update="mensagemTeste" />
 	</h:form>
-
 </h:body>
 </html>

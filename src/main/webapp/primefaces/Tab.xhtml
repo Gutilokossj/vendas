@@ -19,17 +19,27 @@
 		</div>
 	</header>
 
-	<h1>Mensagens de sucesso e erro, efetuar cadastro, teste</h1>
+	<h1>Guias com TabView- PrimeFaces</h1>
 
-	<p:messages id="mensagemTeste" autoUpdate="true" closable="true" />
-	<!-- Mensagem que vai aparecer -->
+	<h:form>
 
-	<h:form id="form" style="display:flex; gap:10px; alling-items:center;">
-		<p:commandButton value="Mensagem Padrão - Aviso" action="#{msg.salvar}"
-			update="mensagemTeste" />
-		<p:commandButton value="Mensagem Erro" action="#{msg.erro}"
-			update="mensagemTeste" />
+		<p:tabView>
+			<p:tab title="Formulário">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nome" />
+					<p:inputText size="45" />
+					<p:outputLabel value="E-mail" />
+					<p:inputText size="45" />
+					<p:outputLabel value="CPF" />
+					<p:inputMask mask="999.999.999-99" size="10" />
+				</h:panelGrid>
+			</p:tab>
+			<p:tab title="Logomarca">
+				<p:graphicImage library="imagens" name="Soften.png"></p:graphicImage>
+			</p:tab>
+		</p:tabView>
 	</h:form>
+
 
 </h:body>
 </html>
