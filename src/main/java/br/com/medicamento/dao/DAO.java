@@ -3,6 +3,7 @@ package br.com.medicamento.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -17,8 +18,10 @@ import br.com.medicamento.model.Base;
 public class DAO<T extends Base> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static EntityManager manager = ConnectionFactory.getEntityManager();
+
+    @Inject
+    private EntityManager manager;
+
 
 	public T buscarPorId(Class<T> clazz, Long id) {
 		return manager.find(clazz, id);

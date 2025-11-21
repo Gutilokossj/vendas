@@ -25,9 +25,8 @@ import br.com.medicamento.utility.NegocioException;
 public class MedicamentoService implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Inject
-	private DAO<Medicamento> dao;
+
+    private DAO<Medicamento> dao = new DAO<>();
 	
 	public void salvar(Medicamento m) throws NegocioException {
 		

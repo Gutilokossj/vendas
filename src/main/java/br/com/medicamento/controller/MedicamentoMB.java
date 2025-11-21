@@ -13,17 +13,15 @@ import br.com.medicamento.service.MedicamentoService;
 import br.com.medicamento.utility.Message;
 import br.com.medicamento.utility.NegocioException;
 
-@Named
+@Named("medicamentoMB")
 @ViewScoped
 public class MedicamentoMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
-	private Medicamento medicamento;
+	private Medicamento medicamento = new Medicamento();
 
-	@Inject
-	private MedicamentoService service;
+	private MedicamentoService service = new MedicamentoService();
 
 	private List<Medicamento> medicamentos;
 

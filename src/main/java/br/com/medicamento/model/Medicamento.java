@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 //Entity informa que nossa classe/modelo se tornará uma tabela no banco de dados!
@@ -42,7 +38,7 @@ public class Medicamento implements Serializable, Base{
 	//GeneratedValue funciona como autoIncrement do SQL, conforme inserimos registros ele atribui automático o valor do ID
 	//Column assim como table, serve definir o nome da coluna no banco de dados se quiser!
 	@Id
-	@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="codigo")
 	private Long id;
 	private String nome;
