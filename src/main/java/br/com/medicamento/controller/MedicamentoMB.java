@@ -19,18 +19,20 @@ public class MedicamentoMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Medicamento medicamento = new Medicamento();
-
-	private MedicamentoService service = new MedicamentoService();
+	private Medicamento medicamento;
 
 	private List<Medicamento> medicamentos;
 
-	@PostConstruct
+	@Inject
+	private MedicamentoService service;
+
 	// PostConstruct diz que o método vai ser construido, assim que a classe for
 	// criada
-	public void carregar() {
-		medicamentos = service.todosOsMedicamentos(); // Método lá do server pra buscar todos os medicamentos do banco
-	}
+    @PostConstruct
+    public void carregar() {
+        medicamento = new Medicamento();
+        medicamentos = service.todosOsMedicamentos();
+    }
 
 	public void adicionar() {
 		try {
@@ -38,7 +40,6 @@ public class MedicamentoMB implements Serializable {
 			medicamento = new Medicamento();
 			carregar(); // Recarrega a lista após inserir o item novo, o mesmo vale no método excluir
 						// ali
-
 			Message.info("Salvo com sucesso");
 		} catch (NegocioException e) {
 			Message.erro(e.getMessage()); // Pega mensagem do MedicamentoService, validado!
@@ -47,9 +48,9 @@ public class MedicamentoMB implements Serializable {
 
 	public void excluir() {
 		try {
+			String nome = medicamento.getNome();
 			service.remover(medicamento);
 			carregar();
-
 			Message.info(medicamento.getNome() + " Foi removido!!");
 		} catch (NegocioException e) {
 			Message.erro(e.getMessage());

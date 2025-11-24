@@ -10,7 +10,7 @@
         <h:form id="frm">
             <p:messages autoUpdate="true"/>
 
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="2" layout="grid">
 
                     <p:outputLabel value="Medicamento"/>
                     <p:inputText size="30" value="#{medicamentoMB.medicamento.nome}" required="true" label="Medicamento"/>
@@ -19,7 +19,7 @@
                     <p:inputText size="30" value="#{medicamentoMB.medicamento.apresentacao}" required="true" label="Apresentação"/>
 
                     <p:outputLabel value="Laboratório"/>
-                    <p:selectOneMenu value="#{medicamentoMB.medicamento.laboratorio}" required="yes" label="Laboratório">
+                    <p:selectOneMenu value="#{medicamentoMB.medicamento.laboratorio}" required="true" label="Laboratório">
                         <f:selectItem itemLabel="Selecione o laboratório" noSelectionOption="true"/>
                         <f:selectItem itemLabel="Bayer" itemValue="BAYER"/>
                         <f:selectItem itemLabel="Pratidonaduzzi" itemValue="PRATIDONADUZZI"/>
@@ -39,7 +39,7 @@
 
                     <p:outputLabel value="Preço"/>
                     <p:inputText size="4" value="#{medicamentoMB.medicamento.preco}" required="true" label="Preço">
-                        <f:convertNumber minFractionDigits="2" locale="pt_BR" minIntegerDigits="0"/> <!-- Aqui definimos o local da moeda, casa decimal no fraction e menor número no minInteger -->
+                        <f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" locale="pt_BR"/> <!-- Aqui definimos o local da moeda, casa decimal no fraction e menor número no minInteger -->
                     </p:inputText>
 
                     <p:outputLabel/>
@@ -71,10 +71,10 @@
                     </p:column>
 
                     <p:column headerText="" width="100">
-                        <p:commandButton icon="ui-icon-pencil" update="@form" process="@this"> <!-- ele vai atualizar o form por isso @form e para processar apenas o botão usamos @this -->
+                        <p:commandButton icon="pi pi-pencil" update="@form" process="@this"> <!-- ele vai atualizar o form por isso @form e para processar apenas o botão usamos @this -->
                             <f:setPropertyActionListener value="#{m}" target="#{medicamentoMB.medicamento}"/> <!--A informação que estiver na variável m, será jogada para o alvo, para o target, assim os campos de cadastro são alterados -->
                         </p:commandButton>
-                        <p:commandButton action="#{medicamentoMB.excluir}" icon="ui-icon-trash" update="tabela" process="@this"> <!--Quando estamos deletando, precisamos atualziar a tabela, por isso update = "tabela-->
+                        <p:commandButton action="#{medicamentoMB.excluir}" icon="pi pi-trash" update="tabela" process="@this"> <!--Quando estamos deletando, precisamos atualziar a tabela, por isso update = "tabela-->
                             <f:setPropertyActionListener value="#{m}" target="#{medicamentoMB.medicamento}"/>
                         </p:commandButton>
                     </p:column>

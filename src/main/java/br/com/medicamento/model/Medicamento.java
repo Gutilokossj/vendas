@@ -4,7 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 //Entity informa que nossa classe/modelo se tornará uma tabela no banco de dados!
@@ -41,10 +46,20 @@ public class Medicamento implements Serializable, Base{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="codigo")
 	private Long id;
+	
+	@Column(length = 120)
 	private String nome;
+	
+	@Column(length = 255)
 	private String apresentacao; //Se vai ser 30 comprimidos, tantos ML, etc
+	
+	@Column(length = 120)
 	private String laboratorio;
+	
+	@Column(length = 20)
 	private String registro;
+	
+	@Column(precision = 10, scale = 2) //precision = 10 → até 999.999.999,99 e scale = 2 → duas casas decimais.
 	private BigDecimal preco; //Representa o preço do medicamento
 	
 	public Long getId() {
