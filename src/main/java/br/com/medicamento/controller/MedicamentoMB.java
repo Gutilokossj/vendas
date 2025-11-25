@@ -20,6 +20,7 @@ public class MedicamentoMB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Medicamento medicamento;
+	private boolean editando;
 
 	private List<Medicamento> medicamentos;
 
@@ -36,8 +37,32 @@ public class MedicamentoMB implements Serializable {
 
 	public void adicionar() {
 		try {
+			
+			if (editando) {
+				atualizar();
+				return;
+			}
+			
+			 // --- NORMALIZAÇÃO (antes de validar, tirar os espaços do inico e fim)
+	        medicamento.setNome(medicamento.getNome().trim());
+	        medicamento.setApresentacao(medicamento.getApresentacao().trim());
+	        medicamento.setRegistro(medicamento.getRegistro().trim());
+			
+	        // VALIDAÇÃO: Registro MS duplicado
+	        boolean existeRegistro = medicamentos.stream()
+	            .anyMatch(m -> m.getRegistro().equals(medicamento.getRegistro())
+	            		&& m.getId() != medicamento.getId()); //Ignora o próprio item, existe o item na lista? Sim! mas ele tem o mesmo ID, então ignore, é o mesmo item!
+			
+			 // VALIDAÇÕES SIMPLES
+
+	        if (existeRegistro) {
+	            Message.erro("Já existe um medicamento cadastrado com este Registro MS.");
+	            return;
+	        }
+	        
 			service.salvar(medicamento);
 			medicamento = new Medicamento();
+			
 			carregar(); // Recarrega a lista após inserir o item novo, o mesmo vale no método excluir
 						// ali
 			Message.info("Salvo com sucesso");
@@ -51,8 +76,19 @@ public class MedicamentoMB implements Serializable {
 			String nome = medicamento.getNome();
 			service.remover(medicamento);
 			carregar();
-			Message.info(medicamento.getNome() + " Foi removido!!");
+			Message.warning("Item: " + nome + ", Foi removido!!");
 		} catch (NegocioException e) {
+			Message.erro(e.getMessage());
+		}
+	}
+	
+	public void atualizar() {
+		try {
+			service.salvar(medicamento);
+			carregar();
+			medicamento = new Medicamento();
+			Message.info("Atualizado com sucesso!");
+		} catch (Exception e) {
 			Message.erro(e.getMessage());
 		}
 	}
@@ -63,6 +99,14 @@ public class MedicamentoMB implements Serializable {
 
 	public void setMedicamento(Medicamento medicamento) {
 		this.medicamento = medicamento;
+	}
+	
+	public boolean isEditando() {
+		return editando;
+	}
+
+	public void setEditando(boolean editando) {
+		this.editando = editando;
 	}
 
 	public List<Medicamento> getMedicamentos() {

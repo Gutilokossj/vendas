@@ -14,13 +14,27 @@
 <h:body>
 	<header class="page-header">
 		<div class="header-center">
-			<h:graphicImage library="imagens" name="SoftenSistemas.png"
-				width="200" />
+			<h:outputLink value="#{request.contextPath}/Index.xhtml">
+				<h:graphicImage library="imagens" name="SoftenSistemas.png"
+					width="200" />
+			</h:outputLink>
 		</div>
 	</header>
-	
-	<ui:insert name="corpo"/>
-	
-	<footer> <h2>Rodapé da página =================================================== </h2></footer>
+
+	<ui:insert name="corpo" />
+
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		<p:commandButton value="Sim" type="button"
+			styleClass="ui-confirmdialog-yes ui-button-danger" icon="pi pi-check" />
+
+		<p:commandButton value="Não" type="button"
+			styleClass="ui-confirmdialog-no ui-button-secondary"
+			icon="pi pi-times" />
+	</p:confirmDialog>
+
+
+	<footer>
+		<h2>Desenvolvido por Gustavo Fernandes (Estudos 2025)</h2>
+	</footer>
 </h:body>
 </html>

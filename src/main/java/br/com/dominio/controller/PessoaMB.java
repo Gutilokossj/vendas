@@ -14,24 +14,39 @@ import br.com.dominio.model.Pessoa;
 public class PessoaMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> pessoas = new ArrayList<>();
 	private int contador = 0;
-	
+
 	public void adicionar() {
-		pessoa.setId(++contador);
-        String cpfFormatado = pessoa.getDocumento().replaceAll("\\D", "");
-        pessoa.setDocumento(cpfFormatado);
-		pessoas.add(pessoa);
-		limpar();
+		try {
+			String cpfFormatado = pessoa.getDocumento().replaceAll("[^0-9]", "");
+			
+			// VALIDAÇÃO: Se CPF do cliente já existe
+			boolean existeCPF = pessoas.stream().anyMatch(p -> p.getDocumento().equals(cpfFormatado));
+
+			if (existeCPF) {
+				MessagesMB.erro("Já existe uma pessoa cadastrada com este CPF.");
+				return;
+			}
+
+			pessoa.setId(++contador);
+			pessoa.setDocumento(cpfFormatado);
+			
+			pessoas.add(pessoa);
+			limpar();
+
+		} catch (Exception e) {
+			MessagesMB.erro("Erro ao adicionar pessoa.");
+		}
 	}
-	
+
 	public void deletar() {
 		pessoas.remove(pessoa);
 		limpar();
 	}
-	
+
 	private void limpar() {
 		pessoa = new Pessoa();
 	}
@@ -51,6 +66,5 @@ public class PessoaMB implements Serializable {
 	public void setPessoas(List<Pessoa> pessoas) {
 		this.pessoas = pessoas;
 	}
-	
 
 }

@@ -1,86 +1,137 @@
 <ui:composition template="/WEB-INF/template/MenuGenerico.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="corpo">
+	<ui:define name="corpo">
 
-        <h:form id="frm">
-            <p:messages autoUpdate="true"/>
+		<h:form id="frm">
+			<p:growl id="growl" showDetail="true" globalOnly="true" />
+			<p:panel header="Cadastro - Medicamentos">
+				<h:panelGrid columns="6" layout="grid" cellpadding="10"
+					styleClasse="gridForm">
 
-                <p:panelGrid columns="2" layout="grid">
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Medicamento" />
+						<p:inputText size="30" value="#{medicamentoMB.medicamento.nome}"
+							label="Medicamento" id="medicamentoNome" />
+						<p:message for="medicamentoNome" />
+					</h:panelGrid>
 
-                    <p:outputLabel value="Medicamento"/>
-                    <p:inputText size="30" value="#{medicamentoMB.medicamento.nome}" required="true" label="Medicamento"/>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Apresentação" />
+						<p:inputText size="30"
+							value="#{medicamentoMB.medicamento.apresentacao}"
+							label="Apresentação" id="apresentacao" />
+						<p:message for="apresentacao" />
+					</h:panelGrid>
 
-                    <p:outputLabel value="Apresentação"/>
-                    <p:inputText size="30" value="#{medicamentoMB.medicamento.apresentacao}" required="true" label="Apresentação"/>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Laboratório" />
+						<p:selectOneMenu value="#{medicamentoMB.medicamento.laboratorio}"
+							label="Laboratório" id="laboratorio">
+							<f:selectItem itemLabel="Selecione o laboratório"
+								noSelectionOption="true" />
+							<f:selectItem itemLabel="Bayer" itemValue="BAYER" />
+							<f:selectItem itemLabel="Pratidonaduzzi"
+								itemValue="PRATIDONADUZZI" />
+							<f:selectItem itemLabel="E-MS" itemValue="E-MS" />
+							<f:selectItem itemLabel="Legrand" itemValue="LEGRAND" />
+							<f:selectItem itemLabel="Eurofarma" itemValue="EUROFARMA" />
+							<f:selectItem itemLabel="Cimed" itemValue="CIMED" />
+							<f:selectItem itemLabel="Teuto" itemValue="TEUTO" />
+							<f:selectItem itemLabel="Neo Química" itemValue="NEO QUIMICA" />
+							<f:selectItem itemLabel="Actavis" itemValue="ACTAVIS" />
+							<f:selectItem itemLabel="Nova Química" itemValue="NOVA QUIMICA" />
+							<f:selectItem itemLabel="Biossintética" itemValue="BIOSSINTETICA" />
+						</p:selectOneMenu>
+						<p:message for="laboratorio" />
+					</h:panelGrid>
 
-                    <p:outputLabel value="Laboratório"/>
-                    <p:selectOneMenu value="#{medicamentoMB.medicamento.laboratorio}" required="true" label="Laboratório">
-                        <f:selectItem itemLabel="Selecione o laboratório" noSelectionOption="true"/>
-                        <f:selectItem itemLabel="Bayer" itemValue="BAYER"/>
-                        <f:selectItem itemLabel="Pratidonaduzzi" itemValue="PRATIDONADUZZI"/>
-                        <f:selectItem itemLabel="E-MS" itemValue="E-MS"/>
-                        <f:selectItem itemLabel="Legrand" itemValue="LEGRAND"/>
-                        <f:selectItem itemLabel="Eurofarma" itemValue="EUROFARMA"/>
-                        <f:selectItem itemLabel="Cimed" itemValue="CIMED"/>
-                        <f:selectItem itemLabel="Teuto" itemValue="TEUTO"/>
-                        <f:selectItem itemLabel="Neo Química" itemValue="NEO QUIMICA"/>
-                        <f:selectItem itemLabel="Actavis" itemValue="ACTAVIS"/>
-                        <f:selectItem itemLabel="Nova Química" itemValue="NOVA QUIMICA"/>
-                        <f:selectItem itemLabel="Biossintética" itemValue="BIOSSINTETICA"/>
-                    </p:selectOneMenu>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Registro MS" />
+						<p:inputMask mask="9.9999.9999.999-9" size="13"
+							value="#{medicamentoMB.medicamento.registro}" label="Registro MS"
+							id="registro" />
+						<p:message for="registro" />
+					</h:panelGrid>
 
-                    <p:outputLabel value="Registro MS"/>
-                    <p:inputMask mask="9.9999.9999.999-9" size="13" value="#{medicamentoMB.medicamento.registro}" required="true" label="Registro MS"/>
+					<h:panelGrid columns="1">
+						<p:outputLabel value="Preço" />
+						<p:inputText size="4" value="#{medicamentoMB.medicamento.preco}"
+							label="Preço" id="preco">
+							<f:convertNumber type="number" maxFractionDigits="2"
+								minFractionDigits="2" locale="pt_BR" />
+							<!-- Aqui definimos o local da moeda, casa decimal no fraction e menor número no minInteger -->
+						</p:inputText>
+						<p:message for="preco" />
+					</h:panelGrid>
 
-                    <p:outputLabel value="Preço"/>
-                    <p:inputText size="4" value="#{medicamentoMB.medicamento.preco}" required="true" label="Preço">
-                        <f:convertNumber type="number" maxFractionDigits="2" minFractionDigits="2" locale="pt_BR"/> <!-- Aqui definimos o local da moeda, casa decimal no fraction e menor número no minInteger -->
-                    </p:inputText>
+					<h:panelGrid columns="1">
+						<p:outputLabel />
+						<p:commandButton value="Cadastrar"
+							action="#{medicamentoMB.adicionar}" update="frm tabela"
+							style="margin-top: 10px" />
+						<!-- update frm para atualizar o formulário de cima ao adicionar, o ID da tabela será criado ao salvar -->
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:panel>
 
-                    <p:outputLabel/>
-                    <p:commandButton value="Cadastrar" action="#{medicamentoMB.adicionar}" update="frm tabela" style="margin-top: 10px"/> <!-- update frm para atualizar o formulário de cima ao adicionar, o ID da tabela será criado ao salvar -->
+			<p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
+				id="tabela" paginator="true" rows="4">
+				<!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
+				<p:column headerText="Medicamento">
+					<p:outputLabel value="#{m.nome}" />
+				</p:column>
 
-                </p:panelGrid>
+				<p:column headerText="Apresentação" width="200">
+					<p:outputLabel value="#{m.apresentacao}" />
+				</p:column>
 
-                <p:dataTable value="#{medicamentoMB.medicamentos}" var="m" id="tabela" paginator="true" rows="5"> <!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
-                    <p:column headerText="Medicamento">
-                        <p:outputLabel value="#{m.nome}"/>
-                    </p:column>
+				<p:column headerText="Laboratório" width="200">
+					<p:outputLabel value="#{m.laboratorio}" />
+				</p:column>
 
-                    <p:column headerText="Apresentação" width="200">
-                        <p:outputLabel value="#{m.apresentacao}"/>
-                    </p:column>
+				<p:column headerText="Registro MS" width="150">
+					<p:outputLabel value="#{m.registro}" />
+				</p:column>
 
-                    <p:column headerText="Laboratório" width="200">
-                        <p:outputLabel value="#{m.laboratorio}"/>
-                    </p:column>
+				<p:column headerText="Preço" width="100">
+					<p:outputLabel value="#{m.preco}">
+						<f:convertNumber type="currency" currencySymbol="R$" />
+					</p:outputLabel>
+				</p:column>
 
-                    <p:column headerText="Registro MS" width="150">
-                        <p:outputLabel value="#{m.registro}"/>
-                    </p:column>
+				<p:column headerText="" width="100">
+					<p:commandButton icon="pi pi-pencil" update="@form" process="@this">
+						<!-- ele vai atualizar o form por isso @form e para processar apenas o botão usamos @this -->
+						<f:setPropertyActionListener value="#{m}"
+							target="#{medicamentoMB.medicamento}" />
+						<f:setPropertyActionListener value="true"
+							target="#{medicamentoMB.editando}" />
+						<!--A informação que estiver na variável m, será jogada para o alvo, para o target, assim os campos de cadastro são alterados -->
+					</p:commandButton>
+					<p:commandButton action="#{medicamentoMB.excluir}"
+						styleClass="ui-button-danger mr-2" icon="pi pi-times"
+						update="frm tabela" process="@this">
+						<!--Quando estamos deletando, precisamos atualziar a tabela, por isso update = "tabela-->
+						<f:setPropertyActionListener value="#{m}"
+							target="#{medicamentoMB.medicamento}" />
 
-                    <p:column headerText="Preço" width="100">
-                        <p:outputLabel value="#{m.preco}">
-                            <f:convertNumber type="currency" currencySymbol="R$"/>
-                        </p:outputLabel>
-                    </p:column>
+						<p:confirm header="Confirmação de exclusão"
+							message="Tem certeza que deseja deletar este medicamento?"
+							icon="pi pi-info-circle" yesButtonLabel="Deletar!"
+							yesButtonClass="bg-red-600 text-white"
+							yesButtonIcon="pi pi-trash" noButtonLabel="Manter"
+							noButtonClass="bg-green-600 text-white"
+							noButtonIcon="pi pi-heart" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:messages autoUpdate="true" closable="true" globalOnly="true" />
+		</h:form>
 
-                    <p:column headerText="" width="100">
-                        <p:commandButton icon="pi pi-pencil" update="@form" process="@this"> <!-- ele vai atualizar o form por isso @form e para processar apenas o botão usamos @this -->
-                            <f:setPropertyActionListener value="#{m}" target="#{medicamentoMB.medicamento}"/> <!--A informação que estiver na variável m, será jogada para o alvo, para o target, assim os campos de cadastro são alterados -->
-                        </p:commandButton>
-                        <p:commandButton action="#{medicamentoMB.excluir}" icon="pi pi-trash" update="tabela" process="@this"> <!--Quando estamos deletando, precisamos atualziar a tabela, por isso update = "tabela-->
-                            <f:setPropertyActionListener value="#{m}" target="#{medicamentoMB.medicamento}"/>
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-
-        </h:form>
-
-    </ui:define>
+	</ui:define>
 </ui:composition>

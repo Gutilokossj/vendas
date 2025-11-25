@@ -1,123 +1,113 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/WEB-INF/template/MenuGenerico.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<h:outputStylesheet library="css" name="file.css" />
-	<title>Treinamento JSF e Primefaces</title>
-</h:head>
 
-<h:body>
-	<header class="page-header">
-		<div class="header-center">
-			<h:graphicImage library="imagens" name="SoftenSistemas.png"
-				width="200" />
-		</div>
-	</header>
+	<ui:define name="corpo">
 
-	<h1>Testes de GRID - PrimeFaces</h1>
+		<h1>Testes de GRID - PrimeFaces</h1>
 
-	<!-- CARD 1: PanelGrid antigo -->
-	<p:panel header="Modelo Antigo - PanelGrid" style="margin-bottom: 40px">
-		<h:form id="form1">
+		<!-- CARD 1: PanelGrid antigo -->
+		<p:panel header="Modelo Antigo - PanelGrid"
+			style="margin-bottom: 40px">
+			<h:form id="form1">
 
-			<p:panelGrid columns="2" layout="grid" styleClass="ui-fluid"
-				style="margin-top: 20px" columnClasses="ui-g-4, ui-g-8">
+				<p:panelGrid columns="2" layout="grid" styleClass="ui-fluid"
+					style="margin-top: 20px" columnClasses="ui-g-4, ui-g-8">
 
-				<p:outputLabel value="Campo 1" />
-				<p:inputText />
+					<p:outputLabel value="Campo 1" />
+					<p:inputText />
 
-				<p:outputLabel value="Campo 2" />
-				<p:inputText />
+					<p:outputLabel value="Campo 2" />
+					<p:inputText />
 
-				<p:outputLabel value="Campo 3" />
-				<p:inputText />
+					<p:outputLabel value="Campo 3" />
+					<p:inputText />
 
-				<p:outputLabel value="Campo 4" />
-				<p:inputText />
+					<p:outputLabel value="Campo 4" />
+					<p:inputText />
 
-				<p:outputLabel value="Campo 5" />
-				<p:inputText />
+					<p:outputLabel value="Campo 5" />
+					<p:inputText />
 
-				<p:outputLabel value="Campo 6" />
-				<p:inputText />
+					<p:outputLabel value="Campo 6" />
+					<p:inputText />
 
-			</p:panelGrid>
+				</p:panelGrid>
 
-		</h:form>
-	</p:panel>
+			</h:form>
+		</p:panel>
 
 
-	<!-- CARD 2: Grid moderno -->
-	<p:panel header="Modelo Moderno - p:row + p:column" style="margin-bottom: 40px">
-	    <h:form id="form2">
-	
-	        <!-- CAMPO 1 -->
-	        <p:row styleClass="ui-g" style="margin-top: 20px">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 1" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	        <!-- CAMPO 2 -->
-	        <p:row styleClass="ui-g">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 2" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	        <!-- CAMPO 3 -->
-	        <p:row styleClass="ui-g">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 3" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	        <!-- CAMPO 4 -->
-	        <p:row styleClass="ui-g">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 4" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	        <!-- CAMPO 5 -->
-	        <p:row styleClass="ui-g">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 5" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	        <!-- CAMPO 6 -->
-	        <p:row styleClass="ui-g">
-	            <p:column styleClass="ui-g-4">
-	                <p:outputLabel value="Campo 6" />
-	            </p:column>
-	            <p:column styleClass="ui-g-8">
-	                <p:inputText />
-	            </p:column>
-	        </p:row>
-	
-	    </h:form>
-	</p:panel>
+		<!-- CARD 2: Grid moderno -->
+		<p:panel header="Modelo Moderno - p:row + p:column"
+			style="margin-bottom: 40px">
+			<h:form id="form2">
 
-</h:body>
-</html>
+				<!-- CAMPO 1 -->
+				<p:row styleClass="ui-g" style="margin-top: 20px">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 1" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+				<!-- CAMPO 2 -->
+				<p:row styleClass="ui-g">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 2" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+				<!-- CAMPO 3 -->
+				<p:row styleClass="ui-g">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 3" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+				<!-- CAMPO 4 -->
+				<p:row styleClass="ui-g">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 4" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+				<!-- CAMPO 5 -->
+				<p:row styleClass="ui-g">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 5" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+				<!-- CAMPO 6 -->
+				<p:row styleClass="ui-g">
+					<p:column styleClass="ui-g-4">
+						<p:outputLabel value="Campo 6" />
+					</p:column>
+					<p:column styleClass="ui-g-8">
+						<p:inputText />
+					</p:column>
+				</p:row>
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>

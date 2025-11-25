@@ -10,6 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 //Entity informa que nossa classe/modelo se tornará uma tabela no banco de dados!
@@ -47,19 +51,26 @@ public class Medicamento implements Serializable, Base{
 	@Column(name="codigo")
 	private Long id;
 	
+	@NotBlank(message = "Medicamento é obrigatório, não pode ser nulo")
 	@Column(length = 120)
 	private String nome;
 	
+	@NotBlank(message = "Apresentação é obrigatório, não pode ser nulo")
 	@Column(length = 255)
 	private String apresentacao; //Se vai ser 30 comprimidos, tantos ML, etc
 	
+	@NotBlank(message = "Labotório é obrigatório")
 	@Column(length = 120)
 	private String laboratorio;
 	
+	@NotBlank(message = "Registro MS é obrigatório")
 	@Column(length = 20)
 	private String registro;
 	
-	@Column(precision = 10, scale = 2) //precision = 10 → até 999.999.999,99 e scale = 2 → duas casas decimais.
+	@NotNull(message = "Preço é obrigatório")
+	@DecimalMin(value = "0.00", inclusive = true, message = "O preço não pode ser negativo!")
+	@Digits(integer = 8, fraction = 2, message = "Preço máximo permitido é 99.999.999,99") //integer = 8 → permite no máximo 99.999.999, fraction = 2 → .99 total = 8 + 2 = 10 dígitos
+	@Column(precision = 10, scale = 2) //precision = 10 (contando 2 depois da vírgula ali) → até 99.999.999,99 e scale = 2 → duas casas decimais.
 	private BigDecimal preco; //Representa o preço do medicamento
 	
 	public Long getId() {
