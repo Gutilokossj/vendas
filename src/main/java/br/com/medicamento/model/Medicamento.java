@@ -68,8 +68,8 @@ public class Medicamento implements Serializable, Base{
 	private String registro;
 	
 	@NotNull(message = "Preço é obrigatório")
-	@DecimalMin(value = "0.00", inclusive = true, message = "O preço não pode ser negativo!")
-	@Digits(integer = 8, fraction = 2, message = "Preço máximo permitido é 99.999.999,99") //integer = 8 → permite no máximo 99.999.999, fraction = 2 → .99 total = 8 + 2 = 10 dígitos
+    @DecimalMin(value = "0.01", inclusive = true, message = "O preço mínimo permitido é 0,01!")
+	@Digits(integer = 8, fraction = 2, message = "O valor deve ter no máximo duas casas decimais!") //integer = 8 → permite no máximo 99.999.999, fraction = 2 → .99 total = 8 + 2 = 10 dígitos
 	@Column(precision = 10, scale = 2) //precision = 10 (contando 2 depois da vírgula ali) → até 99.999.999,99 e scale = 2 → duas casas decimais.
 	private BigDecimal preco; //Representa o preço do medicamento
 	
