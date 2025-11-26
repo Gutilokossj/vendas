@@ -95,3 +95,18 @@ h1 {
     text-align: left;
 }
 
+/* Deixa o campo com erro bem visível e sem quebrar layout */
+.ui-state-error {
+    border: 1px solid #e74c3c !important;
+    background-color: #fdeaea !important;
+}
+
+.ui-state-error input {
+    border: none !important;
+    background: transparent !important;
+}
+
+
+
+
+

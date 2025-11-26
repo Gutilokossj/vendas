@@ -1,56 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/WEB-INF/template/MenuGenerico.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<h:outputStylesheet library="css" name="file.css" />
-	<title>Treinamento JSF e Primefaces</title>
-</h:head>
 
-<h:body>
-	<header class="page-header">
-		<div class="header-center">
-			<h:graphicImage library="imagens" name="SoftenSistemas.png"
-				width="200" />
-		</div>
-	</header>
+	<ui:define name="corpo">
 
-	<h1>SelectOne menu estudos! primefaces!</h1>
+		<h1>SelectOne menu estudos! primefaces!</h1>
 
-	<h:form id="form">
+		<h:form id="form">
 
-		<p:panelGrid columns="1"
-			style="margin:20px auto; border-collapse: collapse;"
-			styleClass="ui-panelgrid ui-widget">
+			<p:panelGrid columns="1"
+				style="margin:20px auto; border-collapse: collapse;"
+				styleClass="ui-panelgrid ui-widget">
 
-			<h:outputText value="Selecionar Evento:" />
-			<p:selectOneMenu value="#{atividadeMB.atividade.tipoAtividade}"
-				style="width:30%">
-				<f:selectItems value="#{atividadeMB.tiposAtividades}" var="a"
-					itemValue="#{a}" itemLabel="#{a.descricao}" />
-			</p:selectOneMenu>
+				<h:outputText value="Selecionar Evento:" />
+				<p:selectOneMenu value="#{atividadeMB.atividade.tipoAtividade}"
+					style="width:30%">
+					<f:selectItems value="#{atividadeMB.tiposAtividades}" var="a"
+						itemValue="#{a}" itemLabel="#{a.descricao}" />
+				</p:selectOneMenu>
 
-			<p:commandButton value="Enviar" process="@form" update="label"
-				icon="pi pi-check" />
-			<!-- process="@form" → diz ao PrimeFaces “pegue todos os valores dentro do form” (como o valor do combo) e mande pro bean.
+				<p:commandButton value="Enviar" process="@form" update="label"
+					icon="pi pi-check" />
+				<!-- process="@form" → diz ao PrimeFaces “pegue todos os valores dentro do form” (como o valor do combo) e mande pro bean.
 
 update="label" → depois que o bean foi atualizado, renderiza novamente apenas o componente com id label.
 
 id="label" → é o alvo da atualização Ajax. -->
 
-			<h:outputText id="label"
-				value="#{atividadeMB.atividade.tipoAtividade.descricao}"
-				style="font-weight:bold; color:#007ad9;" />
-			<!-- update vai atualizar o outputlabel com os valores que guardamos na variável nome do objeto atividade 
+				<h:outputText id="label"
+					value="#{atividadeMB.atividade.tipoAtividade.descricao}"
+					style="font-weight:bold; color:#007ad9;" />
+				<!-- update vai atualizar o outputlabel com os valores que guardamos na variável nome do objeto atividade 
 			e o id que identifica pra sabermos aonde jogar. -->
-			<!-- Usei update="form:label" (com form: antes do id), porque o id="label" está dentro do form, 
+				<!-- Usei update="form:label" (com form: antes do id), porque o id="label" está dentro do form, 
 			e JSF exige o caminho completo em updates. -->
-		</p:panelGrid>
-	</h:form>
+			</p:panelGrid>
+		</h:form>
 
-</h:body>
-</html>
+	</ui:define>
+</ui:composition>

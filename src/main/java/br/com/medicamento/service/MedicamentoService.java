@@ -63,7 +63,7 @@ public class MedicamentoService implements Serializable {
     public List<Medicamento> todosOsMedicamentos() {
         return dao.buscarTodos(
             Medicamento.class,
-            "SELECT m FROM Medicamento m ORDER BY m.nome"
+            "SELECT m FROM Medicamento m ORDER BY m.id DESC" //Faz por ordem de ID descrecente, mais recente primeiro na lista
         );
     }
 	

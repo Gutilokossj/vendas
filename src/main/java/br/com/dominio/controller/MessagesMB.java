@@ -13,13 +13,14 @@ public class MessagesMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public void salvar() {
-		FacesMessage message = new FacesMessage("Mensagem de sucesso teste"); // Por padrão ele usa SERVERITY_WARN
+	public static void info(String text) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, text, null);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	public static void erro(String text) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, text, null);
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	public void erro() {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Mensagem de erro teste");
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
 }
