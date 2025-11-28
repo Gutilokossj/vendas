@@ -23,4 +23,12 @@ public class MessagesMB implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
+    public void salvar(){
+        info("Menagem de sucesso exibida!");
+    }
+
+    public void erro(){
+        erro("Mensagem de erro exibida!");
+    }
+
 }

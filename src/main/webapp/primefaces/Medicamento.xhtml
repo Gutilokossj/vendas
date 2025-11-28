@@ -19,7 +19,7 @@
 					<h:panelGrid columns="1" styleClass="field-group">
 						<p:outputLabel value="Medicamento" />
 						<p:inputText size="30" value="#{medicamentoMB.medicamento.nome}"
-							label="Medicamento" id="medicamentoNome" />
+							label="Medicamento" id="medicamentoNome" placeholder="Digite o medicamento" maxlength="30" />
 						<p:message for="medicamentoNome" styleClass="input-message" />
 					</h:panelGrid>
 
@@ -27,7 +27,7 @@
 						<p:outputLabel value="Apresentação" />
 						<p:inputText size="30"
 							value="#{medicamentoMB.medicamento.apresentacao}"
-							label="Apresentação" id="apresentacao" />
+							label="Apresentação" id="apresentacao" placeholder="Digite a apresentação" maxlength="20" />
 						<p:message for="apresentacao" styleClass="input-message" />
 					</h:panelGrid>
 
@@ -37,18 +37,10 @@
 							label="Laboratório" id="laboratorio">
 							<f:selectItem itemLabel="Selecione o laboratório"
 								noSelectionOption="true" />
-							<f:selectItem itemLabel="Bayer" itemValue="BAYER" />
-							<f:selectItem itemLabel="Pratidonaduzzi"
-								itemValue="PRATIDONADUZZI" />
-							<f:selectItem itemLabel="E-MS" itemValue="E-MS" />
-							<f:selectItem itemLabel="Legrand" itemValue="LEGRAND" />
-							<f:selectItem itemLabel="Eurofarma" itemValue="EUROFARMA" />
-							<f:selectItem itemLabel="Cimed" itemValue="CIMED" />
-							<f:selectItem itemLabel="Teuto" itemValue="TEUTO" />
-							<f:selectItem itemLabel="Neo Química" itemValue="NEO QUIMICA" />
-							<f:selectItem itemLabel="Actavis" itemValue="ACTAVIS" />
-							<f:selectItem itemLabel="Nova Química" itemValue="NOVA QUIMICA" />
-							<f:selectItem itemLabel="Biossintética" itemValue="BIOSSINTETICA" />
+                            <f:selectItems value="#{tipoLaboratorioBean.lista}"
+                                           var="lab"
+                                           itemLabel="#{lab.nomeLaboratorio}"
+                                           itemValue="#{lab}"/>
 						</p:selectOneMenu>
 						<p:message for="laboratorio" styleClass="input-message" />
 					</h:panelGrid>
@@ -83,7 +75,9 @@
 				<!-- update frm para atualizar o formulário de cima ao adicionar, o ID da tabela será criado ao salvar -->
 			</h:panelGrid>
 
-			<p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
+            <p:messages autoUpdate="true" closable="true" globalOnly="true" />
+
+            <p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
 				id="tabela" paginator="true" rows="4">
 				<!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
 				<p:column headerText="Medicamento">
@@ -134,7 +128,6 @@
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-			<p:messages autoUpdate="true" closable="true" globalOnly="true" />
 		</h:form>
 
 	</ui:define>

@@ -48,7 +48,6 @@ public class MedicamentoMB implements Serializable {
 			medicamento.setApresentacao(medicamento.getApresentacao().trim());
 			medicamento.setRegistro(medicamento.getRegistro().trim());
 
-			// VALIDAÇÃO: Registro MS duplicado
 			// Validação de duplicidade
 			if (registroDuplicado(medicamento)) {
 				Message.erro("Já existe um medicamento cadastrado com este Registro MS.");

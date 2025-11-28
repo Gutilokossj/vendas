@@ -4,12 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 
@@ -56,18 +51,18 @@ public class Medicamento implements Serializable, Base{
 	@Column(length = 255)
 	private String apresentacao; //Se vai ser 30 comprimidos, tantos ML, etc
 	
-	@NotBlank(message = "Labotório é obrigatório")
+	@NotNull(message = "Labotório é obrigatório")
+    @Enumerated(EnumType.STRING)
 	@Column(length = 120)
-	private String laboratorio;
+	private TipoLaboratorios laboratorio;
 	
 	@NotBlank(message = "Registro MS é obrigatório")
 	@Column(length = 20)
 	private String registro;
 	
 	@NotNull(message = "Preço é obrigatório")
-    @DecimalMin(value = "0.01", inclusive = true, message = "Informe um valor positivo acima de 0,01.")
-    @DecimalMax(value = "99999999.99", message = "O valor máximo permitido é 99.999.999,99.")
-    @Digits(integer = 8, fraction = 3, message = "Use apenas duas casas decimais (ex.: 10,50).") //integer = 8 → permite no máximo 99.999.999, fraction = 2 → .99 total = 8 + 2 = 10 dígitos
+    @DecimalMin(value = "0.01", inclusive = true, message = "Informe um valor positivo, acima de 0,01.")
+    @Digits(integer = 8, fraction = 2, message = "Use no máximo duas casas decimais (ex.: 10,50).") //integer = 8 → permite no máximo 99.999.999, fraction = 2 → .99 total = 8 + 2 = 10 dígitos
 	@Column(precision = 10, scale = 2) //precision = 10 (contando 2 depois da vírgula ali) → até 99.999.999,99 e scale = 2 → duas casas decimais.
 	private BigDecimal preco; //Representa o preço do medicamento
 	
@@ -89,13 +84,15 @@ public class Medicamento implements Serializable, Base{
 	public void setApresentacao(String apresentacao) {
 		this.apresentacao = apresentacao;
 	}
-	public String getLaboratorio() {
-		return laboratorio;
-	}
-	public void setLaboratorio(String laboratorio) {
-		this.laboratorio = laboratorio;
-	}
-	public String getRegistro() {
+
+    public TipoLaboratorios getLaboratorio() {
+        return laboratorio;
+    }
+    public void setLaboratorio(TipoLaboratorios laboratorio) {
+        this.laboratorio = laboratorio;
+    }
+
+    public String getRegistro() {
 		return registro;
 	}
 	public void setRegistro(String registro) {

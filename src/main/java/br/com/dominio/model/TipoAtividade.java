@@ -4,7 +4,7 @@ public enum TipoAtividade {
 	APRESENTACAO("Apresentação"), CURSO("Curso"), MINICURSO("MiniCurso"), PALESTRA("Palestra"), SEMINARIO("Seminário"), 
 	SIMPOSIO("Simpósio"), OUTRA("Outras");
 	
-	private String descricao;
+	private final String descricao;
 	
 	TipoAtividade(String descricao){
 		this.descricao = descricao;

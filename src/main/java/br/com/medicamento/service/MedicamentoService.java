@@ -1,6 +1,7 @@
 package br.com.medicamento.service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,6 +30,8 @@ public class MedicamentoService implements Serializable {
 	
 	@Inject
     private DAO<Medicamento> dao;
+
+    private static final BigDecimal PRECO_MAXIMO = new BigDecimal("10000");
 	
     @Transactional
     public void salvar(Medicamento m) throws NegocioException {
@@ -36,6 +39,29 @@ public class MedicamentoService implements Serializable {
         if (m.getNome() == null || m.getNome().length() < 3) {
             throw new NegocioException("O nome do medicamento deve ter pelo menos 3 caracteres.");
         }
+
+        if (m.getPreco().compareTo(PRECO_MAXIMO) > 0){
+            throw new NegocioException("O preço máximo permitido é 10.000,00");
+        }
+
+        /*
+
+        if (m.getPreco() > PRECO_MAXIMO) // não compila, só funcionaria com tipos primitivosComo BigDecimal é um objeto, só da pra comprar usando métodos, como comparteTo
+        Como preco é BigDecimal, você não usa >, e sim compareTo.
+       compareTo() retorna:
+            0 → igual
+            > 0 → maior
+            < 0 → menor
+        Então compareTo(new BigDecimal("10000")) > 0 significa:
+        “O preço é maior que 10.000?”
+
+        Pense assim:
+
+            compareTo() devolve um “sinal”:
+            negativo → menor
+            zero → igual
+            positivo → maior
+         */
 
         dao.salvar(m);
     }
