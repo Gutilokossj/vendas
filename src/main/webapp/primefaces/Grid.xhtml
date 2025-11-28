@@ -41,73 +41,51 @@
 		</p:panel>
 
 
-		<!-- CARD 2: Grid moderno -->
-		<p:panel header="Modelo Moderno - p:row + p:column"
-			style="margin-bottom: 40px">
-			<h:form id="form2">
+		<p:panel header="Modelo Moderno - PrimeFlex (recomendado)"
+			style="margin-bottom:40px">
+			<h:form id="form3" class="p-fluid">
 
-				<!-- CAMPO 1 -->
-				<p:row styleClass="ui-g" style="margin-top: 20px">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 1" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+				<div class="grid">
+					<!-- Campo 1 (ocupa metade em md+) -->
+					<div class="col-12 md:col-4">
+						<p:outputLabel for="campo1" value="Campo 1" />
+						<p:inputText id="campo1" style="width:100%" />
+					</div>
 
-				<!-- CAMPO 2 -->
-				<p:row styleClass="ui-g">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 2" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+					<!-- Campo 2 -->
+					<div class="col-12 md:col-4">
+						<p:outputLabel for="campo2" value="Campo 2" />
+						<p:inputText id="campo2" style="width:100%" />
+					</div>
 
-				<!-- CAMPO 3 -->
-				<p:row styleClass="ui-g">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 3" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+					<!-- Campo 3 -->
+					<div class="col-12 md:col-4">
+						<p:outputLabel for="campo3" value="Campo 3" />
+						<p:inputText id="campo3" style="width:100%" />
+					</div>
 
-				<!-- CAMPO 4 -->
-				<p:row styleClass="ui-g">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 4" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+					<!-- Campo 4 -->
+					<div class="col-12 md:col-6">
+						<p:outputLabel for="campo4" value="Campo 4" />
+						<p:inputText id="campo4" style="width:100%" />
+					</div>
 
-				<!-- CAMPO 5 -->
-				<p:row styleClass="ui-g">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 5" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+					<!-- Campo 5 -->
+					<div class="col-12 md:col-6">
+						<p:outputLabel for="campo5" value="Campo 5" />
+						<p:inputText id="campo5" style="width:100%" />
+					</div>
 
-				<!-- CAMPO 6 -->
-				<p:row styleClass="ui-g">
-					<p:column styleClass="ui-g-4">
-						<p:outputLabel value="Campo 6" />
-					</p:column>
-					<p:column styleClass="ui-g-8">
-						<p:inputText />
-					</p:column>
-				</p:row>
+					<!-- Campo 6 -->
+					<div class="col-12 md:col-6">
+						<p:outputLabel for="campo6" value="Campo 6" />
+						<p:inputText id="campo6" style="width:100%" />
+					</div>
+				</div>
 
 			</h:form>
 		</p:panel>
+
 
 	</ui:define>
 </ui:composition>

@@ -1,75 +1,62 @@
 <ui:composition template="/WEB-INF/template/MenuGenerico.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="corpo">
+	<ui:define name="corpo">
 
-        <h:form id="frmCadastro" class="p-fluid">
+		<h:form id="frmCadastro" class="p-fluid">
 
-            <p:messages />
+			<p:messages />
 
-            <p:card header="Cadastro de Produto">
+			<p:card header="Cadastro de Usuário">
 
-                <!-- BLOCO 1 — Tipo / Data / Status -->
-                <div class="grid mb-3">
+				<h5>Formulário (Exemplo seguindo a documentação)</h5>
 
-                    <div class="col-12 col-md-4 mb-3">
-                        <p:outputLabel value="Tipo" />
-                        <p:selectOneButton value="">
-                            <f:selectItem itemLabel="Produto" itemValue="P" />
-                            <f:selectItem itemLabel="Serviço" itemValue="S" />
-                        </p:selectOneButton>
-                    </div>
+				<p:panelGrid columns="4" layout="flex"
+					contentStyleClass="align-items-baseline ui-fluid"
+					columnClasses="
+                        col-12 md:col-3 xl:col-2,
+                        col-12 md:col-9 xl:col-4,
+                        col-12 md:col-3 xl:col-2,
+                        col-12 md:col-9 xl:col-4">
 
-                    <div class="col-12 col-md-4 mb-3">
-                        <p:outputLabel value="Data Cadastro" for="data" />
-                        <p:datePicker id="data" value="" disabled="false"/>
-                    </div>
+					<!-- Linha 1: Nome (coluna 1) e Telefone (coluna 2) -->
 
-                    <div class="col-12 col-md-4 mb-3">
-                        <p:outputLabel value="Status" />
-                        <p:toggleSwitch value="" onLabel="Ativo" offLabel="Inativo" />
-                    </div>
+					<p:outputLabel for="nome" value="Nome" />
+					<p:inputText id="nome" />
 
-                </div>
+					<p:outputLabel for="telefone" value="Telefone" />
+					<p:inputText id="telefone" />
 
-                <p:divider />
+					<!-- Linha 2: CPF (coluna 1) e Botão cadastrar (coluna 2) -->
 
-                <!-- BLOCO 2 — GTIN / Nome / SKU -->
-                <div class="grid">
+					<p:outputLabel for="cpf" value="CPF" />
+					<p:inputText id="cpf" />
 
-                    <div class="col-12 col-md-3 mb-3">
-                        <p:outputLabel for="gtin" value="Cód. Barras" />
-                        <div class="flex gap-2">
-                            <p:inputText id="gtin" value="" style="flex:1" />
-                            <p:commandButton icon="pi pi-search" />
-                        </div>
-                    </div>
 
-                    <div class="col-12 col-md-6 mb-3">
-                        <p:outputLabel for="nome" value="Nome*" />
-                        <p:inputText id="nome" required="true" value="" />
-                    </div>
+					<!-- Linha 3: Email (coluna 1) e célula vazia à direita -->
 
-                    <div class="col-12 col-md-3 mb-3">
-                        <p:outputLabel for="sku" value="SKU" />
-                        <p:inputText id="sku" value="" />
-                    </div>
+					<p:outputLabel for="email" value="Email" />
+					<p:inputText id="email" />
 
-                </div>
+					<!-- Botão ocupa o campo de input da coluna 2 -->
+					<div class="mt-4">
+						<p:commandButton value="Cadastrar" icon="pi pi-check"
+							styleClass="p-button-success" />
+					</div>
 
-            </p:card>
+					<!-- campo vazio para manter alinhamento -->
+					<div></div>
+					<div></div>
 
-            <!-- BOTÕES -->
-            <div class="mt-4 flex justify-content-end gap-2">
-                <p:commandButton value="Salvar" icon="pi pi-save" styleClass="p-button-success" />
-                <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary" />
-            </div>
+				</p:panelGrid>
 
-        </h:form>
+			</p:card>
 
-    </ui:define>
+		</h:form>
+
+	</ui:define>
 </ui:composition>
