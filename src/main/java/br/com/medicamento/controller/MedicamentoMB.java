@@ -2,8 +2,10 @@ package br.com.medicamento.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,6 +14,7 @@ import br.com.medicamento.model.Medicamento;
 import br.com.medicamento.service.MedicamentoService;
 import br.com.medicamento.utility.Message;
 import br.com.medicamento.utility.NegocioException;
+import org.primefaces.event.RowEditEvent;
 
 @Named("medicamentoMB")
 @ViewScoped
@@ -37,26 +40,8 @@ public class MedicamentoMB implements Serializable {
 
 	public void adicionar() {
 		try {
-
-			if (editando) {
-				atualizar();
-				return;
-			}
-
-			// --- NORMALIZAÇÃO (antes de validar, tirar os espaços do inico e fim)
-			medicamento.setNome(medicamento.getNome().trim());
-			medicamento.setApresentacao(medicamento.getApresentacao().trim());
-			medicamento.setRegistro(medicamento.getRegistro().trim());
-
-			// Validação de duplicidade
-			if (registroDuplicado(medicamento)) {
-				Message.erro("Já existe um medicamento cadastrado com este Registro MS.");
-				return;
-			}
-
 			service.salvar(medicamento);
 			medicamento = new Medicamento();
-
 			carregar(); // Recarrega a lista após inserir o item novo, o mesmo vale no método excluir
 						// ali
 			Message.info("Salvo com sucesso");
@@ -78,16 +63,6 @@ public class MedicamentoMB implements Serializable {
 
 	public void atualizar() {
 		try {
-
-			medicamento.setNome(medicamento.getNome().trim());
-			medicamento.setApresentacao(medicamento.getApresentacao().trim());
-			medicamento.setRegistro(medicamento.getRegistro().trim());
-
-			if (registroDuplicado(medicamento)) {
-				Message.erro("Já existe outro medicamento usando este Registro MS.");
-				return;
-			}
-			
 			service.salvar(medicamento);
 			carregar();
 			medicamento = new Medicamento();
@@ -98,10 +73,19 @@ public class MedicamentoMB implements Serializable {
 		}
 	}
 
-	private boolean registroDuplicado(Medicamento med) {
-		return medicamentos.stream()
-				.anyMatch(m -> m.getRegistro().equals(med.getRegistro()) && m.getId() != med.getId());
-	}
+    public void onRowEdit(RowEditEvent<Medicamento> event){
+        Medicamento med = event.getObject();
+
+        try {
+            service.salvar(med);
+            Message.info("Atualizado com sucesso!");
+        } catch (NegocioException e) {
+			FacesContext.getCurrentInstance().validationFailed(); //Isso diz, teve erro, não finalize o row edit!
+            Message.erro(e.getMessage());
+            // recarrega somente a lista para restaurar o estado original
+            medicamentos = service.todosOsMedicamentos();
+        }
+    }
 
 	public Medicamento getMedicamento() {
 		return medicamento;

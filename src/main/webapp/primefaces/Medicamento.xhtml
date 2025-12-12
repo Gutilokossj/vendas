@@ -9,7 +9,7 @@
 	<ui:define name="corpo">
 
 		<h:form id="frm">
-			<p:growl id="growl" showDetail="true" globalOnly="true" />
+			<p:growl id="growl" showDetail="true" />
 
 			<p:panel header="Cadastro - Medicamentos">
 
@@ -75,42 +75,72 @@
 				<!-- update frm para atualizar o formulário de cima ao adicionar, o ID da tabela será criado ao salvar -->
 			</h:panelGrid>
 
-            <p:messages autoUpdate="true" closable="true" globalOnly="true" />
-
             <p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
-				id="tabela" paginator="true" rows="4">
+				id="tabela" paginator="true" rows="4" editable="true">
 				<!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
 				<p:column headerText="Medicamento">
-					<p:outputLabel value="#{m.nome}" />
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <p:outputLabel value="#{m.nome}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{m.nome}" maxlength="30"/>
+                        </f:facet>
+                    </p:cellEditor>
 				</p:column>
 
 				<p:column headerText="Apresentação" width="200">
-					<p:outputLabel value="#{m.apresentacao}" />
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <p:outputLabel value="#{m.apresentacao}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{m.apresentacao}" />
+                        </f:facet>
+                    </p:cellEditor>
 				</p:column>
 
 				<p:column headerText="Laboratório" width="200">
-					<p:outputLabel value="#{m.laboratorio}" />
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <p:outputLabel value="#{m.laboratorio}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{m.laboratorio}"/>
+                        </f:facet>
+                    </p:cellEditor>
 				</p:column>
 
 				<p:column headerText="Registro MS" width="150">
-					<p:outputLabel value="#{m.registro}" />
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <p:outputLabel value="#{m.registro}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputMask mask="9.9999.9999.999-9" value="#{m.registro}" />
+                        </f:facet>
+
+                    </p:cellEditor>
 				</p:column>
 
 				<p:column headerText="Preço" width="100">
-					<p:outputLabel value="#{m.preco}">
-						<f:convertNumber type="currency" currencySymbol="R$" />
-					</p:outputLabel>
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <p:outputLabel value="#{m.preco}">
+                                <f:convertNumber type="currency" currencySymbol="R$" />
+                            </p:outputLabel>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{m.preco}"/>
+                        </f:facet>
+                    </p:cellEditor>
 				</p:column>
 
+                <p:ajax event="rowEdit" listener="#{medicamentoMB.onRowEdit}" update="growl tabela"/>
+                <p:ajax event="rowEditCancel" update="growl tabela" />
+
 				<p:column headerText="" width="100">
-					<p:commandButton icon="pi pi-pencil" update="@form" process="@this">
-						<!-- ele vai atualizar o form por isso @form e para processar apenas o botão usamos @this -->
-						<f:setPropertyActionListener value="#{m}"
-							target="#{medicamentoMB.medicamento}" />
-						<f:setPropertyActionListener value="true"
-							target="#{medicamentoMB.editando}" />
-						<!--A informação que estiver na variável m, será jogada para o alvo, para o target, assim os campos de cadastro são alterados -->
-					</p:commandButton>
+                    <p:rowEditor icon="pi pi-pencil"/>
 					<p:commandButton action="#{medicamentoMB.excluir}"
 						styleClass="ui-button-danger mr-2" icon="pi pi-times"
 						update="frm tabela" process="@this">

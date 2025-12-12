@@ -35,37 +35,50 @@ public class MedicamentoService implements Serializable {
 	
     @Transactional
     public void salvar(Medicamento m) throws NegocioException {
+        normalizar(m);
+        validar(m);
+        dao.salvar(m);
+    }
+
+    private void normalizar(Medicamento m) {
+        m.setNome(m.getNome().trim());
+        m.setApresentacao(m.getApresentacao().trim());
+        m.setRegistro(m.getRegistro().trim());
+    }
+
+    private void validar(Medicamento m) throws NegocioException {
 
         if (m.getNome() == null || m.getNome().length() < 3) {
             throw new NegocioException("O nome do medicamento deve ter pelo menos 3 caracteres.");
         }
 
-        if (m.getPreco().compareTo(PRECO_MAXIMO) > 0){
+        if (m.getPreco().compareTo(PRECO_MAXIMO) > 0) {
             throw new NegocioException("O preço máximo permitido é 10.000,00");
         }
 
-        /*
-
-        if (m.getPreco() > PRECO_MAXIMO) // não compila, só funcionaria com tipos primitivosComo BigDecimal é um objeto, só da pra comprar usando métodos, como comparteTo
-        Como preco é BigDecimal, você não usa >, e sim compareTo.
-       compareTo() retorna:
-            0 → igual
-            > 0 → maior
-            < 0 → menor
-        Então compareTo(new BigDecimal("10000")) > 0 significa:
-        “O preço é maior que 10.000?”
-
-        Pense assim:
-
-            compareTo() devolve um “sinal”:
-            negativo → menor
-            zero → igual
-            positivo → maior
-         */
-
-        dao.salvar(m);
+        if (registroDuplicado(m)) {
+            throw new NegocioException("Já existe outro medicamento usando este Registro MS.");
+        }
     }
-	
+
+    private boolean registroDuplicado(Medicamento m) {
+
+        Long total = dao.buscarCount(
+                "SELECT COUNT(m) FROM Medicamento m " +
+                        "WHERE m.registro = :registro " +
+                        "AND (:id IS NULL OR m.id <> :id)",
+                "registro", m.getRegistro(),
+                "id", m.getId()
+        );
+
+        return total != null && total > 0;
+    }
+
+
+
+
+
+
 //	public void salvar(Medicamento m) throws NegocioException { - MÉTODO ANTIGO SALVO PARA ENTENDIMENTO
 //		
 //		if (m.getNome().length() <3) {
