@@ -76,9 +76,6 @@ public class MedicamentoService implements Serializable {
 
 
 
-
-
-
 //	public void salvar(Medicamento m) throws NegocioException { - MÉTODO ANTIGO SALVO PARA ENTENDIMENTO
 //		
 //		if (m.getNome().length() <3) {

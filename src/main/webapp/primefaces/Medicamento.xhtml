@@ -48,8 +48,8 @@
 					<h:panelGrid columns="1" styleClass="field-group">
 						<p:outputLabel value="Registro MS" />
 						<p:inputMask mask="9.9999.9999.999-9" size="13"
-							value="#{medicamentoMB.medicamento.registro}" label="Registro MS"
-							id="registro" />
+									 value="#{medicamentoMB.medicamento.registro}" label="Registro MS"
+									 id="registro" />
 						<p:message for="registro" styleClass="input-message" />
 					</h:panelGrid>
 
@@ -75,16 +75,18 @@
 				<!-- update frm para atualizar o formulário de cima ao adicionar, o ID da tabela será criado ao salvar -->
 			</h:panelGrid>
 
+			<p:messages id="mesagem" autoUpdate="true" closable="true" globalOnly="true" />
+
             <p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
 				id="tabela" paginator="true" rows="4" editable="true">
 				<!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
-				<p:column headerText="Medicamento">
+				<p:column headerText="Medicamento" width="200">
                     <p:cellEditor>
                         <f:facet name="output">
                             <p:outputLabel value="#{m.nome}"/>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{m.nome}" maxlength="30"/>
+                            <p:inputText value="#{m.nome}" maxlength="30" style="width: 100%"/>
                         </f:facet>
                     </p:cellEditor>
 				</p:column>
@@ -95,18 +97,25 @@
                             <p:outputLabel value="#{m.apresentacao}"/>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{m.apresentacao}" />
+                            <p:inputText value="#{m.apresentacao}" maxlength="30" style="width: 100%"/>
                         </f:facet>
                     </p:cellEditor>
 				</p:column>
 
+				<!-- output → quando NÃO está editando, input → quando está editando -->
+
 				<p:column headerText="Laboratório" width="200">
                     <p:cellEditor>
                         <f:facet name="output">
-                            <p:outputLabel value="#{m.laboratorio}"/>
+                            <p:outputLabel value="#{m.laboratorio.nomeLaboratorio}"/>
                         </f:facet>
+
                         <f:facet name="input">
-                            <p:inputText value="#{m.laboratorio}"/>
+                            <p:selectOneMenu value="#{m.laboratorio}" style="width: 100%">
+								<f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+
+								<f:selectItems value="#{tipoLaboratorioBean.lista}" var="lab" itemLabel="#{lab.nomeLaboratorio}" itemValue="#{lab}"/>
+							</p:selectOneMenu>
                         </f:facet>
                     </p:cellEditor>
 				</p:column>
@@ -136,8 +145,8 @@
                     </p:cellEditor>
 				</p:column>
 
-                <p:ajax event="rowEdit" listener="#{medicamentoMB.onRowEdit}" update="growl tabela"/>
-                <p:ajax event="rowEditCancel" update="growl tabela" />
+                <p:ajax event="rowEdit" listener="#{medicamentoMB.onRowEdit}" update=":frm:growl :frm:tabela :frm:mesagem" process="@this"/>
+                <p:ajax event="rowEditCancel"/>
 
 				<p:column headerText="" width="100">
                     <p:rowEditor icon="pi pi-pencil"/>
