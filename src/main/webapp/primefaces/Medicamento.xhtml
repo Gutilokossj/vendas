@@ -78,7 +78,7 @@
 			<p:messages id="mesagem" autoUpdate="true" closable="true" globalOnly="true" />
 
             <p:dataTable value="#{medicamentoMB.medicamentos}" var="m"
-				id="tabela" paginator="true" rows="4" editable="true">
+				id="tabela" paginator="true" paginatorPosition="bottom" rows="4" editable="true">
 				<!--Aqui o porquê de usar tabela lá no botão de salvar, para atualizar aqui -->
 				<p:column headerText="Medicamento" width="200">
                     <p:cellEditor>

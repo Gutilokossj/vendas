@@ -1,5 +1,6 @@
 package br.com.medicamento.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -33,7 +34,8 @@ public class Medicamento implements Serializable, Base{
 		
 		E por tabela, toda entidade dentro do bean também deve ser.
 			*/
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	//ID informa que nosso atributo será o identificador da tabela, chave primária da tabela
 	//GeneratedValue funciona como autoIncrement do SQL, conforme inserimos registros ele atribui automático o valor do ID

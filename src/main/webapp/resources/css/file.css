@@ -107,3 +107,9 @@ h1 {
 }
 
 
+footer {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;    /* Centraliza verticalmente (se houver altura) */
+    width: 100%;            /* Ocupa a largura total */
+}
