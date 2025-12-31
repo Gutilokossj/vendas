@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class ProdutoService  implements Serializable {
 
@@ -38,5 +39,10 @@ public class ProdutoService  implements Serializable {
         }
 
         daoGenerico.remover(Produto.class, produtoParaExcluir.getId());
+    }
+
+    public List<Produto> buscarTodosProdutos(){
+        return daoGenerico.buscarTodos
+                (Produto.class, "SELECT p FROM Produto p ORDER BY p.id DESC");
     }
 }
