@@ -1,0 +1,46 @@
+package br.com.vendas.service;
+
+import br.com.vendas.dao.ClienteDao;
+import br.com.vendas.dao.GenericDao;
+import br.com.vendas.model.Cliente;
+import br.com.vendas.model.Usuario;
+import br.com.vendas.util.NegocioException;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
+
+public class ClienteService implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Inject
+    private GenericDao<Cliente> daoGenerico;
+
+    @Inject
+    private ClienteDao clienteDao;
+
+    @Transactional
+    public void salvar(Cliente cliente){
+        daoGenerico.salvar(cliente);
+    }
+
+    public void remover(Cliente clienteParaExcluir, Usuario usuarioLogado) throws NegocioException {
+        if(!usuarioLogado.isAdmin()){
+            throw new NegocioException("Apenas administradores podem excluir clientes!");
+        }
+
+        if(clienteDao.existePedidoParaCliente(clienteParaExcluir)){
+            throw new NegocioException("Cliente possui pedidos vinculados, não pode ser excluído!");
+        }
+
+        daoGenerico.remover(Cliente.class, clienteParaExcluir.getId());
+    }
+
+    public List<Cliente> buscarTodos(){
+        return daoGenerico.buscarTodos(Cliente.class, "SELECT c FROM Cliente c ORDER BY c.id DESC");
+    }
+}

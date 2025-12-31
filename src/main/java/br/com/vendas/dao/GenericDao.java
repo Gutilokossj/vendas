@@ -21,31 +21,18 @@ public class GenericDao <T extends EntidadeBase> implements Serializable {
     }
 
     public void salvar(T t){
-        try {
-            manager.getTransaction().begin();
+
             if (t.getId() == null){
                 manager.persist(t);
             } else {
                 manager.merge(t);
             }
-            manager.getTransaction().commit();
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw new RuntimeException("Erro ao salvar entidade", e);
-        }
     }
 
     public void remover(Class<T> clazz, Long id){
         T entidade = buscarPorId(clazz, id);
         if (entidade != null){
-            try {
-                manager.getTransaction().begin();
                 manager.remove(entidade);
-                manager.getTransaction().commit();
-            } catch (Exception e) {
-                manager.getTransaction().rollback();
-                throw new RuntimeException("Erro ao remover entidade", e);
-            }
         }
     }
 

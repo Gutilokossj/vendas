@@ -29,7 +29,7 @@ public class Usuario extends EntidadeBase implements Serializable {
     private String senha;
 
     @Column(nullable = false)
-    private Boolean isAdmin;
+    private Boolean Admin;
 
     public String getNome() {
         return nome;
@@ -55,11 +55,11 @@ public class Usuario extends EntidadeBase implements Serializable {
         this.senha = senha;
     }
 
-    public Boolean getAdmin() {
-        return isAdmin;
+    public Boolean isAdmin() {
+        return Admin;
     }
 
     public void setAdmin(Boolean admin) {
-        isAdmin = admin;
+        Admin = admin;
     }
 }
