@@ -7,6 +7,8 @@ import br.com.vendas.model.Usuario;
 import br.com.vendas.util.NegocioException;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
@@ -42,5 +44,16 @@ public class ClienteService implements Serializable {
 
     public List<Cliente> buscarTodos(){
         return daoGenerico.buscarTodos(Cliente.class, "SELECT c FROM Cliente c ORDER BY c.id DESC");
+    }
+
+    public List<Cliente> buscarPorNome(String nome) throws NegocioException {
+
+        List<Cliente> clientes = clienteDao.buscarPorNome(nome);
+
+        if(clientes.isEmpty()){
+            throw new NegocioException("Nenhum cliente encontrado com este nome!");
+        }
+
+        return clientes;
     }
 }

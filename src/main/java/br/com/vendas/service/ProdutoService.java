@@ -45,4 +45,15 @@ public class ProdutoService  implements Serializable {
         return daoGenerico.buscarTodos
                 (Produto.class, "SELECT p FROM Produto p ORDER BY p.id DESC");
     }
+
+    public List<Produto> buscarPorNome(String nome) throws NegocioException{
+
+        List<Produto> produtos = produtoDao.buscarPorNome(nome);
+
+        if (produtos.isEmpty()){
+            throw new NegocioException("Nenhum produto encontrado para o nome informado!");
+        }
+
+        return produtos;
+    }
 }

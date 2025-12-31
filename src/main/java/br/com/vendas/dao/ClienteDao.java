@@ -5,6 +5,7 @@ import br.com.vendas.model.Cliente;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @ApplicationScoped
 public class ClienteDao {
@@ -19,5 +20,13 @@ public class ClienteDao {
                 .getSingleResult();
 
         return count > 0;
+    }
+
+    public List<Cliente> buscarPorNome(String nome){
+        return em.createQuery(
+                "SELECT c FROM Cliente c WHERE c.nome = :nome ORDER BY c.id",
+                        Cliente.class)
+                .setParameter("nome", nome)
+                .getResultList();
     }
 }

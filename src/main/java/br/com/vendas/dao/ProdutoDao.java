@@ -5,6 +5,7 @@ import br.com.vendas.model.Produto;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @ApplicationScoped
 public class ProdutoDao {
@@ -21,4 +22,11 @@ public class ProdutoDao {
         return count > 0;
     }
 
+    public List<Produto> buscarPorNome(String nome){
+        return em.createQuery(
+                "SELECT p FROM Produto p WHERE p.nome = :nome ORDER BY p.id",
+                        Produto.class)
+                .setParameter("nome", nome)
+                .getResultList();
+    }
 }
