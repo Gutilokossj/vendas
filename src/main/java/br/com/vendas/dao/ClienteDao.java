@@ -5,7 +5,6 @@ import br.com.vendas.model.Cliente;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 @ApplicationScoped
 public class ClienteDao {
