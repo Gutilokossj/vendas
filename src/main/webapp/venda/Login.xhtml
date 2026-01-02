@@ -9,7 +9,7 @@
 
         <h:form>
 
-            <p:growl autoUpdate="true" closable="true" life="3000" />
+            <p:growl id="aviso" autoUpdate="true" closable="true" life="3000" />
 
         <div class="card">
         <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem">Login de usuário (testando)</h1>
@@ -34,7 +34,9 @@
             <p:commandButton action="#{loginMB.logar}"
                              label="Entrar"
                              icon="pi pi-sign-in"
+                             ajax="false"
                              styleClass="ui-button-primary"
+                             update="aviso"
                              style="width:100%" />
 
             <div style="text-align:center; margin-top:0.5rem">

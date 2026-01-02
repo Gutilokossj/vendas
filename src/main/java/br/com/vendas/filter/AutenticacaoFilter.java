@@ -1,0 +1,39 @@
+package br.com.vendas.filter;
+
+import br.com.vendas.session.SessaoUsuario;
+import br.com.vendas.util.Message;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebFilter("/venda/*")
+public class AutenticacaoFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
+
+        SessaoUsuario sessaoUsuario =
+                (SessaoUsuario) req.getSession().getAttribute("sessaoUsuario");
+
+        boolean paginaLogin = req.getRequestURI().endsWith("Login.xhtml");
+
+        if(sessaoUsuario == null || !sessaoUsuario.isLogado()){
+            if (!paginaLogin){
+                resp.sendRedirect(req.getContextPath() + "/venda/Login.xhtml");
+                return;
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}

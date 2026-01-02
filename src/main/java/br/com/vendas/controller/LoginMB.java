@@ -1,11 +1,12 @@
-package br.com.vendas;
+package br.com.vendas.controller;
 
 import br.com.vendas.model.Usuario;
 import br.com.vendas.service.UsuarioService;
+import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 
-import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,12 +26,24 @@ public class LoginMB implements Serializable {
     @Inject
     private UsuarioService usuarioService;
 
-    public void logar(){
+    @Inject
+    private SessaoUsuario sessaoUsuario;
+
+    public String logar(){
         try{
-            usuarioService.logar(login, senha);
+            Usuario usuario = usuarioService.logar(login, senha);
+            sessaoUsuario.setUsuarioLogado(usuario);
+
+            FacesContext.getCurrentInstance()
+                            .getExternalContext()
+                                    .getFlash()
+                                            .setKeepMessages(true);
+
             Message.info("Login realizado com sucesso!");
+            return "DashboardVendas.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
+            return null;
         }
     }
 
