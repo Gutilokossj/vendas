@@ -5,12 +5,13 @@ import br.com.vendas.dao.UsuarioDao;
 import br.com.vendas.model.Usuario;
 import br.com.vendas.util.NegocioException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+@ApplicationScoped
 public class UsuarioService implements Serializable {
 
     @Serial
@@ -22,10 +23,10 @@ public class UsuarioService implements Serializable {
     @Inject
     private UsuarioDao usuarioDao;
 
-    @Transactional
-    public void salvar(Usuario usuario) throws NegocioException {
+    public void salvar(Usuario usuario, String confirmarSenha) throws NegocioException {
 
         validarCamposObrigatorios(usuario);
+        validarSenhaConfirmacao(usuario.getSenha(), confirmarSenha);
         validarLoginExistente(usuario);
         daoGenerico.salvar(usuario);
     }
@@ -33,8 +34,8 @@ public class UsuarioService implements Serializable {
     private void validarCamposObrigatorios(Usuario usuario) throws NegocioException {
 
         if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()
-                ||usuario.getLogin() == null || usuario.getLogin().trim().isEmpty()
-                ||usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()){
+                || usuario.getLogin() == null || usuario.getLogin().trim().isEmpty()
+                || usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
             throw new NegocioException("Todos os campos são de preenchimento obrigatório!");
         }
     }
@@ -42,8 +43,8 @@ public class UsuarioService implements Serializable {
     private void validarLoginExistente(Usuario usuario) throws NegocioException {
 
         // Criação de usuário (novo usuário)
-        if (usuario.getId() == null){
-            if (usuarioDao.existeLogin(usuario.getLogin())){
+        if (usuario.getId() == null) {
+            if (usuarioDao.existeLogin(usuario.getLogin())) {
                 throw new NegocioException("Usuário já cadastrado!");
             }
             return;
@@ -52,31 +53,37 @@ public class UsuarioService implements Serializable {
         // Edição de usuário
         Usuario usuarioComMesmoLogin = usuarioDao.buscarPorLogin(usuario.getLogin());
 
-        if (usuarioComMesmoLogin != null && !usuarioComMesmoLogin.equals(usuario)){
+        if (usuarioComMesmoLogin != null && !usuarioComMesmoLogin.equals(usuario)) {
             throw new NegocioException("Usuário já cadastrado!");
+        }
+    }
+
+    private void validarSenhaConfirmacao(String senha, String confirmarSenha) throws NegocioException {
+        if (senha == null || !senha.equals(confirmarSenha)) {
+            throw new NegocioException("As senhas não conferem. Verifique e tente novamente.");
         }
     }
 
     public Usuario logar(String login, String senha) throws NegocioException {
         Usuario usuario = usuarioDao.buscarPorLogin(login);
 
-        if (usuario == null || !usuario.getSenha().equals(senha)){
+        if (usuario == null || !usuario.getSenha().equals(senha)) {
             throw new NegocioException("Usuário ou senha inválidos!");
         }
 
         return usuario;
     }
 
-   @Transactional
-   public void remover(Usuario usuarioParaExcluir, Usuario usuarioLogado) throws NegocioException {
-        if (!usuarioLogado.isAdmin()){
+
+    public void remover(Usuario usuarioParaExcluir, Usuario usuarioLogado) throws NegocioException {
+        if (!usuarioLogado.isAdmin()) {
             throw new NegocioException("Somente administradores podem excluir usuários!");
         }
 
         daoGenerico.remover(Usuario.class, usuarioParaExcluir.getId());
-   }
+    }
 
-    public List<Usuario> buscarTodosUsuarios(){
+    public List<Usuario> buscarTodosUsuarios() {
         return daoGenerico.buscarTodos
                 (Usuario.class, "SELECT u FROM Usuario u ORDER BY u.id DESC");
     }

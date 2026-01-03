@@ -106,6 +106,29 @@ h1 {
     background: transparent !important;
 }
 
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-sair {
+    padding-top: 2rem;
+}
+
+.btn-sair {
+    font-weight: bold;
+}
+
+.conteudo {
+    flex: 1;
+    padding: 2rem;
+}
+
 
 footer {
     display: flex;

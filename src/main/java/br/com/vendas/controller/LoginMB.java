@@ -29,15 +29,15 @@ public class LoginMB implements Serializable {
     @Inject
     private SessaoUsuario sessaoUsuario;
 
-    public String logar(){
-        try{
+    public String logar() {
+        try {
             Usuario usuario = usuarioService.logar(login, senha);
             sessaoUsuario.setUsuarioLogado(usuario);
 
             FacesContext.getCurrentInstance()
-                            .getExternalContext()
-                                    .getFlash()
-                                            .setKeepMessages(true);
+                    .getExternalContext()
+                    .getFlash()
+                    .setKeepMessages(true);
 
             Message.info("Login realizado com sucesso!");
             return "DashboardVendas.xhtml?faces-redirect=true";
@@ -45,6 +45,17 @@ public class LoginMB implements Serializable {
             Message.error(e.getMessage());
             return null;
         }
+    }
+
+    public String deslogar() {
+        sessaoUsuario.setUsuarioLogado(null);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.getExternalContext().invalidateSession();
+        facesContext.getExternalContext()
+                .getFlash()
+                .setKeepMessages(true);
+        Message.warning("Atenção: Usuário deslogado!");
+        return "Login.xhtml?faces-redirect=true";
     }
 
     public String getLogin() {

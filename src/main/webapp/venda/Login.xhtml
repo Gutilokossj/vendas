@@ -9,48 +9,52 @@
 
         <h:form>
 
-            <p:growl id="aviso" autoUpdate="true" closable="true" life="3000" />
+            <p:growl id="aviso" showDetail="true" closable="true" life="5000"/>
 
-        <div class="card">
-        <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem">Login de usuário (testando)</h1>
+            <div class="card">
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem">Login de usuário (testando)</h1>
 
-        <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
-        <div class="col-12 md:col-4"
-             style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
+                    <div class="col-12 md:col-4"
+                         style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
 
-            <div class="ui-inputgroup">
-                <div class="ui-inputgroup-addon">
-                    <i class="pi pi-user"></i>
-                </div>
-                <p:inputText value="#{loginMB.login}" id="usuario" placeholder="Digite seu nome de usuário"/>
-            </div>
-            <div class="ui-inputgroup">
-                <div class="ui-inputgroup-addon">
-                    <i class="pi pi-lock"></i>
-                </div>
-                <p:inputText value="#{loginMB.senha}" type="password" id="senha" placeholder="Digite sua senha"/>
-            </div>
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">
+                                <i class="pi pi-user"></i>
+                            </div>
+                            <p:inputText value="#{loginMB.login}" required="true" requiredMessage="Login é obrigatório"
+                                         detail="Login é obrigatório filha da mãe" id="usuario" maxlength="10"
+                                         placeholder="Digite seu nome de usuário"/>
+                        </div>
+                        <div class="ui-inputgroup">
+                            <div class="ui-inputgroup-addon">
+                                <i class="pi pi-lock"></i>
+                            </div>
+                            <p:password value="#{loginMB.senha}" required="true" requiredMessage="Senha é obrigatória"
+                                        toggleMask="true" redisplay="true" id="senha" maxlength="20"
+                                        placeholder="Digite sua senha"/>
+                        </div>
 
-            <p:commandButton action="#{loginMB.logar}"
-                             label="Entrar"
-                             icon="pi pi-sign-in"
-                             ajax="false"
-                             styleClass="ui-button-primary"
-                             update="aviso"
-                             style="width:100%" />
+                        <p:commandButton action="#{loginMB.logar}"
+                                         label="Entrar"
+                                         icon="pi pi-sign-in"
+                                         ajax="false"
+                                         styleClass="ui-button-primary"
+                                         update="aviso"
+                                         style="width:100%"/>
 
-            <div style="text-align:center; margin-top:0.5rem">
+                        <div style="text-align:center; margin-top:0.5rem">
                         <span style="color:#6c757d">
                             Não tem uma conta?
                         </span>
-                <p:link value="Cadastrar usuário"
-                        outcome="CadastroUsuario.xhtml"
-                        style="font-weight:600" />
+                            <p:link value="Cadastrar usuário"
+                                    outcome="CadastroUsuario.xhtml"
+                                    style="font-weight:600"/>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        </div>
-        </div>
-</h:form>
+        </h:form>
 
     </ui:define>
 </ui:composition>

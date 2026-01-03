@@ -8,7 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-public class GenericDao <T extends EntidadeBase> implements Serializable {
+public class GenericDao<T extends EntidadeBase> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -16,36 +16,60 @@ public class GenericDao <T extends EntidadeBase> implements Serializable {
     @Inject
     private EntityManager manager;
 
-    public T buscarPorId(Class<T> clazz, Long id){
+    public T buscarPorId(Class<T> clazz, Long id) {
         return manager.find(clazz, id);
     }
 
-    public void salvar(T t){
+    public void salvar(T t) {
+        var tx = manager.getTransaction();
+        try {
+            if (!tx.isActive()) {
+                tx.begin();
+            }
 
-            if (t.getId() == null){
+            if (t.getId() == null) {
                 manager.persist(t);
             } else {
                 manager.merge(t);
             }
-    }
-
-    public void remover(Class<T> clazz, Long id){
-        T entidade = buscarPorId(clazz, id);
-        if (entidade != null){
-                manager.remove(entidade);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
         }
     }
 
-    public Long buscarCount(String jpql, Object... params){
+    public void remover(Class<T> clazz, Long id) {
+        T entidade = buscarPorId(clazz, id);
+        if (entidade != null) {
+            var tx = manager.getTransaction();
+            try {
+                if (!tx.isActive()) {
+                    tx.begin();
+                }
+                manager.remove(entidade);
+                tx.commit();
+            } catch (Exception e) {
+                if (tx.isActive()) {
+                    tx.rollback();
+                }
+                throw e;
+            }
+        }
+    }
+
+    public Long buscarCount(String jpql, Object... params) {
         var query = manager.createQuery(jpql, Long.class);
 
-        for (int i = 0; i < params.length; i+= 2) {
+        for (int i = 0; i < params.length; i += 2) {
             query.setParameter(params[i].toString(), params[i + 1]);
         }
         return query.getSingleResult();
     }
 
-    public List<T> buscarTodos(Class<T> clazz, String jpql){
+    public List<T> buscarTodos(Class<T> clazz, String jpql) {
         return manager.createQuery(jpql, clazz).getResultList();
     }
 

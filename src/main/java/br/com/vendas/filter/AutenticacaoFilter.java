@@ -3,6 +3,7 @@ package br.com.vendas.filter;
 import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 
+import javax.enterprise.inject.spi.CDI;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,16 +25,16 @@ public class AutenticacaoFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         SessaoUsuario sessaoUsuario =
-                (SessaoUsuario) req.getSession().getAttribute("sessaoUsuario");
+               CDI.current().select(SessaoUsuario.class).get();
 
-        boolean paginaLogin = req.getRequestURI().endsWith("Login.xhtml");
+        boolean paginaPublica = req.getRequestURI().endsWith("Login.xhtml")
+                || req.getRequestURI().endsWith("CadastroUsuario.xhtml");
 
-        if(sessaoUsuario == null || !sessaoUsuario.isLogado()){
-            if (!paginaLogin){
-                resp.sendRedirect(req.getContextPath() + "/venda/Login.xhtml");
-                return;
-            }
+        if (!paginaPublica && !sessaoUsuario.isLogado()){
+            resp.sendRedirect(req.getContextPath() + "/venda/Login.xhtml");
+            return;
         }
+
         chain.doFilter(request, response);
     }
 }
