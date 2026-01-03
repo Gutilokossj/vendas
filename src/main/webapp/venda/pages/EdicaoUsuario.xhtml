@@ -1,4 +1,4 @@
-<ui:composition template="/WEB-INF/template/MenuGenerico.xhtml"
+<ui:composition template="/WEB-INF/template/TemplateLogado.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -9,9 +9,9 @@
         <h:form>
             <p:growl id="aviso" autoUpdate="true" showDetail="true" life="5000"/>
             <div class="card">
-                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Cadastro de usuário</h1>
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Edição de usuário</h1>
 
-                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 3rem">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
                     <div class="col-12 md:col-4"
                          style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
 
@@ -19,48 +19,40 @@
                             <div class="ui-inputgroup-addon">
                                 <i class="pi pi-user-edit"></i>
                             </div>
-                            <p:inputText value="#{cadastroUsuarioMB.usuario.nome}" id="nome" maxlength="40"
+                            <p:inputText value="#{editarUsuarioMB.usuario.nome}" id="nome" maxlength="40"
                                          placeholder="Digite seu nome completo"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
                                 <i class="pi pi-user"></i>
                             </div>
-                            <p:inputText value="#{cadastroUsuarioMB.usuario.login}" id="usuario" maxlength="10"
+                            <p:inputText value="#{editarUsuarioMB.usuario.login}" id="usuario" maxlength="10"
                                          placeholder="Digite seu nome de usuário (até 10 caracteres)"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
                                 <i class="pi pi-lock"></i>
                             </div>
-                            <p:password value="#{cadastroUsuarioMB.usuario.senha}" type="password" id="senha"
+                            <p:password value="#{editarUsuarioMB.novaSenha}" type="password" id="senha"
                                         maxlength="20"
-                                        placeholder="Digite sua senha" toggleMask="true" redisplay="true"/>
+                                        placeholder="Preencha apenas se desejar alterar a senha" toggleMask="true"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
                                 <i class="pi pi-lock"></i>
                             </div>
-                            <p:password value="#{cadastroUsuarioMB.confirmarSenha}" type="password" id="confirmarSenha"
+                            <p:password value="#{editarUsuarioMB.confirmarSenha}" type="password" id="confirmarSenha"
                                         maxlength="20"
-                                        placeholder="Confirme sua senha" toggleMask="true" redisplay="true"/>
+                                        placeholder="Confirme sua senha nova" toggleMask="true" redisplay="true"/>
                         </div>
 
-                        <p:commandButton action="#{cadastroUsuarioMB.cadastrarUsuario()}"
+                        <p:commandButton action="#{editarUsuarioMB.salvarAlteracoes()}"
                                          label="Cadastrar novo usuário!"
                                          icon="pi pi-sign-in"
                                          ajax="false"
                                          styleClass="ui-button-primary"
                                          update="aviso"
                                          style="width:100%"/>
-
-                        <div style="text-align:center; margin-top:0.5rem">
-                            <span style="color:#6c757d">
-                            Já tem uma conta?
-                        </span>
-                            <p:link value="Logue agora!" outcome="Login.xhtml" style="font-weight:600"/>
-
-                        </div>
                     </div>
                 </div>
             </div>

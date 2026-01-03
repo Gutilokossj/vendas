@@ -6,6 +6,7 @@ import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -13,9 +14,9 @@ import javax.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Named("cadastroUsuarioMB")
+@Named("editarUsuarioMB")
 @ViewScoped
-public class CadastroUsuarioMB implements Serializable {
+public class EditarUsuarioMB implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,21 +24,27 @@ public class CadastroUsuarioMB implements Serializable {
     @Inject
     private UsuarioService usuarioService;
 
-    private final Usuario usuario = new Usuario(); //Lembre-se manter o objeto como atributo da classe e não local!
+    private Usuario usuario;
+    private String novaSenha;
     private String confirmarSenha;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
 
-    public String cadastrarUsuario() {
+    @PostConstruct
+    public void init() {
+        usuario = sessaoUsuario.getUsuarioLogado();
+    }
+
+    public String salvarAlteracoes() {
         try {
-            usuarioService.salvar(usuario, confirmarSenha);
+            usuarioService.atualizar(usuario, novaSenha, confirmarSenha);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Usuario cadastrado com sucesso!");
-            return "Login.xhtml?faces-redirect=true";
+            Message.info("Usuario atualizado com sucesso!");
+            return "/venda/pages/DashboardVendas?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
             return null;
@@ -56,12 +63,11 @@ public class CadastroUsuarioMB implements Serializable {
         this.confirmarSenha = confirmarSenha;
     }
 
-    public void excluirUsuario(Usuario usuarioSelecionado) {
-        try {
-            usuarioService.remover(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
-            Message.info("Usuario excluido com sucesso!");
-        } catch (NegocioException e) {
-            Message.error(e.getMessage());
-        }
+    public String getNovaSenha() {
+        return novaSenha;
+    }
+
+    public void setNovaSenha(String novaSenha) {
+        this.novaSenha = novaSenha;
     }
 }

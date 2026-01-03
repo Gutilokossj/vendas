@@ -23,6 +23,10 @@ public class UsuarioDao {
         return resultado.isEmpty() ? null : resultado.get(0);
     }
 
+    public Usuario buscarPorId(Long id){
+        return em.find(Usuario.class, id);
+    }
+
     public boolean existeLogin(String login){
         String jpql = "SELECT COUNT(u) FROM Usuario u WHERE u.login = :login";
         Long count = em.createQuery(jpql, Long.class)
@@ -30,5 +34,23 @@ public class UsuarioDao {
                 .getSingleResult();
 
         return count > 0;
+    }
+
+    public void atualizar(Usuario usuario) {
+        var tx = em.getTransaction();
+        try {
+            if (!tx.isActive()){
+                tx.begin();
+            }
+
+            em.merge(usuario);
+
+            tx.commit();
+        } catch (Exception e){
+            if(tx.isActive()){
+                tx.rollback();
+            }
+            throw (e);
+        }
     }
 }

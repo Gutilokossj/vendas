@@ -31,6 +31,18 @@ public class UsuarioService implements Serializable {
         daoGenerico.salvar(usuario);
     }
 
+    public void atualizar(Usuario usuario, String novaSenha,String confirmarSenha) throws NegocioException {
+
+        if (novaSenha != null && !novaSenha.isBlank()){
+            validarSenhaConfirmacao(novaSenha, confirmarSenha);
+            usuario.setSenha(novaSenha);
+        } else {
+            Usuario usuarioBanco = usuarioDao.buscarPorId(usuario.getId());
+            usuario.setSenha(usuarioBanco.getSenha());
+        }
+        usuarioDao.atualizar(usuario);
+    }
+
     private void validarCamposObrigatorios(Usuario usuario) throws NegocioException {
 
         if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()
