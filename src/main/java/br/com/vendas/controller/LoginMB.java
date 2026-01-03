@@ -40,7 +40,7 @@ public class LoginMB implements Serializable {
                     .setKeepMessages(true);
 
             Message.info("Login realizado com sucesso!");
-            return "DashboardVendas.xhtml?faces-redirect=true";
+            return "/venda/pages/DashboardVendas.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
             return null;
@@ -55,7 +55,7 @@ public class LoginMB implements Serializable {
                 .getFlash()
                 .setKeepMessages(true);
         Message.warning("Atenção: Usuário deslogado!");
-        return "Login.xhtml?faces-redirect=true";
+        return "/venda/Login.xhtml?faces-redirect=true";
     }
 
     public String getLogin() {

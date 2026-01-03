@@ -8,7 +8,7 @@
 
 <h:head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <h:outputStylesheet library="css" name="file.css"/>
     <title>Sistema de Vendas</title>
 </h:head>
@@ -16,11 +16,52 @@
 <h:body>
 
     <header class="page-header">
-        <div class="header-center">
-            <h:outputLink value="#{request.contextPath}/Index.xhtml">
-                <h:graphicImage library="imagens" name="SoftenSistemas.png"
-                                width="200" />
+
+        <div class="header-left">
+            <h:outputLink value="#{request.contextPath}/venda/pages/DashboardVendas.xhtml">
+
+                <h:graphicImage library="imagens"
+                                name="CapsuleCorp.png"
+                                styleClass="banner-left"/>
             </h:outputLink>
+        </div>
+
+        <div class="header-center">
+
+            <h:graphicImage library="imagens"
+                            name="Scouter2.png"
+                            styleClass="banner-center-left"/>
+
+            <h:graphicImage library="imagens"
+                            name="CapsuleCorp2.jpg"
+                            styleClass="banner-center"/>
+
+            <h:graphicImage library="imagens"
+                            name="DragonRadar.jfif"
+                            styleClass="banner-center-right"/>
+        </div>
+
+        <div class="header-user">
+            <span class="welcome-text">Seja bem vindo(a): </span>
+
+            <h:form styleClass="user-menu">
+                <p:menuButton value="#{sessaoUsuario.usuarioLogado.nome}"
+                              icon="pi pi-user"
+                              styleClass="user-menu-btn">
+
+                    <p:menuitem value="Editar Cadastro"
+                                icon="pi pi-user-edit"
+                                outcome="/venda/CadastroUsuario.xhtml"/>
+
+                    <p:divider/>
+
+                    <p:menuitem value="Sair"
+                                icon="pi pi-sign-out"
+                                action="#{loginMB.deslogar()}"
+                                styleClass="ui-menuitem-danger"/>
+                </p:menuButton>
+            </h:form>
+
         </div>
     </header>
 
@@ -31,7 +72,7 @@
 
             <p:tabMenu activeIndex="#{param.i}" orientation="left" style="width:15rem">
 
-                <p:menuitem value="Home" outcome="" icon="pi pi-home">
+                <p:menuitem value="CapsuleCop (home)" outcome="" icon="pi pi-home">
                     <f:param name="i" value="0"/>
                 </p:menuitem>
 
@@ -48,16 +89,6 @@
                 </p:menuitem>
 
             </p:tabMenu>
-
-            <div class="menu-sair">
-                <h:form>
-                <p:commandButton value="Sair"
-                            icon="pi pi-sign-out"
-                            action="#{loginMB.deslogar()}"
-                            styleClass="btn-sair ui-button-danger ui-button-text"/>
-                </h:form>
-            </div>
-
         </aside>
 
         <main class="conteudo">
