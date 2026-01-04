@@ -17,6 +17,10 @@
 
     <header class="page-header">
 
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="pi pi-bars"></i>
+        </button>
+
         <div class="header-left">
             <h:outputLink value="#{request.contextPath}/venda/pages/DashboardVendas.xhtml">
 
@@ -29,29 +33,37 @@
         <div class="header-center">
 
             <h:graphicImage library="imagens"
-                            name="Scouter2.png"
-                            styleClass="banner-center-left"/>
+                            name="Capsule1.png"
+                            styleClass="banner-center"/>
 
             <h:graphicImage library="imagens"
-                            name="CapsuleCorp2.jpg"
+                            name="Capsule2.png"
+                            styleClass="banner-center"/>
+
+            <h:graphicImage library="imagens"
+                            name="Capsule3.png"
                             styleClass="banner-center"/>
 
             <h:graphicImage library="imagens"
                             name="DragonRadar.jfif"
-                            styleClass="banner-center-right"/>
+                            styleClass="banner-center"/>
         </div>
 
         <div class="header-user">
             <span class="welcome-text">Olá, tudo bem?</span>
 
-            <h:form styleClass="user-menu">
+            <h:form>
                 <p:menuButton value="#{sessaoUsuario.usuarioLogado.nome}"
                               icon="pi pi-user"
                               styleClass="user-menu-btn">
 
-                    <p:menuitem value="Editar Cadastro"
+                    <p:menuitem value="Alterar Usuario"
                                 icon="pi pi-user-edit"
                                 outcome="/venda/pages/EdicaoUsuario.xhtml"/>
+
+                    <p:menuitem value="Alterar Senha"
+                                icon="pi pi-lock"
+                                outcome="/venda/pages/EdicaoSenha.xhtml"/>
 
                     <p:divider/>
 
@@ -66,29 +78,40 @@
     </header>
 
     <div class="layout">
-
         <aside class="menu">
-            <h2>Menu principal</h2>
+            <div class="menu-header">
+                <h2>Menu principal</h2>
 
-            <p:tabMenu activeIndex="#{param.i}" orientation="left" style="width:15rem">
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <i class="pi pi-bars"></i>
+                </button>
+            </div>
+            <nav class="menu-nav">
+                <a href="#{request.contextPath}/venda/pages/DashboardVendas.xhtml">
+                    <i class="pi pi-home"></i>
+                    <span>Home - Capsule Corp</span>
+                </a>
 
-                <p:menuitem value="CapsuleCop (home)" outcome="" icon="pi pi-home">
-                    <f:param name="i" value="0"/>
-                </p:menuitem>
+                <a href="#{request.contextPath}/venda/pages/CadastroCliente.xhtml">
+                    <i class="pi pi-user-plus"></i>
+                    <span>Cadastrar Clientes</span>
+                </a>
 
-                <p:menuitem value="Cadastrar Clientes" outcome="" icon="pi pi-user-plus">
-                    <f:param name="i" value="1"/>
-                </p:menuitem>
+                <a href="#{request.contextPath}/produtos/Cadastro.xhtml">
+                    <i class="pi pi-box"></i>
+                    <span>Cadastrar Produtos</span>
+                </a>
 
-                <p:menuitem value="Emitir Pedido" outcome="" icon="pi pi-shopping-cart">
-                    <f:param name="i" value="2"/>
-                </p:menuitem>
+                <a href="#{request.contextPath}/pedido/Novo.xhtml">
+                    <i class="pi pi-shopping-cart"></i>
+                    <span>Emitir Pedido</span>
+                </a>
 
-                <p:menuitem value="Gerenciar Usuários" outcome="" icon="pi pi-users">
-                    <f:param name="i" value="3"/>
-                </p:menuitem>
-
-            </p:tabMenu>
+                <a href="#{request.contextPath}/usuarios/Listar.xhtml">
+                    <i class="pi pi-users"></i>
+                    <span>Gerenciar Usuários</span>
+                </a>
+            </nav>
         </aside>
 
         <main class="conteudo">
@@ -107,8 +130,43 @@
     </p:confirmDialog>
 
     <footer>
-        <h2>Desenvolvido por Gustavo Fernandes (Estudos 2025)</h2>
+        <h2>© 2025 • Desenvolvido por Gustavo Fernandes</h2>
     </footer>
 
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const menu = document.querySelector(".menu");
+
+            // 1️⃣ Restaura estado salvo
+            const menuState = localStorage.getItem("menuState");
+            if (menuState === "collapsed") {
+                menu.classList.add("collapsed");
+            }
+
+            // 2️⃣ Função global do botão ☰
+            window.toggleMenu = function () {
+
+                if (window.innerWidth &lt;= 768) {
+                    // MOBILE → abre/fecha
+                    menu.classList.toggle("open");
+                    return;
+                }
+
+                // DESKTOP → colapsa/expande
+                menu.classList.toggle("collapsed");
+
+                // salva estado
+                if (menu.classList.contains("collapsed")) {
+                    localStorage.setItem("menuState", "collapsed");
+                } else {
+                    localStorage.setItem("menuState", "expanded");
+                }
+            };
+
+        });
+    </script>
 </h:body>
 </html>
+
+

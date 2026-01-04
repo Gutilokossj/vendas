@@ -9,7 +9,7 @@
         <h:form>
             <p:growl id="aviso" autoUpdate="true" showDetail="true" life="5000"/>
             <div class="card">
-                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Edição de usuário</h1>
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Alteração de senha</h1>
 
                 <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
                     <div class="col-12 md:col-4"
@@ -17,17 +17,21 @@
 
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
-                                <i class="pi pi-user-edit"></i>
+                                <i class="pi pi-lock"></i>
                             </div>
-                            <p:inputText value="#{editarUsuarioMB.usuario.nome}" id="nome" maxlength="40"
-                                         placeholder="Digite seu nome completo" required="true" requiredMessage="Nome é obrigatório"/>
+                            <p:password value="#{alterarSenhaMB.novaSenha}" type="password" id="senha"
+                                        maxlength="20"
+                                        required="true"
+                                        requiredMessage="Senha é obrigatória"
+                                        placeholder="Digite a nova senha" toggleMask="true" redisplay="true"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
-                                <i class="pi pi-user"></i>
+                                <i class="pi pi-lock"></i>
                             </div>
-                            <p:inputText value="#{editarUsuarioMB.usuario.login}" id="usuario" maxlength="10"
-                                         placeholder="Digite seu nome de usuário (até 10 caracteres)" required="true" requiredMessage="Login é obrigatório"/>
+                            <p:password value="#{alterarSenhaMB.confirmarSenha}" type="password" id="confirmarSenha"
+                                        maxlength="20"
+                                        placeholder="Confirme sua senha nova" required="true" requiredMessage="Confirmação de senha é obrigatória" toggleMask="true" redisplay="true"/>
                         </div>
 
                         <div style="display: flex; justify-content: space-between; gap: 1rem">
@@ -36,12 +40,13 @@
                                       outcome="/venda/pages/DashboardVendas.xhtml"
                                       styleClass="ui-button-secondary"/>
 
-                            <p:commandButton action="#{editarUsuarioMB.salvarAlteracoes()}"
-                                             value="Atualizar usuário!"
+                            <p:commandButton action="#{alterarSenhaMB.salvarAlteracoes()}"
+                                             value="Atualizar senha!"
                                              icon="pi pi-sign-in"
                                              ajax="false"
                                              styleClass="ui-button-primary"
-                                             update="aviso"/>
+                                             update="aviso"
+                                             style="width:100%"/>
                         </div>
                     </div>
                 </div>

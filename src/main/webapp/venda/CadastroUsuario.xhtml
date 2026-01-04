@@ -20,14 +20,14 @@
                                 <i class="pi pi-user-edit"></i>
                             </div>
                             <p:inputText value="#{cadastroUsuarioMB.usuario.nome}" id="nome" maxlength="40"
-                                         placeholder="Digite seu nome completo"/>
+                                         placeholder="Digite seu nome completo" required="true" requiredMessage="Nome é obrigatório"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
                                 <i class="pi pi-user"></i>
                             </div>
                             <p:inputText value="#{cadastroUsuarioMB.usuario.login}" id="usuario" maxlength="10"
-                                         placeholder="Digite seu nome de usuário (até 10 caracteres)"/>
+                                         placeholder="Digite seu nome de usuário (até 10 caracteres)" required="true" requiredMessage="Login é obrigatório"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
@@ -35,7 +35,7 @@
                             </div>
                             <p:password value="#{cadastroUsuarioMB.usuario.senha}" type="password" id="senha"
                                         maxlength="20"
-                                        placeholder="Digite sua senha" toggleMask="true" redisplay="true"/>
+                                        placeholder="Digite sua senha" toggleMask="true" redisplay="true" required="true" requiredMessage="Senha é obrigatória"/>
                         </div>
                         <div class="ui-inputgroup">
                             <div class="ui-inputgroup-addon">
@@ -47,7 +47,7 @@
                         </div>
 
                         <p:commandButton action="#{cadastroUsuarioMB.cadastrarUsuario()}"
-                                         label="Cadastrar novo usuário!"
+                                         value="Cadastrar novo usuário!"
                                          icon="pi pi-sign-in"
                                          ajax="false"
                                          styleClass="ui-button-primary"

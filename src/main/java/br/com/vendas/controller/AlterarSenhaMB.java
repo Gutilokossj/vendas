@@ -14,15 +14,18 @@ import javax.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Named("editarUsuarioMB")
+@Named("alterarSenhaMB")
 @ViewScoped
-public class EditarUsuarioMB implements Serializable {
+public class AlterarSenhaMB implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Inject
     private UsuarioService usuarioService;
+
+    private String novaSenha;
+    private String confirmarSenha;
 
     private Usuario usuario;
 
@@ -36,12 +39,12 @@ public class EditarUsuarioMB implements Serializable {
 
     public String salvarAlteracoes() {
         try {
-            usuarioService.atualizarUsuario(usuario);
+            usuarioService.atualizarSenha(usuario, novaSenha, confirmarSenha);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Usuario atualizado com sucesso!");
+            Message.info("Senha atualizada com sucesso!");
             return "/venda/pages/DashboardVendas?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
@@ -49,8 +52,19 @@ public class EditarUsuarioMB implements Serializable {
         }
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getNovaSenha() {
+        return novaSenha;
     }
 
+    public void setNovaSenha(String novaSenha) {
+        this.novaSenha = novaSenha;
+    }
+
+    public String getConfirmarSenha() {
+        return confirmarSenha;
+    }
+
+    public void setConfirmarSenha(String confirmarSenha) {
+        this.confirmarSenha = confirmarSenha;
+    }
 }

@@ -31,15 +31,15 @@ public class UsuarioService implements Serializable {
         daoGenerico.salvar(usuario);
     }
 
-    public void atualizar(Usuario usuario, String novaSenha,String confirmarSenha) throws NegocioException {
+    public void atualizarUsuario(Usuario usuario) throws NegocioException {
+        validarLoginExistente(usuario);
+        usuarioDao.atualizar(usuario);
+    }
 
-        if (novaSenha != null && !novaSenha.isBlank()){
-            validarSenhaConfirmacao(novaSenha, confirmarSenha);
-            usuario.setSenha(novaSenha);
-        } else {
-            Usuario usuarioBanco = usuarioDao.buscarPorId(usuario.getId());
-            usuario.setSenha(usuarioBanco.getSenha());
-        }
+    public void atualizarSenha(Usuario usuario, String novaSenha, String confirmarSenha) throws NegocioException {
+        validarSenha(novaSenha);
+        usuario.setSenha(novaSenha);
+        validarSenhaConfirmacao(novaSenha, confirmarSenha);
         usuarioDao.atualizar(usuario);
     }
 
@@ -73,6 +73,16 @@ public class UsuarioService implements Serializable {
     private void validarSenhaConfirmacao(String senha, String confirmarSenha) throws NegocioException {
         if (senha == null || !senha.equals(confirmarSenha)) {
             throw new NegocioException("As senhas não conferem. Verifique e tente novamente.");
+        }
+    }
+
+    public void validarSenha(String novaSenha) throws NegocioException {
+        if(novaSenha == null || novaSenha.trim().isEmpty()){
+            throw new NegocioException("Nova senha é obrigatória!");
+        }
+
+        if(novaSenha.length() < 5 || novaSenha.length() > 20){
+            throw new NegocioException("Nova senha deve ter entre 5 a 20 caracteres");
         }
     }
 
