@@ -55,13 +55,4 @@ public class CadastroUsuarioMB implements Serializable {
     public void setConfirmarSenha(String confirmarSenha) {
         this.confirmarSenha = confirmarSenha;
     }
-
-    public void excluirUsuario(Usuario usuarioSelecionado) {
-        try {
-            usuarioService.remover(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
-            Message.info("Usuario excluido com sucesso!");
-        } catch (NegocioException e) {
-            Message.error(e.getMessage());
-        }
-    }
 }

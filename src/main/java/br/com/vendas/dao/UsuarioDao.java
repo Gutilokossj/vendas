@@ -53,4 +53,9 @@ public class UsuarioDao {
             throw (e);
         }
     }
+
+    public void alterarPermissaoAdmin(Usuario usuario, boolean admin){
+        usuario.setAdmin(admin);
+        atualizar(usuario);
+    }
 }

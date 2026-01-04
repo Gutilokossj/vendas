@@ -121,6 +121,7 @@ h1 {
 }
 
 .menu {
+    user-select: none;
     width: 260px;
     min-height: 100vh;
     background-color: var(--bg-light);
@@ -223,6 +224,7 @@ h1 {
 }
 
 .banner-center {
+    user-select: none;
     height: clamp(60px, 10vw, 120px);
     max-width: 100%;
     object-fit: contain;
@@ -230,6 +232,7 @@ h1 {
 
 /* Usuário */
 .header-user {
+    user-select: none;
     flex: 0 0 auto;
     display: flex;
     flex-direction: column;

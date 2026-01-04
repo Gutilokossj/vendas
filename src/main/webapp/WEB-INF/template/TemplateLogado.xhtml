@@ -87,30 +87,53 @@
                 </button>
             </div>
             <nav class="menu-nav">
-                <a href="#{request.contextPath}/venda/pages/DashboardVendas.xhtml">
+
+                <h:link id="home"
+                        outcome="/venda/pages/DashboardVendas.xhtml">
                     <i class="pi pi-home"></i>
                     <span>Home - Capsule Corp</span>
-                </a>
+                </h:link>
+                <p:tooltip for="home"
+                           value="Home - Capsule Corp"
+                           position="right"/>
 
-                <a href="#{request.contextPath}/venda/pages/CadastroCliente.xhtml">
+                <h:link id="cadastroCliente"
+                        outcome="/venda/pages/CadastroCliente.xhtml">
                     <i class="pi pi-user-plus"></i>
                     <span>Cadastrar Clientes</span>
-                </a>
+                </h:link>
+                <p:tooltip for="cadastroCliente"
+                           value="Cadastrar Clientes"
+                           position="right"/>
 
-                <a href="#{request.contextPath}/produtos/Cadastro.xhtml">
+                <h:link id="cadastroProduto"
+                        outcome="/venda/pages/CadastroProduto.xhtml">
                     <i class="pi pi-box"></i>
                     <span>Cadastrar Produtos</span>
-                </a>
+                </h:link>
+                <p:tooltip for="cadastroProduto"
+                           value="Cadastrar Produtos"
+                           position="right"/>
 
-                <a href="#{request.contextPath}/pedido/Novo.xhtml">
+                <h:link id="emitirPedido"
+                        outcome="/venda/pages/EmitirPedidoVenda.xhtml">
                     <i class="pi pi-shopping-cart"></i>
-                    <span>Emitir Pedido</span>
-                </a>
+                    <span>Emitir Pedidos</span>
+                </h:link>
+                <p:tooltip for="emitirPedido"
+                           value="Emitir Pedidos"
+                           position="right"/>
 
-                <a href="#{request.contextPath}/usuarios/Listar.xhtml">
+                <h:link id="gerenciarUsuarios"
+                        outcome="/venda/pages/GerenciarUsuarios.xhtml"
+                        rendered="#{sessaoUsuario.usuarioLogado.admin}"
+                        styleClass="menu-item">
                     <i class="pi pi-users"></i>
                     <span>Gerenciar Usuários</span>
-                </a>
+                </h:link>
+                <p:tooltip for="gerenciarUsuarios"
+                           value="Gerenciar Usuários"
+                           position="right"/>
             </nav>
         </aside>
 

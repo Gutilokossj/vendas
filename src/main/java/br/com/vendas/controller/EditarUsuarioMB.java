@@ -23,7 +23,6 @@ public class EditarUsuarioMB implements Serializable {
 
     @Inject
     private UsuarioService usuarioService;
-
     private Usuario usuario;
 
     @Inject

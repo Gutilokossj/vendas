@@ -109,4 +109,17 @@ public class UsuarioService implements Serializable {
         return daoGenerico.buscarTodos
                 (Usuario.class, "SELECT u FROM Usuario u ORDER BY u.id DESC");
     }
+
+    public void alterarPermissaoAdmin(Usuario usuarioParaAlterar, Usuario usuarioLogado, boolean admin) throws NegocioException{
+
+        if(!usuarioLogado.isAdmin()){
+            throw new NegocioException("Somente administradores podem tornar usuários administradores!");
+        }
+
+        if (usuarioParaAlterar.equals(usuarioLogado)){
+            throw new NegocioException("Não é permitido alterar seu próprio perfil de administrador!");
+        }
+
+        usuarioDao.alterarPermissaoAdmin(usuarioParaAlterar, admin);
+    }
 }
