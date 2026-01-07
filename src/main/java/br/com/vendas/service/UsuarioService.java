@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.List;
 
 @ApplicationScoped
@@ -121,5 +122,32 @@ public class UsuarioService implements Serializable {
         }
 
         usuarioDao.alterarPermissaoAdmin(usuarioParaAlterar, admin);
+    }
+
+    public String resetarSenha(Usuario usuarioParaResetar, Usuario usuarioLogado) throws NegocioException {
+        if (!usuarioLogado.isAdmin()){
+            throw new NegocioException("Somente administradores podem resetar senhas");
+        }
+
+        if (usuarioParaResetar.equals(usuarioLogado)){
+            throw new NegocioException("Não é possível resetar a própria senha!");
+        }
+
+        String novaSenha = gerarSenhaAleatoria();
+        usuarioParaResetar.setSenha(novaSenha);
+        usuarioDao.atualizar(usuarioParaResetar);
+
+        return novaSenha;
+    }
+
+    private String gerarSenhaAleatoria(){
+        String caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#";
+        SecureRandom random = new SecureRandom();
+
+        StringBuilder senha = new StringBuilder();
+        for (int i = 0; i < 8; i++){
+            senha.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+        return senha.toString();
     }
 }

@@ -8,9 +8,9 @@
     <ui:define name="corpo">
         <h:form>
             <div class="card">
-                <p:growl id="aviso" autoUpdate="true" closable="true" life="3000"/>
+                <p:growl id="aviso" widgetVar="growlAviso" autoUpdate="true" closable="true" life="3000"/>
                 <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Gerenciamento de usuários</h1>
-
+                <p:messages globalOnly="true" closable="true"/>
                 <p:dataTable id="tabelaUsuarios" var="usuario" paginator="true" rows="5"
                              value="#{gerenciarUsuariosMB.usuarios}">
                     <p:column headerText="Usuário">
@@ -21,7 +21,19 @@
                     </p:column>
                     <p:column headerText="Ações e permissões">
                         <div style="display: flex; gap: 1rem">
-                            <p:commandButton icon="pi pi-lock" value="Resetar Senha"/>
+                            <p:commandButton icon="pi pi-lock" value="Resetar Senha"
+                                             action="#{gerenciarUsuariosMB.resetarSenha}"
+                                             update="@form"
+                                             process="@this">
+
+                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
+                                                             value="#{usuario}"/>
+
+                                <p:confirm header="Confirmação - Resetar Senha"
+                                           message="Resetar a senha do usuário? (Será gerada uma senha aleatória)"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+
                             <p:commandButton id="btnEditar" type="button" icon="pi pi-pencil"/>
                             <p:tooltip for="btnEditar" value="Edita Usuário" showEffect="clip" hideEffect="fold"
                                        position="top"/>
@@ -32,7 +44,7 @@
                                              styleClass="ui-button-danger">
                                 <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
                                                              value="#{usuario}"/>
-                                <p:confirm header="Confirmar exclusão"
+                                <p:confirm header="Confirmação - Exclusão Usuário"
                                            message="Deseja realmente excluir o usuário?"
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
@@ -44,15 +56,49 @@
                                              process="@this"
                                              icon="#{usuario.admin ? 'pi pi-star-fill' : 'pi pi-star'}"
                                              class="ui-button-warning">
-                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}" value="#{usuario}"/>
+                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
+                                                             value="#{usuario}"/>
                             </p:commandButton>
-                            <p:tooltip for="btnAdmin" value="Altera permissão de admin" showEffect="clip"
+                            <p:tooltip for="btnAdmin" value="Altera Permissão (admin)" showEffect="clip"
                                        hideEffect="fold"
                                        position="top"/>
                         </div>
                     </p:column>
                 </p:dataTable>
             </div>
+            <p:dialog header="Senha gerada - Usuário: #{gerenciarUsuariosMB.usuarioSelecionado.login}"
+                      widgetVar="dlgSenhaGerada"
+                      modal="true"
+                      resizable="false"
+                      closable="true">
+
+                <h:panelGrid columns="2" columnClasses="copy-col,senha-col"
+                             style="align-items: center; gap: 1rem; justify-content: center">
+
+                    <p:commandButton icon="pi pi-copy" title="Copiar senha"
+                                     type="button"
+                                     onclick="copiarSenha()"
+                                     styleClass="ui-button-text ui-button-secondary"/>
+
+                    <h:outputText id="senhaGerada"
+                                  value="#{gerenciarUsuariosMB.senhaGerada}"
+                                  style="font-weight: bold; font-size: 1.2rem"/>
+                </h:panelGrid>
+            </p:dialog>
+            <h:outputScript>
+                function copiarSenha() {
+                const dialog = document.querySelector('.ui-dialog');
+                const senha = dialog.querySelector('[id$="senhaGerada"]').innerText;
+
+                navigator.clipboard.writeText(senha);
+
+                PF('growlAviso').renderMessage({
+                summary: 'Senha copiada',
+                detail: 'A senha foi copiada para a área de transferência.',
+                severity: 'info'
+                });
+                }
+            </h:outputScript>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -5,6 +5,7 @@ import br.com.vendas.service.UsuarioService;
 import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -26,6 +27,7 @@ public class GerenciarUsuariosMB implements Serializable {
     private UsuarioService usuarioService;
     private List<Usuario> usuarios;
     private Usuario usuarioSelecionado;
+    private String senhaGerada;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
@@ -67,7 +69,17 @@ public class GerenciarUsuariosMB implements Serializable {
 
             usuarioSelecionado.setAdmin(novoStatusAdmin);
 
-            Message.info("Permissão de usuário alterada com sucesso!");
+            Message.info("Permissão de usuário: "+ getUsuarioSelecionado().getLogin() +", Alterada com sucesso!");
+        } catch (NegocioException e) {
+            Message.error(e.getMessage());
+        }
+    }
+
+    public void resetarSenha(){
+        try {
+            senhaGerada = usuarioService.resetarSenha(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
+            Message.info("Senha resetada com sucesso!");
+            PrimeFaces.current().executeScript("PF('dlgSenhaGerada').show()");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
@@ -83,5 +95,9 @@ public class GerenciarUsuariosMB implements Serializable {
 
     public List<Usuario> getUsuarios() {
         return usuarios;
+    }
+
+    public String getSenhaGerada() {
+        return senhaGerada;
     }
 }
