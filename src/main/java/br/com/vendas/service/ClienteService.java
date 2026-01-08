@@ -6,14 +6,14 @@ import br.com.vendas.model.Cliente;
 import br.com.vendas.model.Usuario;
 import br.com.vendas.util.NegocioException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+
+@ApplicationScoped
 public class ClienteService implements Serializable {
 
     @Serial
@@ -25,7 +25,7 @@ public class ClienteService implements Serializable {
     @Inject
     private ClienteDao clienteDao;
 
-    @Transactional
+
     public void salvar(Cliente cliente){
         daoGenerico.salvar(cliente);
     }

@@ -35,6 +35,7 @@ h1 {
     font-weight: 450;
     color: #3b4d64 !important;
     margin-bottom: 15px;
+    user-select: none;
 }
 
 .page-content {
