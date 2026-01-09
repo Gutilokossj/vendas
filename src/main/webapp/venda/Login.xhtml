@@ -15,27 +15,35 @@
                 <h1 class="titulo-principal">Seja bem vindo ao CapsuleCorp Shop</h1>
                 <h2 class="titulo-secundario">Entre com seu login</h2>
 
-                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 3rem;">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 2rem;">
                     <div class="col-12 md:col-4 login-container"
-                         style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
+                         style="display: flex; flex-direction: column; gap: 1.2rem; width: 100%; max-width: 500px">
 
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-user"></i>
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Usuário" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-user"></i>
+                                </div>
+                                <p:inputText value="#{loginMB.login}"
+                                             required="true" requiredMessage="Login é obrigatório"
+                                             detail="Login é obrigatório filha da mãe" id="usuario" maxlength="10"
+                                             placeholder="Digite seu nome de usuário"/>
                             </div>
-                            <p:inputText value="#{loginMB.login}" required="true" requiredMessage="Login é obrigatório"
-                                         detail="Login é obrigatório filha da mãe" id="usuario" maxlength="10"
-                                         placeholder="Digite seu nome de usuário"/>
-                        </div>
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-lock"></i>
-                            </div>
-                            <p:password value="#{loginMB.senha}" required="true" requiredMessage="Senha é obrigatória"
-                                        toggleMask="true" redisplay="true" id="senha" maxlength="20"
-                                        placeholder="Digite sua senha"/>
                         </div>
 
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Senha" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-lock"></i>
+                                </div>
+                                <p:password value="#{loginMB.senha}" required="true"
+                                            requiredMessage="Senha é obrigatória"
+                                            toggleMask="true" redisplay="true" id="senha" maxlength="20"
+                                            placeholder="Digite sua senha"/>
+                            </div>
+                        </div>
                         <p:commandButton action="#{loginMB.logar}"
                                          value="Entrar"
                                          icon="pi pi-sign-in"

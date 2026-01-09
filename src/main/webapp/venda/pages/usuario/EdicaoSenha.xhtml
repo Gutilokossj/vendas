@@ -7,33 +7,41 @@
 
     <ui:define name="corpo">
         <h:form>
-            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="5000"/>
+            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="2000"/>
             <div class="card">
                 <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Alteração de senha</h1>
 
-                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 2rem">
                     <div class="col-12 md:col-4"
-                         style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
+                         style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 500px">
 
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-lock"></i>
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Senha" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-lock"></i>
+                                </div>
+                                <p:password value="#{alterarSenhaMB.novaSenha}" type="password" id="senha"
+                                            maxlength="20"
+                                            required="true"
+                                            requiredMessage="Senha é obrigatória"
+                                            placeholder="Digite a nova senha" toggleMask="true" redisplay="true"/>
                             </div>
-                            <p:password value="#{alterarSenhaMB.novaSenha}" type="password" id="senha"
-                                        maxlength="20"
-                                        required="true"
-                                        requiredMessage="Senha é obrigatória"
-                                        placeholder="Digite a nova senha" toggleMask="true" redisplay="true"/>
-                        </div>
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-lock"></i>
-                            </div>
-                            <p:password value="#{alterarSenhaMB.confirmarSenha}" type="password" id="confirmarSenha"
-                                        maxlength="20"
-                                        placeholder="Confirme sua senha nova" required="true" requiredMessage="Confirmação de senha é obrigatória" toggleMask="true" redisplay="true"/>
                         </div>
 
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Confirmar Senha" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-lock"></i>
+                                </div>
+                                <p:password value="#{alterarSenhaMB.confirmarSenha}" type="password" id="confirmarSenha"
+                                            maxlength="20"
+                                            placeholder="Confirme sua senha nova" required="true"
+                                            requiredMessage="Confirmação de senha é obrigatória" toggleMask="true"
+                                            redisplay="true"/>
+                            </div>
+                        </div>
                         <div style="display: flex; justify-content: space-between; gap: 1rem">
 
                             <p:button value="Cancelar Edição"

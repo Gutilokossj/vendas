@@ -9,11 +9,7 @@
         <h:form>
             <p:growl id="aviso" autoUpdate="true" showDetail="true" life="5000"/>
             <div class="card">
-                <h1 style="
-                text-align: center;
-                margin-top: 2rem;
-                font-size: 3rem;">
-                    Cadastro de cliente</h1>
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Cadastro de cliente</h1>
 
                 <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 3rem">
                     <div class="col-12 md:col-4"
@@ -22,79 +18,111 @@
                             <p:tab title="Dados do cliente">
                                 <div style="display: flex; flex-direction: column; gap: 1rem; flex-wrap: wrap;">
                                     <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                                        <div class="ui-inputgroup" style="flex: 1; min-width: 250px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.documento}"
-                                                         id="documento"
-                                                         placeholder="Informe o CPF/CNPJ"
-                                                         required="true"
-                                                         requiredMessage="CPF/CNPJ é obrigatório"
-                                                         maxlength="18"
-                                                         oninput="aplicarMascaraCpfCnpj(this)"/>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="CPF/CNPJ" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 1; min-width: 250px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.documento}"
+                                                             id="documento"
+                                                             placeholder="Informe o CPF/CNPJ"
+                                                             required="true"
+                                                             requiredMessage="CPF/CNPJ é obrigatório"
+                                                             maxlength="18"
+                                                             oninput="aplicarMascaraCpfCnpj(this)"/>
+                                            </div>
                                         </div>
-                                        <div class="ui-inputgroup" style="flex: 1; min-width: 250px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.inscricaoEstadual}"
-                                                         id="inscricaoEstadual"
-                                                         maxlength="14"
-                                                         placeholder="Informe o RG/IE" required="true"
-                                                         requiredMessage="IE/RG é obrigatório"/>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Inscrição Estadual" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 1; min-width: 250px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.inscricaoEstadual}"
+                                                             id="inscricaoEstadual"
+                                                             maxlength="14"
+                                                             placeholder="Informe o RG/IE" required="true"
+                                                             requiredMessage="IE/RG é obrigatório"/>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="ui-inputgroup" style="flex: 1; min-width: 300px">
-                                        <p:inputText value="#{cadastroClienteMB.cliente.nome}" id="nome" maxlength="60"
-                                                     placeholder="Informe o nome/razão social" required="true"
-                                                     requiredMessage="Nome/Razão social é obrigatório"/>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <p:outputLabel value="Nome Completo/Razão Social" styleClass="soft-label"/>
+                                        <div class="ui-inputgroup" style="flex: 1; min-width: 300px">
+                                            <p:inputText value="#{cadastroClienteMB.cliente.nome}" id="nome"
+                                                         maxlength="60"
+                                                         placeholder="Informe o nome/razão social" required="true"
+                                                         requiredMessage="Nome/Razão social é obrigatório"/>
+                                        </div>
                                     </div>
                                 </div>
                             </p:tab>
                             <p:tab title="Dados de endereço">
                                 <div style="display: flex; flex-direction: column; gap: 1rem;">
-                                    <div class="ui-inputgroup" style="max-width: 300px">
-                                        <p:inputMask value="#{cadastroClienteMB.cliente.cep}" id="CEP"
-                                                     maxlength="9"
-                                                     placeholder="Informe o CEP" mask="99999-999" required="true"
-                                                     requiredMessage="CEP é obrigatório"/>
+                                    <div style="display: flex; gap: 2rem; flex-wrap: wrap">
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="CEP" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="max-width: 300px">
+                                                <p:inputMask value="#{cadastroClienteMB.cliente.cep}" id="CEP"
+                                                             maxlength="9"
+                                                             placeholder="Informe o CEP" mask="99999-999"
+                                                             required="true"
+                                                             requiredMessage="CEP é obrigatório"/>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Cidade" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 3 1; min-width: 300px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.cidade}" id="cidade"
+                                                             maxlength="60"
+                                                             placeholder="Informe a cidade" required="true"
+                                                             requiredMessage="Cidade é obrigatório"/>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Estado" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 1; min-width: 120px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.estado}" id="estado"
+                                                             maxlength="20"
+                                                             placeholder="Informe o estado" required="true"
+                                                             requiredMessage="Estado é obrigatório"/>
+                                            </div>
+                                        </div>
                                     </div>
-
                                     <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                                        <div class="ui-inputgroup" style="flex: 3; min-width: 300px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.logradouro}" id="logradouro"
-                                                         maxlength="60"
-                                                         placeholder="Informe o endereço" required="true"
-                                                         requiredMessage="Endereço é obrigatório"/>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Endereço" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 3; min-width: 300px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.logradouro}"
+                                                             id="logradouro"
+                                                             maxlength="60"
+                                                             placeholder="Informe o endereço" required="true"
+                                                             requiredMessage="Endereço é obrigatório"/>
+                                            </div>
                                         </div>
-                                        <div class="ui-inputgroup" style="flex: 1; min-width: 300px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.numero}" id="numero"
-                                                         maxlength="6"
-                                                         placeholder="Informe o numero" required="true"
-                                                         requiredMessage="Numero é obrigatório"/>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Número" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 1; min-width: 300px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.numero}" id="numero"
+                                                             maxlength="6"
+                                                             placeholder="Informe o numero" required="true"
+                                                             requiredMessage="Numero é obrigatório"/>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Bairro" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 2; min-width: 250px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.bairro}" id="bairro"
+                                                             maxlength="60"
+                                                             placeholder="Informe o bairro" required="true"
+                                                             requiredMessage="Bairro é obrigatório"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div style="display: flex; gap: 2rem; flex-wrap: wrap">
-                                        <div class="ui-inputgroup" style="flex: 2; min-width: 250px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.bairro}" id="bairro"
-                                                         maxlength="60"
-                                                         placeholder="Informe o bairro" required="true"
-                                                         requiredMessage="Bairro é obrigatório"/>
-                                        </div>
-                                        <div class="ui-inputgroup" style="flex: 2; min-width: 250px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.complemento}"
-                                                         id="complemento"
-                                                         maxlength="60"
-                                                         placeholder="Informe o complemento (ex: apto 123)"/>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 2rem; flex-wrap: wrap">
-                                        <div class="ui-inputgroup" style="flex: 3; min-width: 300px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.cidade}" id="cidade"
-                                                         maxlength="60"
-                                                         placeholder="Informe a cidade" required="true"
-                                                         requiredMessage="Cidade é obrigatório"/>
-                                        </div>
-                                        <div class="ui-inputgroup" style="flex: 1; min-width: 300px">
-                                            <p:inputText value="#{cadastroClienteMB.cliente.estado}" id="estado"
-                                                         maxlength="20"
-                                                         placeholder="Informe o estado" required="true"
-                                                         requiredMessage="Estado é obrigatório"/>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <p:outputLabel value="Complemento" styleClass="soft-label"/>
+                                            <div class="ui-inputgroup" style="flex: 2; min-width: 250px">
+                                                <p:inputText value="#{cadastroClienteMB.cliente.complemento}"
+                                                             id="complemento"
+                                                             maxlength="60"
+                                                             placeholder="Informe o complemento (ex: apto 123)"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

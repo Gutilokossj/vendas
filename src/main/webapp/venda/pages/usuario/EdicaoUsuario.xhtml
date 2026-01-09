@@ -7,29 +7,37 @@
 
     <ui:define name="corpo">
         <h:form>
-            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="5000"/>
+            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="2000"/>
             <div class="card">
                 <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Edição de usuário</h1>
 
-                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 5rem">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 2rem">
                     <div class="col-12 md:col-4"
-                         style="display: flex; flex-direction: column; gap: 2rem; width: 100%; max-width: 500px">
+                         style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 500px">
 
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-user-edit"></i>
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Nome Completo" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-user-edit"></i>
+                                </div>
+                                <p:inputText value="#{editarUsuarioMB.usuario.nome}" id="nome" maxlength="40"
+                                             placeholder="Digite seu nome completo" required="true"
+                                             requiredMessage="Nome é obrigatório"/>
                             </div>
-                            <p:inputText value="#{editarUsuarioMB.usuario.nome}" id="nome" maxlength="40"
-                                         placeholder="Digite seu nome completo" required="true" requiredMessage="Nome é obrigatório"/>
                         </div>
-                        <div class="ui-inputgroup">
-                            <div class="ui-inputgroup-addon">
-                                <i class="pi pi-user"></i>
+                        <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Usuário" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-user"></i>
+                                </div>
+                                <p:inputText value="#{editarUsuarioMB.usuario.login}" id="usuario" maxlength="10"
+                                             placeholder="Digite seu nome de usuário (até 10 caracteres)"
+                                             required="true"
+                                             requiredMessage="Login é obrigatório"/>
                             </div>
-                            <p:inputText value="#{editarUsuarioMB.usuario.login}" id="usuario" maxlength="10"
-                                         placeholder="Digite seu nome de usuário (até 10 caracteres)" required="true" requiredMessage="Login é obrigatório"/>
                         </div>
-
                         <div style="display: flex; justify-content: space-between; gap: 1rem">
 
                             <p:button value="Cancelar Edição"
