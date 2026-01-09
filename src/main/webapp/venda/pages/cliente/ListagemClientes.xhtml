@@ -12,7 +12,7 @@
                 <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Gerenciamento de usuários</h1>
                 <p:button value="Adicionar Cliente" outcome="/venda/pages/cliente/CadastroCliente.xhtml"/>
                 <p:messages globalOnly="true" closable="true"/>
-                <p:dataTable id="tabelaUsuarios" var="clientes" paginator="true" rows="5"
+                <p:dataTable id="tabelaUsuarios" var="clientes" paginator="true" paginatorPosition="bottom" rows="5"
                              value="#{gerenciarClienteMB.clientes}">
                     <p:column headerText="CPF/CNPJ">
                         <h:outputText value="#{clientes.documento}"/>
