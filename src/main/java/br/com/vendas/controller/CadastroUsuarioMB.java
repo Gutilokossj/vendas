@@ -2,7 +2,6 @@ package br.com.vendas.controller;
 
 import br.com.vendas.model.Usuario;
 import br.com.vendas.service.UsuarioService;
-import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 
@@ -25,9 +24,6 @@ public class CadastroUsuarioMB implements Serializable {
 
     private final Usuario usuario = new Usuario(); //Lembre-se manter o objeto como atributo da classe e não local!
     private String confirmarSenha;
-
-    @Inject
-    private SessaoUsuario sessaoUsuario;
 
     public String cadastrarUsuario() {
         try {

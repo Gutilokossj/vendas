@@ -59,11 +59,11 @@
 
                     <p:menuitem value="Alterar Usuario"
                                 icon="pi pi-user-edit"
-                                outcome="/venda/pages/EdicaoUsuario.xhtml"/>
+                                outcome="/venda/pages/usuario/EdicaoUsuario.xhtml"/>
 
                     <p:menuitem value="Alterar Senha"
                                 icon="pi pi-lock"
-                                outcome="/venda/pages/EdicaoSenha.xhtml"/>
+                                outcome="/venda/pages/usuario/EdicaoSenha.xhtml"/>
 
                     <p:divider/>
 
@@ -98,7 +98,7 @@
                            position="right"/>
 
                 <h:link id="cadastroCliente"
-                        outcome="/venda/pages/CadastroCliente.xhtml">
+                        outcome="/venda/pages/cliente/ListagemClientes.xhtml">
                     <i class="pi pi-user-plus"></i>
                     <span>Cadastrar Clientes</span>
                 </h:link>
@@ -125,7 +125,7 @@
                            position="right"/>
 
                 <h:link id="gerenciarUsuarios"
-                        outcome="/venda/pages/GerenciarUsuarios.xhtml"
+                        outcome="/venda/pages/usuario/GerenciarUsuarios.xhtml"
                         rendered="#{sessaoUsuario.usuarioLogado.admin}"
                         styleClass="menu-item">
                     <i class="pi pi-users"></i>

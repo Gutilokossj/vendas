@@ -45,7 +45,7 @@ public class AlterarSenhaMB implements Serializable {
                     .getFlash()
                     .setKeepMessages(true);
             Message.info("Senha atualizada com sucesso!");
-            return "/venda/pages/DashboardVendas?faces-redirect=true";
+            return "/venda/pages/DashboardVendas.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
             return null;
