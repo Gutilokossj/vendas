@@ -26,7 +26,10 @@ public class ClienteService implements Serializable {
     private ClienteDao clienteDao;
 
 
-    public void salvar(Cliente cliente){
+    public void salvar(Cliente cliente) throws NegocioException {
+        if (clienteDao.existeClienteComDocumento(cliente.getDocumento())){
+            throw new NegocioException("Já existe um cliente cadastrado com este documento.");
+        }
         daoGenerico.salvar(cliente);
     }
 

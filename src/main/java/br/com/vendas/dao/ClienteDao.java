@@ -29,4 +29,14 @@ public class ClienteDao {
                 .setParameter("nome", nome)
                 .getResultList();
     }
+
+    public boolean existeClienteComDocumento(String documento){
+        String jpql = "SELECT COUNT(c) FROM Cliente c WHERE c.documento = :documento";
+
+        Long count = em.createQuery(jpql, Long.class)
+                .setParameter("documento", documento)
+                .getSingleResult();
+
+        return count > 0;
+    }
 }
