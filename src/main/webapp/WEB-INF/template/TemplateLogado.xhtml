@@ -13,7 +13,7 @@
     <title>Sistema de Vendas</title>
 </h:head>
 
-<h:body>
+<h:body style="min-height: 100vh; display: flex; flex-direction: column">
 
     <header class="page-header">
 
@@ -137,7 +137,7 @@
             </nav>
         </aside>
 
-        <main class="conteudo">
+        <main class="conteudo" style="flex: 1">
             <ui:insert name="corpo"/>
         </main>
 
@@ -152,7 +152,7 @@
                          icon="pi pi-times"/>
     </p:confirmDialog>
 
-    <footer>
+    <footer style="margin-top: 0">
         <h2>© 2025 • Desenvolvido por Gustavo Fernandes</h2>
     </footer>
 

@@ -118,13 +118,12 @@ h1 {
 .layout {
     flex: 1;
     display: flex;
-    min-height: 100vh;
 }
 
 .menu {
     user-select: none;
     width: 260px;
-    min-height: 100vh;
+    height: 100%;
     background-color: var(--bg-light);
     padding: 1.5rem 1rem;
     color: var(--primary);
@@ -365,6 +364,62 @@ h1 {
     font-size: 1.4rem;
 }
 
+.titulo-principal {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 2.5rem;
+}
+
+.titulo-secundario {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1.6rem;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+
+    .titulo-principal {
+        font-size: 1.8rem;
+        margin-top: 1.2rem;
+    }
+
+    .titulo-secundario {
+        font-size: 1.3rem;
+        margin-top: 0.8rem;
+    }
+
+    .login-container {
+        max-width: 100%;
+        padding: 0 1.2rem;
+    }
+
+    .card {
+        padding: 1.5rem 1rem;
+    }
+
+    .ui-inputgroup {
+        font-size: 1rem;
+    }
+
+    .ui-inputtext,
+    .ui-password input {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+
+    .ui-button {
+        font-size: 1rem;
+        padding: 0.9rem;
+    }
+}
+
+
 footer {
     display: flex;
     justify-content: center; /* Centraliza horizontalmente */
@@ -375,4 +430,5 @@ footer {
     color: #64748b;
     font-size: 0.7rem;
     padding: 1rem;
+    margin-top: 2rem;
 }
