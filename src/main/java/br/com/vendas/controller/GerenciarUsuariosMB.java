@@ -37,18 +37,15 @@ public class GerenciarUsuariosMB implements Serializable {
         usuarios = usuarioService.buscarTodosUsuarios();
     }
 
-    public String salvarAlteracoes() {
+    public void salvarAlteracoes() {
         try {
             usuarioService.atualizarUsuario(usuarioSelecionado);
-            FacesContext.getCurrentInstance()
-                    .getExternalContext()
-                    .getFlash()
-                    .setKeepMessages(true);
+
             Message.info("Usuario atualizado com sucesso!");
-            return "/venda/pages/DashboardVendas?faces-redirect=true";
+            PrimeFaces.current().ajax().addCallbackParam("salvo", true);
         } catch (NegocioException e) {
             Message.error(e.getMessage());
-            return null;
+            PrimeFaces.current().ajax().addCallbackParam("salvo", false);
         }
     }
 
@@ -83,6 +80,10 @@ public class GerenciarUsuariosMB implements Serializable {
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
+    }
+
+    public void notificarSenhaCopiada(){
+        Message.info("Senha copiada para a area de transferencia!");
     }
 
     public Usuario getUsuarioSelecionado() {

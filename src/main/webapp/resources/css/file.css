@@ -436,6 +436,33 @@ h1 {
     padding: 1rem;
 }
 
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.dialog-actions .ui-button {
+    height: 2.5rem;
+    padding: 0 1.25rem;
+    line-height: 1;
+}
+
+.senha-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.senha-texto {
+    font-weight: bold;
+    font-size: 1.4rem;
+    letter-spacing: 0.15rem;
+    user-select: all;
+}
 
 
 

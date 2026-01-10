@@ -6,9 +6,10 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="corpo">
-        <h:form>
+        <h:form id="form">
             <div class="card">
-                <p:growl id="aviso" widgetVar="growlAviso" autoUpdate="true" closable="true" life="3000"/>
+                <p:growl id="aviso" widgetVar="growlAviso" autoUpdate="true" closable="true" life="3000"
+                         appendTo="@(body)"/>
                 <p:messages globalOnly="true" closable="true"/>
                 <h1 class="tituloPagina">Gerenciamento de usuários</h1>
                 <p:dataTable id="tabelaUsuarios" var="usuarios" paginator="true" paginatorPosition="bottom" rows="5"
@@ -23,8 +24,8 @@
                         <div style="display: flex; gap: 1rem">
                             <p:commandButton icon="pi pi-lock" value="Resetar Senha"
                                              action="#{gerenciarUsuariosMB.resetarSenha}"
-                                             update="@form"
-                                             process="@this">
+                                             process="@this"
+                                             update=":formDialog:conteudoSenha @form">
 
                                 <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
                                                              value="#{usuarios}"/>
@@ -34,9 +35,17 @@
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
 
-                            <p:commandButton id="btnEditar" type="button" icon="pi pi-pencil"/>
-                            <p:tooltip for="btnEditar" value="Edita Usuário" showEffect="clip" hideEffect="fold"
+                            <p:commandButton process="@this"
+                                             update=":formDialog:dlgEditar"
+                                             id="btnEditar"
+                                             icon="pi pi-pencil"
+                                             oncomplete="PF('dlgEditar').show();">
+                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
+                                                             value="#{usuarios}"/>
+                            </p:commandButton>
+                            <p:tooltip for="btnEditar" value="Editar Usuário" showEffect="clip" hideEffect="fold"
                                        position="top"/>
+
                             <p:commandButton action="#{gerenciarUsuariosMB.excluirUsuario}"
                                              update="@form"
                                              process="@this"
@@ -50,6 +59,7 @@
                             </p:commandButton>
                             <p:tooltip for="btnExcluir" value="Excluir Usuário" showEffect="clip" hideEffect="fold"
                                        position="top"/>
+
                             <p:commandButton id="btnAdmin"
                                              action="#{gerenciarUsuariosMB.alterarAdmin}"
                                              update="@form"
@@ -66,37 +76,83 @@
                     </p:column>
                 </p:dataTable>
             </div>
-            <p:dialog header="Senha gerada - Usuário: #{gerenciarUsuariosMB.usuarioSelecionado.login}"
+        </h:form>
+        <h:form id="formDialog">
+            <p:dialog header="Edição de Usuário" widgetVar="dlgEditar" modal="true" resizable="false"
+                      id="dlgEditar" style="min-width: 500px">
+                <p:outputPanel id="conteudoDialog">
+                    <div class="grid ui-fluid"
+                         style="display: flex; justify-content: center; margin-top: 2px">
+                        <div class="col-12 md:col-4"
+                             style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                            <div style="display: flex; flex-direction: column;">
+                                <p:outputLabel value="Usuário" styleClass="soft-label"/>
+                                <div class="ui-inputgroup">
+                                    <div class="ui-inputgroup-addon">
+                                        <i class="pi pi-user"></i>
+                                    </div>
+                                    <p:inputText value="#{gerenciarUsuariosMB.usuarioSelecionado.login}"
+                                                 maxlength="10" required="true"
+                                                 requiredMessage="Login é obrigatório"/>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <p:outputLabel value="Nome Completo" styleClass="soft-label"/>
+                                <div class="ui-inputgroup">
+                                    <div class="ui-inputgroup-addon">
+                                        <i class="pi pi-user-edit"></i>
+                                    </div>
+                                    <p:inputText value="#{gerenciarUsuariosMB.usuarioSelecionado.nome}"
+                                                 maxlength="40" required="true"
+                                                 requiredMessage="Nome é obrigatório"/>
+                                </div>
+                            </div>
+                            <div class="dialog-actions">
+                                <p:commandButton value="Cancelar Edição"
+                                                 type="button"
+                                                 onclick="PF('dlgEditar').hide();"
+                                                 styleClass="ui-button-secondary"/>
+
+                                <p:commandButton action="#{gerenciarUsuariosMB.salvarAlteracoes}"
+                                                 value="Atualizar Usuário!"
+                                                 icon="pi pi-check"
+                                                 process="@form"
+                                                 update=":formDialog:conteudoDialog :form"
+                                                 ajax="true"
+                                                 oncomplete="if (args.salvo) PF('dlgEditar').hide();"/>
+                            </div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Senha gerada - Usuário:"
                       widgetVar="dlgSenhaGerada"
                       modal="true"
                       resizable="false"
                       closable="true">
 
-                <h:panelGrid columns="2" columnClasses="copy-col,senha-col"
-                             style="align-items: center; gap: 1rem; justify-content: center">
-
-                    <p:commandButton icon="pi pi-copy" title="Copiar senha"
-                                     type="button"
-                                     onclick="copiarSenha()"
-                                     styleClass="ui-button-text ui-button-secondary"/>
-
-                    <h:outputText id="senhaGerada"
-                                  value="#{gerenciarUsuariosMB.senhaGerada}"
-                                  style="font-weight: bold; font-size: 1.2rem"/>
-                </h:panelGrid>
+                <p:outputPanel id="conteudoSenha">
+                    <div class="senha-container">
+                        <p:commandButton icon="pi pi-copy"
+                                         title="Copiar senha"
+                                         process="@this"
+                                         update=":form:aviso"
+                                         actionListener="#{gerenciarUsuariosMB.notificarSenhaCopiada}"
+                                         oncomplete="copiarSenhaJS()"
+                                         styleClass="ui-button-text ui-button-secondary"/>
+                        <span id="senhaGerada" class="senha-texto">
+                          #{gerenciarUsuariosMB.senhaGerada}
+                        </span>
+                    </div>
+                </p:outputPanel>
             </p:dialog>
             <h:outputScript>
-                function copiarSenha() {
-                const dialog = document.querySelector('.ui-dialog');
-                const senha = dialog.querySelector('[id$="senhaGerada"]').innerText;
+                function copiarSenhaJS() {
+                const senhaEl = document.querySelector('[id$="senhaGerada"]');
+                if (!senhaEl) return;
 
-                navigator.clipboard.writeText(senha);
-
-                PF('growlAviso').renderMessage({
-                summary: 'Senha copiada',
-                detail: 'A senha foi copiada para a área de transferência.',
-                severity: 'info'
-                });
+                navigator.clipboard.writeText(senhaEl.innerText);
                 }
             </h:outputScript>
         </h:form>
