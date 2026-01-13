@@ -6,10 +6,14 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="corpo">
+        <f:metadata>
+            <f:viewParam name="id" value="#{editarClienteMB.id}"/>
+            <f:viewAction action="#{editarClienteMB.init}"/>
+        </f:metadata>
         <h:form>
             <p:growl id="aviso" autoUpdate="true" showDetail="true" life="3000"/>
             <div class="card">
-                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Cadastro de cliente</h1>
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Edição de cliente</h1>
 
                 <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 3rem">
                     <div class="col-12 md:col-4"
@@ -20,24 +24,25 @@
                                     <div style="display: flex; gap: 1.5rem;">
                                         <div style="flex: 3; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Nome Completo/Razão Social" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.nome}" id="nome"
+                                            <p:inputText value="#{editarClienteMB.cliente.nome}" id="nome"
                                                          maxlength="60"
                                                          placeholder="Informe o nome/razão social" required="true"
                                                          requiredMessage="Nome/Razão social é obrigatório"/>
                                         </div>
                                         <div style="flex: 2; display: flex; flex-direction: column;">
                                             <p:outputLabel value="CPF/CNPJ" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.documento}"
+                                            <p:inputText value="#{editarClienteMB.cliente.documento}"
                                                          id="documento"
                                                          placeholder="Informe o CPF/CNPJ"
                                                          required="true"
                                                          requiredMessage="CPF/CNPJ é obrigatório"
                                                          maxlength="18"
-                                                         oninput="aplicarMascaraCpfCnpj(this)"/>
+                                                         oninput="aplicarMascaraCpfCnpj(this)"
+                                                         disabled="true"/>
                                         </div>
                                         <div style="flex: 1.5; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Inscrição Estadual" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.inscricaoEstadual}"
+                                            <p:inputText value="#{editarClienteMB.cliente.inscricaoEstadual}"
                                                          id="inscricaoEstadual"
                                                          maxlength="14"
                                                          placeholder="Informe o RG/IE" required="true"
@@ -51,7 +56,7 @@
                                     <div style="display: flex; gap: 1.5rem;">
                                         <div style="flex: 4; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Endereço" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.logradouro}"
+                                            <p:inputText value="#{editarClienteMB.cliente.logradouro}"
                                                          id="logradouro"
                                                          maxlength="60"
                                                          placeholder="Informe o endereço" required="true"
@@ -59,14 +64,14 @@
                                         </div>
                                         <div style="flex: 1; display: flex; flex-direction: column; max-width: 120px">
                                             <p:outputLabel value="Número" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.numero}" id="numero"
+                                            <p:inputText value="#{editarClienteMB.cliente.numero}" id="numero"
                                                          maxlength="6"
                                                          placeholder="N°" required="true"
                                                          requiredMessage="Numero é obrigatório"/>
                                         </div>
                                         <div style="flex: 2; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Bairro" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.bairro}" id="bairro"
+                                            <p:inputText value="#{editarClienteMB.cliente.bairro}" id="bairro"
                                                          maxlength="60"
                                                          placeholder="Informe o bairro" required="true"
                                                          requiredMessage="Bairro é obrigatório"/>
@@ -75,7 +80,7 @@
                                     <div style="display: flex; gap: 1rem;">
                                         <div style="flex: 0 0 130px; display: flex; flex-direction: column;">
                                             <p:outputLabel value="CEP" styleClass="soft-label"/>
-                                            <p:inputMask value="#{cadastroClienteMB.cliente.cep}" id="CEP"
+                                            <p:inputMask value="#{editarClienteMB.cliente.cep}" id="CEP"
                                                          maxlength="9"
                                                          placeholder="Informe o CEP" mask="99999-999"
                                                          required="true"
@@ -83,21 +88,21 @@
                                         </div>
                                         <div style="flex: 2; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Cidade" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.cidade}" id="cidade"
+                                            <p:inputText value="#{editarClienteMB.cliente.cidade}" id="cidade"
                                                          maxlength="60"
                                                          placeholder="Informe a cidade" required="true"
                                                          requiredMessage="Cidade é obrigatório"/>
                                         </div>
                                         <div style="flex: 0 0 80px; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Estado" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.estado}" id="estado"
+                                            <p:inputText value="#{editarClienteMB.cliente.estado}" id="estado"
                                                          maxlength="20"
                                                          placeholder="UF" required="true"
                                                          requiredMessage="Estado é obrigatório"/>
                                         </div>
                                         <div style="flex: 2; display: flex; flex-direction: column;">
                                             <p:outputLabel value="Complemento" styleClass="soft-label"/>
-                                            <p:inputText value="#{cadastroClienteMB.cliente.complemento}"
+                                            <p:inputText value="#{editarClienteMB.cliente.complemento}"
                                                          id="complemento"
                                                          maxlength="60"
                                                          placeholder="Informe o complemento (ex: apto 123)"/>
@@ -114,13 +119,18 @@
                               styleClass="ui-button-secondary"
                               style="min-width: 180px"
                     />
-                    <p:commandButton action="#{cadastroClienteMB.cadastrarCliente()}"
-                                     value="Cadastrar"
-                                     icon="pi pi-user-plus"
-                                     ajax="false"
-                                     styleClass="ui-button-primary"
-                                     update="aviso"
-                                     style="min-width: 180px"/>
+
+                    <div style="display: flex; gap: 1rem">
+                        <p:button value="Novo Cliente" outcome="/venda/pages/cliente/CadastroCliente.xhtml"/>
+
+                        <p:commandButton action="#{editarClienteMB.salvarAlteracoes()}"
+                                         value="Salvar Cliente"
+                                         icon="pi pi-check"
+                                         ajax="false"
+                                         styleClass="ui-button-primary"
+                                         update="aviso"
+                                         style="min-width: 180px"/>
+                    </div>
                 </div>
             </div>
             <script type="text/javascript">

@@ -30,6 +30,10 @@ public class ClienteDao {
                 .getResultList();
     }
 
+    public Cliente buscarPorId(Long id){
+        return em.find(Cliente.class, id);
+    }
+
     public boolean existeClienteComDocumento(String documento){
         String jpql = "SELECT COUNT(c) FROM Cliente c WHERE c.documento = :documento";
 

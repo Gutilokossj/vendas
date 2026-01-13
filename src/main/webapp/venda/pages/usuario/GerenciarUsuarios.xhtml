@@ -12,7 +12,7 @@
                          appendTo="@(body)"/>
                 <p:messages globalOnly="true" closable="true"/>
                 <h1 class="tituloPagina">Gerenciamento de usuários</h1>
-                <p:dataTable id="tabelaUsuarios" var="usuarios" paginator="true" paginatorPosition="bottom" rows="5"
+                <p:dataTable id="tabelaUsuarios" var="usuarios" paginator="true" paginatorPosition="bottom" rows="10"
                              value="#{gerenciarUsuariosMB.usuarios}">
                     <p:column headerText="Usuário">
                         <h:outputText value="#{usuarios.login}"/>
@@ -31,8 +31,9 @@
                                                              value="#{usuarios}"/>
 
                                 <p:confirm header="Confirmação - Resetar Senha"
-                                           message="Resetar a senha do usuário? (Será gerada uma senha aleatória)"
-                                           icon="pi pi-exclamation-triangle"/>
+                                           icon="pi pi-exclamation-triangle"
+                                           message="Deseja resetar a senha do usuário?">
+                                </p:confirm>
                             </p:commandButton>
 
                             <p:commandButton process="@this"
@@ -108,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="dialog-actions">
-                                <p:commandButton value="Cancelar Edição"
+                                <p:commandButton value="Cancelar"
                                                  type="button"
                                                  onclick="PF('dlgEditar').hide();"
                                                  styleClass="ui-button-secondary"/>

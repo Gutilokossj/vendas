@@ -25,11 +25,25 @@ public class ClienteService implements Serializable {
     @Inject
     private ClienteDao clienteDao;
 
-
     public void salvar(Cliente cliente) throws NegocioException {
+
         if (clienteDao.existeClienteComDocumento(cliente.getDocumento())){
             throw new NegocioException("Já existe um cliente cadastrado com este documento.");
         }
+
+        daoGenerico.salvar(cliente);
+    }
+
+    public void atualizar(Cliente cliente) throws NegocioException {
+        Cliente clienteBanco = clienteDao.buscarPorId(cliente.getId());
+
+        if (clienteBanco == null) {
+            throw new NegocioException("Cliente não encontrado!");
+        }
+
+        //Documento do cliente não pode ser alterado
+        cliente.setDocumento(clienteBanco.getDocumento());
+
         daoGenerico.salvar(cliente);
     }
 
@@ -45,7 +59,7 @@ public class ClienteService implements Serializable {
         daoGenerico.remover(Cliente.class, clienteParaExcluir.getId());
     }
 
-    public List<Cliente> buscarTodos(){
+    public List<Cliente> buscarTodosClientes(){
         return daoGenerico.buscarTodos(Cliente.class, "SELECT c FROM Cliente c ORDER BY c.id DESC");
     }
 
@@ -58,5 +72,9 @@ public class ClienteService implements Serializable {
         }
 
         return clientes;
+    }
+
+    public Cliente buscarPorId(Long id){
+        return clienteDao.buscarPorId(id);
     }
 }
