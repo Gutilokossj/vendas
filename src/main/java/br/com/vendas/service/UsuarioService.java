@@ -103,6 +103,10 @@ public class UsuarioService implements Serializable {
             throw new NegocioException("Somente administradores podem excluir usuários!");
         }
 
+        if (usuarioParaExcluir.equals(usuarioLogado)){
+            throw new NegocioException("Não é permitido excluir seu próprio perfil de usuário!");
+        }
+
         daoGenerico.remover(Usuario.class, usuarioParaExcluir.getId());
     }
 
