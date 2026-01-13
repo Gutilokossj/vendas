@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class Produto extends EntidadeBase implements Serializable {
     private BigDecimal valorCusto;
 
     @NotNull(message = "Valor de venda do produto é obrigatório")
+    @PositiveOrZero(message = "Valor de venda não pode ser negativo") //Fiz isso para permitir bonificação no pedido.
     @Column(nullable = false, precision = 14, scale = 4)
     private BigDecimal valorVenda;
 

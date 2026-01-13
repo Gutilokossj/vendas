@@ -6,12 +6,14 @@ import br.com.vendas.model.Produto;
 import br.com.vendas.model.Usuario;
 import br.com.vendas.util.NegocioException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+@ApplicationScoped
 public class ProdutoService  implements Serializable {
 
     @Serial
@@ -23,8 +25,9 @@ public class ProdutoService  implements Serializable {
     @Inject
     private ProdutoDao produtoDao;
 
-    @Transactional
-    public void salvar(Produto produto){
+    public void salvar(Produto produto) throws NegocioException {
+        validarProduto(produto);
+        normalizarProduto(produto);
         daoGenerico.salvar(produto);
     }
 
@@ -39,6 +42,16 @@ public class ProdutoService  implements Serializable {
         }
 
         daoGenerico.remover(Produto.class, produtoParaExcluir.getId());
+    }
+
+    public void validarProduto(Produto produto) throws NegocioException{
+        if (produto.getNome() == null || produto.getNome().length() < 2){
+            throw new NegocioException("Nome deve ter pelo menos 2 caracteres!");
+        }
+    }
+
+    public void normalizarProduto(Produto produto){
+        produto.setNome(produto.getNome().trim());
     }
 
     public List<Produto> buscarTodosProdutos(){
