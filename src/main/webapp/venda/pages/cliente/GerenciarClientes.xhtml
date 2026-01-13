@@ -16,19 +16,19 @@
                 <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Listagem de clientes</h1>
                 <p:dataTable id="tabelaUsuarios" var="clientes" paginator="true" paginatorPosition="bottom" rows="10"
                              value="#{gerenciarClienteMB.clientes}">
-                    <p:column headerText="Nome">
+                    <p:column headerText="Nome" sortBy="#{clientes.nome}">
                         <p:link value="#{clientes.nome}"
                                 outcome="/venda/pages/cliente/EditarCliente.xhtml">
                             <f:param name="id" value="#{clientes.id}"/>
                         </p:link>
                     </p:column>
-                    <p:column headerText="CPF/CNPJ">
+                    <p:column headerText="CPF/CNPJ" sortBy="#{clientes.documento}">
                         <p:link value="#{clientes.documento}"
                                 outcome="/venda/pages/cliente/EditarCliente.xhtml">
                             <f:param name="id" value="#{clientes.id}"/>
                         </p:link>
                     </p:column>
-                    <p:column headerText="Cidade">
+                    <p:column headerText="Cidade" sortBy="#{clientes.cidade}">
                         <h:outputText value="#{clientes.cidade}"/>
                     </p:column>
                     <p:column>

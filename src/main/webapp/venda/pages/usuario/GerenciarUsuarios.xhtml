@@ -14,10 +14,10 @@
                 <h1 class="tituloPagina">Gerenciamento de usuários</h1>
                 <p:dataTable id="tabelaUsuarios" var="usuarios" paginator="true" paginatorPosition="bottom" rows="10"
                              value="#{gerenciarUsuariosMB.usuarios}">
-                    <p:column headerText="Usuário">
+                    <p:column headerText="Usuário" sortBy="#{usuarios.login}">
                         <h:outputText value="#{usuarios.login}"/>
                     </p:column>
-                    <p:column headerText="Nome Completo">
+                    <p:column headerText="Nome Completo" sortBy="#{usuarios.nome}">
                         <h:outputText value="#{usuarios.nome}"/>
                     </p:column>
                     <p:column headerText="Ações e permissões">
