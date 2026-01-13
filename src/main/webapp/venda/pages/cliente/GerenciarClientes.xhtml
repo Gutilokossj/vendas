@@ -39,7 +39,7 @@
                                              id="btnExcluir"
                                              icon="pi pi-trash"
                                              styleClass="ui-button-danger"
-                                             rendered="#{sessaoUsuario.usuarioLogado.admin}">
+                                             disabled="#{!sessaoUsuario.usuarioLogado.admin}">
                                 <f:setPropertyActionListener target="#{gerenciarClienteMB.clienteSelecionado}"
                                                              value="#{clientes}"/>
                                 <p:confirm header="Confirmação - Exclusão Cliente"

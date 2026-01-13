@@ -464,7 +464,14 @@ h1 {
     user-select: all;
 }
 
-
+/* Remove foco azul das colunas da DataTable */
+.ui-datatable th:focus,
+.ui-datatable td:focus,
+.ui-datatable .ui-column-header:focus,
+.ui-datatable .ui-state-focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
 footer {
     display: flex;
