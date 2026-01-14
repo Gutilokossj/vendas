@@ -24,13 +24,12 @@ public class AlterarSenhaMB implements Serializable {
     @Inject
     private UsuarioService usuarioService;
 
-    private String novaSenha;
-    private String confirmarSenha;
-
-    private Usuario usuario;
-
     @Inject
     private SessaoUsuario sessaoUsuario;
+
+    private String novaSenha;
+    private String confirmarSenha;
+    private Usuario usuario;
 
     @PostConstruct
     public void init() {

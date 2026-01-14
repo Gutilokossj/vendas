@@ -23,10 +23,11 @@ public class EditarUsuarioMB implements Serializable {
 
     @Inject
     private UsuarioService usuarioService;
-    private Usuario usuario;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
+
+    private Usuario usuario;
 
     @PostConstruct
     public void init() {
@@ -40,7 +41,7 @@ public class EditarUsuarioMB implements Serializable {
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Usuario atualizado com sucesso!");
+            Message.info("Usuario:\n" + usuario.getLogin() + ", atualizado com sucesso!");
             return "/venda/pages/DashboardVendas?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());

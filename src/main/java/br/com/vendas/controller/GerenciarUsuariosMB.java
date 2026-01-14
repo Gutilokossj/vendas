@@ -25,12 +25,13 @@ public class GerenciarUsuariosMB implements Serializable {
 
     @Inject
     private UsuarioService usuarioService;
-    private List<Usuario> usuarios;
-    private Usuario usuarioSelecionado;
-    private String senhaGerada;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
+
+    private List<Usuario> usuarios;
+    private Usuario usuarioSelecionado;
+    private String senhaGerada;
 
     @PostConstruct
     public void init() {
@@ -41,7 +42,7 @@ public class GerenciarUsuariosMB implements Serializable {
         try {
             usuarioService.atualizarUsuario(usuarioSelecionado);
 
-            Message.info("Usuario atualizado com sucesso!");
+            Message.info("Usuario:\n" + usuarioSelecionado.getLogin() + ", atualizado com sucesso!");
             PrimeFaces.current().ajax().addCallbackParam("salvo", true);
         } catch (NegocioException e) {
             Message.error(e.getMessage());
@@ -51,9 +52,10 @@ public class GerenciarUsuariosMB implements Serializable {
 
     public void excluirUsuario() {
         try {
+            String nomeUsuarioExcluido = usuarioSelecionado.getLogin();
             usuarioService.remover(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
             usuarios.remove(usuarioSelecionado);
-            Message.info("Usuario excluido com sucesso!");
+            Message.info("Usuario:\n" + nomeUsuarioExcluido + ", excluído com sucesso!");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }

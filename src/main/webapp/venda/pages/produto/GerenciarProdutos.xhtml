@@ -11,42 +11,39 @@
                 <p:growl id="aviso" widgetVar="growlAviso" autoUpdate="true" closable="true" life="3000"/>
                 <p:messages globalOnly="true" closable="true"/>
                 <div style="display: flex; flex-direction: column; align-items: flex-end">
-                    <p:button value="Cadastrar Cliente" outcome="/venda/pages/cliente/CadastroCliente.xhtml"/>
+                    <p:button value="Cadastrar Produto" outcome="/venda/pages/produto/CadastroProduto.xhtml"/>
                 </div>
-                <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Gerenciamento de clientes</h1>
-                <p:dataTable id="tabelaClientes" var="clientes" paginator="true" paginatorPosition="bottom" rows="10"
-                             value="#{gerenciarClienteMB.clientes}">
-                    <p:column headerText="Nome" sortBy="#{clientes.nome}">
-                        <p:link value="#{clientes.nome}"
-                                outcome="/venda/pages/cliente/EditarCliente.xhtml">
-                            <f:param name="id" value="#{clientes.id}"/>
+                <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Gerenciamento de produtos</h1>
+                <p:dataTable id="tabelaProdutos" var="produtos" paginator="true" paginatorPosition="bottom" rows="10"
+                             value="#{gerenciarProdutoMB.produtos}">
+                    <p:column headerText="Descrição" sortBy="#{produtos.nome}">
+                        <p:link value="#{produtos.nome}"
+                                outcome="/venda/pages/produto/EditarProduto.xhtml">
+                            <f:param name="id" value="#{produtos.id}"/>
                         </p:link>
                     </p:column>
-                    <p:column headerText="CPF/CNPJ" sortBy="#{clientes.documento}">
-                        <p:link value="#{clientes.documento}"
-                                outcome="/venda/pages/cliente/EditarCliente.xhtml">
-                            <f:param name="id" value="#{clientes.id}"/>
-                        </p:link>
+                    <p:column headerText="Valor de Custo" sortBy="#{produtos.valorCusto}">
+                        <h:outputText value="R$ #{produtos.valorCusto}"/>
                     </p:column>
-                    <p:column headerText="Cidade" sortBy="#{clientes.cidade}">
-                        <h:outputText value="#{clientes.cidade}"/>
+                    <p:column headerText="Valor de Venda" sortBy="#{produtos.valorVenda}">
+                        <h:outputText value="R$ #{produtos.valorVenda}"/>
                     </p:column>
                     <p:column>
                         <div style="display: flex; flex-direction: column; align-items: flex-end">
-                            <p:commandButton action="#{gerenciarClienteMB.excluirCliente()}"
+                            <p:commandButton action="#{gerenciarProdutoMB.excluirProduto()}"
                                              update="@form"
                                              process="@this"
                                              id="btnExcluir"
                                              icon="pi pi-trash"
                                              styleClass="ui-button-danger"
                                              disabled="#{!sessaoUsuario.usuarioLogado.admin}">
-                                <f:setPropertyActionListener target="#{gerenciarClienteMB.clienteSelecionado}"
-                                                             value="#{clientes}"/>
-                                <p:confirm header="Confirmação - Exclusão Cliente"
-                                           message="Deseja realmente excluir o cliente?"
+                                <f:setPropertyActionListener target="#{gerenciarProdutoMB.produtoSelecionado}"
+                                                             value="#{produtos}"/>
+                                <p:confirm header="Confirmação - Exclusão Produtos"
+                                           message="Deseja realmente excluir o produto?"
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
-                            <p:tooltip for="btnExcluir" value="Excluir Cliente"
+                            <p:tooltip for="btnExcluir" value="Excluir Produto"
                                        showEffect="clip"
                                        hideEffect="fold"
                                        position="top"/>

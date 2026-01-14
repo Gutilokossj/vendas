@@ -31,6 +31,18 @@ public class ProdutoService  implements Serializable {
         daoGenerico.salvar(produto);
     }
 
+    public void atualizar(Produto produto) throws NegocioException {
+        Produto produtoBanco = produtoDao.buscarPorId(produto.getId());
+
+        if (produtoBanco == null){
+            throw new NegocioException("Produto não encontrado!");
+        }
+
+        validarProduto(produto);
+        normalizarProduto(produto);
+        daoGenerico.salvar(produto);
+    }
+
     public void remover(Produto produtoParaExcluir, Usuario usuarioLogado) throws NegocioException {
 
         if(!usuarioLogado.isAdmin()){
@@ -68,5 +80,9 @@ public class ProdutoService  implements Serializable {
         }
 
         return produtos;
+    }
+
+    public Produto buscarPorId(Long id){
+        return produtoDao.buscarPorId(id);
     }
 }

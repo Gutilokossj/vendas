@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/template/TemplateLogado.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/template" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/venda/pages/produto/EditarProduto.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/venda/pages/produto" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/venda/pages/usuario/EdicaoSenha.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/venda/pages/usuario" />
       </map>
     </option>

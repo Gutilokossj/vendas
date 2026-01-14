@@ -20,14 +20,14 @@ public class LoginMB implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String login;
-    private String senha;
-
     @Inject
     private UsuarioService usuarioService;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
+
+    private String login;
+    private String senha;
 
     public String logar() {
         try {
@@ -41,11 +41,10 @@ public class LoginMB implements Serializable {
     }
 
     public String deslogar() {
-
         FacesContext facesContext = FacesContext.getCurrentInstance();
         facesContext.getExternalContext().getFlash().setKeepMessages(true);
 
-        Message.warning("Usuário deslogado com sucesso!");
+        Message.warning("Atenção:\n Usuário deslogado!");
 
         sessaoUsuario.setUsuarioLogado(null);
         facesContext.getExternalContext().invalidateSession();

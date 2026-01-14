@@ -30,7 +30,7 @@ public class CadastroClienteMB implements Serializable {
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Cliente cadastrado com sucesso!");
+            Message.info("Cliente:\n" + cliente.getNome() + ", cadastrado com sucesso!");
             return "/venda/pages/cliente/GerenciarClientes.xhtml?faces-redirect=true";
         }catch (Exception e){
             Message.error(e.getMessage());

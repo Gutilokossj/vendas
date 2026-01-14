@@ -17,15 +17,18 @@
 					styleClass="doc-main-grid">
 
 					<h2>Cadastro Testes</h2>
-					<h:panelGrid columns="2" styleClass="doc-section">
+					<h:panelGrid columns="1" styleClass="doc-section">
+						<p:button outcome="venda/Login.xhtml"
+								  value="Vendas - Capsule Corp" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" styleClass="doc-section">
 						<p:button outcome="CadastroPessoa.xhtml"
 							value="Cadastrar Cliente - Lista" />
 						<p:button outcome="Cadastro.xhtml"
 							value="Cadastro Cliente (antigo)" />
 						<p:button outcome="primefaces/Medicamento.xhtml"
 							value="Cadastro Medicamentos (com bando de dados)" />
-						<p:button outcome="venda/Login.xhtml"
-								  value="Vendas - Capsule Corp" />
 					</h:panelGrid>
 
 					<!-- COLUNA 2 – Testes Primefaces (agrupados em 2 colunas internas) -->

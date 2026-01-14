@@ -473,6 +473,11 @@ h1 {
     box-shadow: none !important;
 }
 
+.col-center {
+    text-align: center;
+}
+
+
 footer {
     display: flex;
     justify-content: center; /* Centraliza horizontalmente */

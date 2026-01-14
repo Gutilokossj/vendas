@@ -29,4 +29,8 @@ public class ProdutoDao {
                 .setParameter("nome", nome)
                 .getResultList();
     }
+
+    public Produto buscarPorId(Long id){
+        return em.find(Produto.class, id);
+    }
 }

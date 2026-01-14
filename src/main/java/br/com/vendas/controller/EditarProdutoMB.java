@@ -1,7 +1,7 @@
 package br.com.vendas.controller;
 
-import br.com.vendas.model.Cliente;
-import br.com.vendas.service.ClienteService;
+import br.com.vendas.model.Produto;
+import br.com.vendas.service.ProdutoService;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 
@@ -13,49 +13,41 @@ import javax.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Named("editarClienteMB")
+@Named("editarProdutoMB")
 @ViewScoped
-public class EditarClienteMB implements Serializable {
+public class EditarProdutoMB implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private ClienteService clienteService;
+    private ProdutoService produtoService;
 
-    private Cliente cliente;
+    private Produto produto;
     private Long id;
 
     @PostConstruct
-    public void init(){
-        if(id != null){
-            cliente = clienteService.buscarPorId(id);
+    public void init() {
+        if (id != null) {
+            produto = produtoService.buscarPorId(id);
         } else {
-            cliente = new Cliente();
+            produto = new Produto();
         }
     }
 
-    public String salvarAlteracoes(){
-        try{
-            clienteService.atualizar(cliente);
+    public String salvarAlteracoes() {
+        try {
+            produtoService.atualizar(produto);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Cliente:\n" + cliente.getNome() + ", atualizado com sucesso!");
-            return "/venda/pages/cliente/GerenciarClientes.xhtml?faces-redirect=true";
-        } catch (NegocioException e){
+            Message.info("Produto:\n" + produto.getNome() + ", atualizado com sucesso!");
+            return "/venda/pages/produto/GerenciarProdutos.xhtml?faces-redirect=true";
+        } catch (NegocioException e) {
             Message.error(e.getMessage());
             return null;
         }
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public Long getId() {
@@ -64,5 +56,13 @@ public class EditarClienteMB implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

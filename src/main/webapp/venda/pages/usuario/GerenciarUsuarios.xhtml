@@ -20,7 +20,7 @@
                     <p:column headerText="Nome Completo" sortBy="#{usuarios.nome}">
                         <h:outputText value="#{usuarios.nome}"/>
                     </p:column>
-                    <p:column headerText="Ações e permissões">
+                    <p:column headerText="Ações e pemirssões" sortBy="#{usuarios.admin}">
                         <div style="display: flex; gap: 1rem">
                             <p:commandButton icon="pi pi-lock" value="Resetar Senha"
                                              action="#{gerenciarUsuariosMB.resetarSenha}"
@@ -60,19 +60,22 @@
                             </p:commandButton>
                             <p:tooltip for="btnExcluir" value="Excluir Usuário" showEffect="clip" hideEffect="fold"
                                        position="top"/>
-
-                            <p:commandButton id="btnAdmin"
-                                             action="#{gerenciarUsuariosMB.alterarAdmin}"
-                                             update="@form"
-                                             process="@this"
-                                             icon="#{usuarios.admin ? 'pi pi-star-fill' : 'pi pi-star'}"
-                                             class="ui-button-warning">
-                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
-                                                             value="#{usuarios}"/>
-                            </p:commandButton>
-                            <p:tooltip for="btnAdmin" value="Altera Permissão (admin)" showEffect="clip"
-                                       hideEffect="fold"
-                                       position="top"/>
+                            <p:column headerText="Permissão (admin)">
+                                <div style="display: flex; gap: 1rem; ">
+                                    <p:commandButton id="btnAdmin"
+                                                     action="#{gerenciarUsuariosMB.alterarAdmin}"
+                                                     update="@form"
+                                                     process="@this"
+                                                     icon="#{usuarios.admin ? 'pi pi-star-fill' : 'pi pi-star'}"
+                                                     class="ui-button-warning">
+                                        <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
+                                                                     value="#{usuarios}"/>
+                                    </p:commandButton>
+                                    <p:tooltip for="btnAdmin" value="Altera Permissão" showEffect="clip"
+                                               hideEffect="fold"
+                                               position="top"/>
+                                </div>
+                            </p:column>
                         </div>
                     </p:column>
                 </p:dataTable>

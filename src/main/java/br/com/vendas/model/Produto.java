@@ -24,6 +24,7 @@ public class Produto extends EntidadeBase implements Serializable {
     private String nome;
 
     @NotNull(message = "Valor de custo do produto é obrigatório")
+    @PositiveOrZero(message = "Valor de custo não pode ser negativo")
     @Column(nullable = false, precision = 14, scale = 4)
     private BigDecimal valorCusto;
 

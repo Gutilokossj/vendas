@@ -32,7 +32,7 @@ public class CadastroUsuarioMB implements Serializable {
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Usuario cadastrado com sucesso!");
+            Message.info("Usuario:\n" + usuario.getLogin() + ", cadastrado com sucesso!");
             return "Login.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());

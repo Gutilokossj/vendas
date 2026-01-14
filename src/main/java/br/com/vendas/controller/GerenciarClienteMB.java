@@ -23,29 +23,32 @@ public class GerenciarClienteMB implements Serializable {
 
     @Inject
     private ClienteService clienteService;
-    private List<Cliente> clientes;
-    private Cliente clienteSelecionado;
 
     @Inject
     private SessaoUsuario sessaoUsuario;
+
+    private List<Cliente> clientes;
+    private Cliente clienteSelecionado;
 
     @PostConstruct
     public void init() {
         clientes = clienteService.buscarTodosClientes();
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
 
     public void excluirCliente(){
         try{
+            String nomeClienteExcluido = clienteSelecionado.getNome();
             clienteService.remover(clienteSelecionado, sessaoUsuario.getUsuarioLogado());
             clientes.remove(clienteSelecionado);
-            Message.info("Cliente excluido com sucesso!");
+            Message.info("Cliente:\n" + nomeClienteExcluido + ", excluido com sucesso!");
         } catch (NegocioException e){
             Message.error(e.getMessage());
         }
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 
     public Cliente getClienteSelecionado() {
