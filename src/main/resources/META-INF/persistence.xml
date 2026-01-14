@@ -7,7 +7,6 @@
 
 	<persistence-unit name="VendasPU" transaction-type="RESOURCE_LOCAL">
 
-		<!-- Classes - ou seja, entidades do novo projeto!! -->
 		<class>br.com.vendas.model.Usuario</class>
 		<class>br.com.vendas.model.Cliente</class>
 		<class>br.com.vendas.model.Produto</class>

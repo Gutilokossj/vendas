@@ -140,10 +140,7 @@
                     <div class="senha-container">
                         <p:commandButton icon="pi pi-copy"
                                          title="Copiar senha"
-                                         process="@this"
-                                         update=":form:aviso"
-                                         actionListener="#{gerenciarUsuariosMB.notificarSenhaCopiada}"
-                                         oncomplete="copiarSenhaJS()"
+                                         onclick="copiarSenhaJS()"
                                          styleClass="ui-button-text ui-button-secondary"/>
                         <span id="senhaGerada" class="senha-texto">
                           #{gerenciarUsuariosMB.senhaGerada}
@@ -153,10 +150,27 @@
             </p:dialog>
             <h:outputScript>
                 function copiarSenhaJS() {
-                const senhaEl = document.querySelector('[id$="senhaGerada"]');
-                if (!senhaEl) return;
+                const senhaEl = document.getElementById('senhaGerada');
+                if (!senhaEl) {
+                console.log('Senha não encontrada');
+                return;
+                }
 
-                navigator.clipboard.writeText(senhaEl.innerText);
+                navigator.clipboard.writeText(senhaEl.innerText)
+                .then(() => {
+                PF('growlAviso').renderMessage({
+                summary: 'Sucesso',
+                detail: 'Senha copiada!',
+                severity: 'info'
+                });
+                })
+                .catch(() => {
+                PF('growlAviso').renderMessage({
+                summary: 'Erro',
+                detail: 'Não foi possível copiar a senha',
+                severity: 'error'
+                });
+                });
                 }
             </h:outputScript>
         </h:form>

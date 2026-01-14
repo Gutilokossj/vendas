@@ -133,7 +133,7 @@ public class UsuarioService implements Serializable {
             throw new NegocioException("Somente administradores podem resetar senhas");
         }
 
-        if (usuarioParaResetar.equals(usuarioLogado)){
+        if (usuarioParaResetar.getId().equals(usuarioLogado.getId())){
             throw new NegocioException("Não é possível resetar a própria senha!");
         }
 

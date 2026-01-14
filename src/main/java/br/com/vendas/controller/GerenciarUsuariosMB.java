@@ -84,10 +84,6 @@ public class GerenciarUsuariosMB implements Serializable {
         }
     }
 
-    public void notificarSenhaCopiada(){
-        Message.info("Senha copiada para a area de transferencia!");
-    }
-
     public Usuario getUsuarioSelecionado() {
         return usuarioSelecionado;
     }

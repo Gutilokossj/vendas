@@ -477,6 +477,9 @@ h1 {
     text-align: center;
 }
 
+.ui-dialog-mask ~ .ui-growl {
+    z-index: 11000 !important;
+}  /* VER DEPOIS, AQUI NÃO FUNCIONU ISSO RSRS*/
 
 footer {
     display: flex;
