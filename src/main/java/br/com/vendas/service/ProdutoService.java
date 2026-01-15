@@ -60,6 +60,11 @@ public class ProdutoService  implements Serializable {
         if (produto.getNome() == null || produto.getNome().length() < 2){
             throw new NegocioException("Nome deve ter pelo menos 2 caracteres!");
         }
+
+        if (produto.getValorCusto().compareTo(produto.getValorVenda()) > 0) {
+            throw new NegocioException(("Preço de custo não pode ser maior que o valor de venda!"));
+                    // > 0 é maior, == 0 é igual e < 0 é menor. (só pra eu lembrar)
+        }
     }
 
     public void normalizarProduto(Produto produto){
