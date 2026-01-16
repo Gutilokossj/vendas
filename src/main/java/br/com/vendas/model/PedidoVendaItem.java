@@ -44,15 +44,15 @@ public class PedidoVendaItem extends EntidadeBase implements Serializable {
 
     @NotNull(message = "Quantidade deve ser informada")
     @Column(nullable = false, precision = 14, scale = 4)
-    private BigDecimal quantidade;
+    private BigDecimal quantidade = BigDecimal.ZERO;
 
     @NotNull(message = "Valor unitário deve ser informado")
     @Column(nullable = false, precision = 14, scale = 4)
-    private BigDecimal valorUnitario;
+    private BigDecimal valorUnitario = BigDecimal.ZERO;
 
     @NotNull(message = "Valor total deve ser informado")
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal valorTotal;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
 
     public PedidoVenda getPedidoVenda() {
         return pedidoVenda;

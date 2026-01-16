@@ -151,25 +151,19 @@
             <h:outputScript>
                 function copiarSenhaJS() {
                 const senhaEl = document.getElementById('senhaGerada');
-                if (!senhaEl) {
-                console.log('Senha não encontrada');
-                return;
-                }
+                if (!senhaEl) return;
 
                 navigator.clipboard.writeText(senhaEl.innerText)
                 .then(() => {
-                PF('growlAviso').renderMessage({
-                summary: 'Sucesso',
-                detail: 'Senha copiada!',
-                severity: 'info'
-                });
-                })
-                .catch(() => {
-                PF('growlAviso').renderMessage({
-                summary: 'Erro',
-                detail: 'Não foi possível copiar a senha',
-                severity: 'error'
-                });
+                    PF('dlgSenhaGerada').hide();
+
+                setTimeout(() => {
+                    PF('growlAviso').renderMessage({
+                        summary: 'Sucesso',
+                        detail: 'Senha copiada!',
+                        severity: 'info'
+                    });
+                }, 3000);
                 });
                 }
             </h:outputScript>

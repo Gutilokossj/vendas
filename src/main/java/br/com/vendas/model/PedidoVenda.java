@@ -51,7 +51,17 @@ public class PedidoVenda extends EntidadeBase implements Serializable {
      */
 
     @Column(precision = 12, scale = 2)
-    private BigDecimal valorTotal;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
+
+    public void adicionarItem(PedidoVendaItem item){
+        item.setPedidoVenda(this);
+        this.itens.add(item);
+    }
+
+    public void removerItem(PedidoVendaItem item){
+        item.setPedidoVenda(null);
+        this.itens.remove(item);
+    }
 
     public Cliente getCliente() {
         return cliente;

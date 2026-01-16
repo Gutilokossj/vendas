@@ -1,0 +1,251 @@
+<ui:composition template="/WEB-INF/template/TemplateLogado.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="corpo">
+        <h:form id="form">
+            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="3000"/>
+            <div class="card">
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Emissão Pedido de Venda</h1>
+
+                <h:panelGrid columns="3" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
+                    <h:outputLabel value="Cliente:" for="cliente"/>
+                    <p:autoComplete id="cliente" value="#{emitirPedidoMB.clienteSelecionado}"
+                                    completeMethod="#{emitirPedidoMB.buscarClientes}" var="c"
+                                    itemLabel="#{c.documento} - #{c.nome}"
+                                    itemValue="#{c}" forceSelection="true"
+                                    dropdown="true" placeholder="Busque pelo nome ou CPF/CNPJ">
+
+                        <p:ajax listener="#{emitirPedidoMB.selecionarCliente}" update="@form"/>
+                    </p:autoComplete>
+
+                    <p:commandButton value="Novo Cliente"
+                                     icon="pi pi-user-plus"
+                                     type="button"
+                                     styleClass="ui-button-success"
+                                     onclick="PF('dlgNovoCliente').show()"/>
+                </h:panelGrid>
+
+                <h:panelGrid columns="4" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
+                    <h:outputLabel value="Produto:" for="produto"/>
+
+                    <p:autoComplete id="produto" value="#{emitirPedidoMB.produtoSelecionado}"
+                                    completeMethod="#{emitirPedidoMB.buscarProdutos}"
+                                    var="p"
+                                    itemLabel="#{p.nome}"
+                                    itemValue="#{p}" forceSelection="true"
+                                    dropdown="true" placeholder="Busque pelo nome">
+
+                        <p:ajax event="itemSelect" process="@this" update=":form:panelValorUnitario :form:btnInserirProduto"/>
+                    </p:autoComplete>
+
+                    <h:outputLabel value="Quantidade:" for="quantidade"/>
+                    <p:inputNumber id="quantidade" value="#{emitirPedidoMB.quantidade}"
+                                   decimalPlaces="4"
+                                   minValue="0"
+                                   placeholder="0,000"/>
+
+                    <p:commandButton value="Novo Produto"
+                                     icon="pi pi-plus-circle"
+                                     type="button"
+                                     styleClass="ui-button-success"
+                                     onclick="PF('dlgNovoProduto').show()"/>
+                </h:panelGrid>
+
+                <h:panelGrid
+                        id="panelValorUnitario"
+                        columns="2" cellpadding="8" style="margin-top: 2rem"
+                        rendered="#{emitirPedidoMB.produtoSelecionado != null}">
+
+                    <h:outputLabel value="Valor Unitário:"/>
+
+                    <h:outputText value="#{emitirPedidoMB.produtoSelecionado.valorVenda}">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+
+                </h:panelGrid>
+
+                <p:commandButton id="btnInserirProduto"
+                                 value="Inserir Produto"
+                                 icon="pi pi-plus"
+                                 style="margin-top: 1rem"
+                                 action="#{emitirPedidoMB.adicionarItem()}"
+                                 update="@form"
+                                 rendered="#{emitirPedidoMB.produtoSelecionado == null}"/>
+
+                <p:dataTable id="tabelaItens" value="#{emitirPedidoMB.pedidoVenda.itens}"
+                             var="item"
+                             selection="#{emitirPedidoMB.itemSelecionado}"
+                             selectionMode="single"
+                             style="margin-top: 2rem"
+                             emptyMessage="Nenhum produto inserido no pedido">
+
+                    <p:column headerText="Produto">
+                        <h:outputText value="#{item.produto.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Quantidade" style="text-align: right">
+                        <h:outputText value="#{item.quantidade}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="4"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Valor Unitário" style="text-align: right">
+                        <h:outputText value="#{item.valorUnitario}">
+                            <f:convertNumber type="currency" currencySymbol="R$ "/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Valor Total" style="text-align: right">
+                        <h:outputText value="#{item.valorTotal}">
+                            <f:convertNumber type="currency" currencySymbol="R$ "/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+                <p:commandButton value="Remover Produto"
+                                 icon="pi pi-trash"
+                                 styleClass="ui-button-danger"
+                                 style="margin-top: 1rem"
+                                 action="#{emitirPedidoMB.removerItem()}"
+                                 update="@form"
+                                 disabled="#{emitirPedidoMB.itemSelecionado == null}"/>
+
+                <h:panelGrid columns="2" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
+
+                    <h:outputLabel value="Valor Total do Pedido:" style="font-weight: bold"/>
+
+                    <h:outputText value="#{emitirPedidoMB.pedidoVenda.valorTotal}"
+                                  style="font-size: 1.4rem; font-weight: bold">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" cellpadding="10" styleClass="ui-fluid" style="margin-top: 2rem">
+
+                    <p:commandButton value="Salvar Pedido"
+                                     icon="pi pi-check"
+                                     styleClass="ui-button-success"
+                                     action="#{emitirPedidoMB.emitirPedidoVenda()}"
+                                     update="@form"/>
+
+                    <p:commandButton value="Cancelar"
+                                     icon="pi pi-times"
+                                     styleClass="ui-button-secondary"
+                                     immediate="true"
+                                     action="/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true"/>
+                </h:panelGrid>
+            </div>
+
+            <p:dialog header="Novo Cliente" widgetVar="dlgNovoCliente" modal="true" resizable="false" width="600">
+                <h:panelGrid columns="2" cellpadding="8" styleClass="ui-fluid">
+
+                    <h:outputLabel value="Nome / Razão Social:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.nome}" required="true"
+                                 requiredMessage="O nome é obrigatório"/>
+
+                    <h:outputLabel value="CPF / CNPJ:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.documento}" required="true"
+                                 requiredMessage="O documento é obrigatório"/>
+
+                    <h:outputLabel value="Inscrição Estadual:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.inscricaoEstadual}" required="true"
+                                 requiredMessage="IE é obrigatório"/>
+
+                    <h:outputLabel value="Endereço:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.logradouro}" required="true"
+                                 requiredMessage="O endereço é obrigatório"/>
+
+                    <h:outputLabel value="Número:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.numero}" required="true"
+                                 requiredMessage="O número é obrigatório"/>
+
+                    <h:outputLabel value="Bairro:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.bairro}" required="true"
+                                 requiredMessage="O bairro é obrigatório"/>
+
+                    <h:outputLabel value="CEP:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.cep}" required="true"
+                                 requiredMessage="O CEP é obrigatório"/>
+
+                    <h:outputLabel value="Cidade:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.cidade}" required="true"
+                                 requiredMessage="A cidade é obrigatória"/>
+
+                    <h:outputLabel value="Estado:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.estado}" required="true"
+                                 requiredMessage="O estado é obrigatório"/>
+
+                    <h:outputLabel value="Complemento:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoCliente.complemento}"/>
+
+                </h:panelGrid>
+
+                <p:separator/>
+
+                <h:panelGrid columns="2" cellpadding="10" style="justify-content: center;">
+
+                    <p:commandButton value="Salvar"
+                                     icon="pi pi-check"
+                                     action="#{emitirPedidoMB.salvarNovoCliente()}"
+                                     update="@form"
+                                     oncomplete="PF('dlgNovoCliente').hide()"/>
+
+                    <p:commandButton value="Cancelar"
+                                     icon="pi pi-times"
+                                     type="button"
+                                     oncomplete="PF('dlgNovoCliente').hide()"/>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog header="Novo Produto" widgetVar="dlgNovoProduto" modal="true" resizable="false" width="500">
+                <h:panelGrid columns="2" cellpadding="8" styleClass="ui-fluid">
+
+                    <h:outputLabel value="Nome:"/>
+                    <p:inputText value="#{emitirPedidoMB.novoProduto.nome}" required="true"
+                                 requiredMessage="O nome é obrigatório"/>
+
+                    <h:outputLabel value="Preço de Custo"/>
+                    <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorCusto}"
+                                   decimalPlaces="4"
+                                   minValue="0"
+                                   required="true"
+                                   requiredMessage="O preço de custo é obrigatório"
+                                   maxValue="9999999999.9999"
+                                   decimalSeparator=","/>
+
+                    <h:outputLabel value="Valor de Venda:"/>
+                    <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorVenda}"
+                                   decimalPlaces="4"
+                                   minValue="0"
+                                   required="true"
+                                   requiredMessage="O valor de venda é obrigatório"
+                                   maxValue="9999999999.9999"
+                                   decimalSeparator=","/>
+
+                </h:panelGrid>
+
+                <p:separator/>
+
+                <h:panelGrid columns="2" cellpadding="10" style="justify-content: center;">
+
+                    <p:commandButton value="Salvar"
+                                     icon="pi pi-check"
+                                     action="#{emitirPedidoMB.salvarNovoProduto()}"
+                                     update="@form"
+                                     oncomplete="PF('dlgNovoProduto').hide()"/>
+
+                    <p:commandButton value="Cancelar"
+                                     icon="pi pi-times"
+                                     type="button"
+                                     oncomplete="PF('dlgNovoProduto').hide()"/>
+
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -74,6 +74,14 @@ public class ClienteService implements Serializable {
         return clientes;
     }
 
+    public List<Cliente> buscarPorNomeOuDocumento(String filtro) {
+        if (filtro == null || filtro.trim().isEmpty()){
+            return List.of();
+        }
+
+        return clienteDao.buscarPorNomeOuDocumento(filtro);
+    }
+
     public Cliente buscarPorId(Long id){
         return clienteDao.buscarPorId(id);
     }

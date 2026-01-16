@@ -22,11 +22,19 @@ public class ProdutoDao {
         return count > 0;
     }
 
-    public List<Produto> buscarPorNome(String nome){
+    public List<Produto> buscarPorNomeExato(String nome){
         return em.createQuery(
                 "SELECT p FROM Produto p WHERE p.nome = :nome ORDER BY p.id",
                         Produto.class)
                 .setParameter("nome", nome)
+                .getResultList();
+    }
+
+    public List<Produto> buscarPorNomeParcial(String filtro){
+        String jpql = "SELECT p FROM Produto p WHERE LOWER (p.nome) LIKE LOWER (:filtro) ORDER BY p.nome";
+        return em.createQuery(jpql, Produto.class)
+                .setParameter("filtro", "%" + filtro + "%")
+                .setMaxResults(10)
                 .getResultList();
     }
 
