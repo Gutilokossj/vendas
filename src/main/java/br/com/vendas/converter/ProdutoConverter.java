@@ -9,8 +9,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-@FacesConverter(forClass = Produto.class, managed = true)
-public class ProdutoConverter implements Converter<Produto> {
+@FacesConverter(value = "produtoConverter", forClass = Produto.class, managed = true)
+public class ProdutoConverter implements Converter<Object> {
 
     @Inject
     private ProdutoService produtoService;
@@ -24,10 +24,19 @@ public class ProdutoConverter implements Converter<Produto> {
     }
 
     @Override
-    public String getAsString(FacesContext context, UIComponent component, Produto produto) {
-        if (produto == null || produto.getId() == null) {
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
+        if (value == null){
             return "";
         }
-        return produto.getId().toString();
+
+        if (value instanceof Produto produto){
+            return produto.getId() != null ? produto.getId().toString() : "";
+        }
+
+        if (value instanceof Long id) {
+            return id.toString();
+        }
+
+        return "";
     }
 }

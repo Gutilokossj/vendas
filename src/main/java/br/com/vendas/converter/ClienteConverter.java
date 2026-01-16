@@ -9,7 +9,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-@FacesConverter(forClass = Cliente.class, managed = true)
+@FacesConverter(value = "clienteConverter", forClass = Cliente.class, managed = true)
 public class ClienteConverter implements Converter<Cliente> {
 
     @Inject

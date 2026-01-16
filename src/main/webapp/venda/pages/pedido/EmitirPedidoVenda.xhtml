@@ -11,70 +11,106 @@
             <div class="card">
                 <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Emissão Pedido de Venda</h1>
 
-                <h:panelGrid columns="3" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
-                    <h:outputLabel value="Cliente:" for="cliente"/>
-                    <p:autoComplete id="cliente" value="#{emitirPedidoMB.clienteSelecionado}"
-                                    completeMethod="#{emitirPedidoMB.buscarClientes}" var="c"
-                                    itemLabel="#{c.documento} - #{c.nome}"
-                                    itemValue="#{c}" forceSelection="true"
-                                    dropdown="true" placeholder="Busque pelo nome ou CPF/CNPJ">
+                <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 3rem">
+                    <div class="col-12 md:col-4"
+                         style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: flex; gap: 1.5rem;">
+                                <div style="flex: 1; display: flex; flex-direction: column;">
+                                    <p:outputLabel value="Cliente:" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <p:autoComplete id="cliente" value="#{emitirPedidoMB.clienteSelecionado}"
+                                                        completeMethod="#{emitirPedidoMB.buscarClientes}" var="c"
+                                                        itemLabel="#{c.documento}#{c.nome}"
+                                                        itemValue="#{c}"
+                                                        forceSelection="true"
+                                                        placeholder="Busque pelo nome ou CPF/CNPJ">
+                                            <p:ajax event="itemSelect"
+                                                    process="@this"
+                                                    listener="#{emitirPedidoMB.selecionarCliente}"
+                                                    update="@form"/>
+                                        </p:autoComplete>
 
-                        <p:ajax listener="#{emitirPedidoMB.selecionarCliente}" update="@form"/>
-                    </p:autoComplete>
+                                        <p:commandButton icon="pi pi-plus-circle"
+                                                         type="button"
+                                                         styleClass="ui-button-primary"
+                                                         title="Novo Cliente"
+                                                         onclick="PF('dlgNovoCliente').show()"/>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column;">
+                                    <p:outputLabel value="Produto:" for="produto" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <p:selectOneMenu id="produto"
+                                                         value="#{emitirPedidoMB.produtoSelecionado}"
+                                                         converter="produtoConverter"
+                                                         filter="true"
+                                                         filterMatchMode="contains"
+                                                         style="width: 100%">
 
-                    <p:commandButton value="Novo Cliente"
-                                     icon="pi pi-user-plus"
-                                     type="button"
-                                     styleClass="ui-button-success"
-                                     onclick="PF('dlgNovoCliente').show()"/>
-                </h:panelGrid>
+                                            <f:selectItem itemLabel="Selecione um produto" itemValue="#{null}"/>
 
-                <h:panelGrid columns="4" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
-                    <h:outputLabel value="Produto:" for="produto"/>
+                                            <f:selectItems value="#{emitirPedidoMB.produtos}"
+                                                           var="p"
+                                                           itemLabel="#{p.nome}"
+                                                           itemValue="#{p.id}"/>
 
-                    <p:autoComplete id="produto" value="#{emitirPedidoMB.produtoSelecionado}"
-                                    completeMethod="#{emitirPedidoMB.buscarProdutos}"
-                                    var="p"
-                                    itemLabel="#{p.nome}"
-                                    itemValue="#{p}" forceSelection="true"
-                                    dropdown="true" placeholder="Busque pelo nome">
+                                            <p:ajax event="change"
+                                                    process="@this"
+                                                    listener="#{emitirPedidoMB.selecionarProduto}"
+                                                    update="form:quantidade form:valorUnitario form:valorTotalItem"/>
+                                        </p:selectOneMenu>
 
-                        <p:ajax event="itemSelect" process="@this" update=":form:panelValorUnitario :form:btnInserirProduto"/>
-                    </p:autoComplete>
-
-                    <h:outputLabel value="Quantidade:" for="quantidade"/>
-                    <p:inputNumber id="quantidade" value="#{emitirPedidoMB.quantidade}"
-                                   decimalPlaces="4"
-                                   minValue="0"
-                                   placeholder="0,000"/>
-
-                    <p:commandButton value="Novo Produto"
-                                     icon="pi pi-plus-circle"
-                                     type="button"
-                                     styleClass="ui-button-success"
-                                     onclick="PF('dlgNovoProduto').show()"/>
-                </h:panelGrid>
-
-                <h:panelGrid
-                        id="panelValorUnitario"
-                        columns="2" cellpadding="8" style="margin-top: 2rem"
-                        rendered="#{emitirPedidoMB.produtoSelecionado != null}">
-
-                    <h:outputLabel value="Valor Unitário:"/>
-
-                    <h:outputText value="#{emitirPedidoMB.produtoSelecionado.valorVenda}">
-                        <f:convertNumber type="currency" currencySymbol="R$ "/>
-                    </h:outputText>
-
-                </h:panelGrid>
-
-                <p:commandButton id="btnInserirProduto"
-                                 value="Inserir Produto"
-                                 icon="pi pi-plus"
-                                 style="margin-top: 1rem"
-                                 action="#{emitirPedidoMB.adicionarItem()}"
-                                 update="@form"
-                                 rendered="#{emitirPedidoMB.produtoSelecionado == null}"/>
+                                        <p:commandButton icon="pi pi-plus-circle"
+                                                         type="button"
+                                                         styleClass="ui-button-primary"
+                                                         title="Novo Produto"
+                                                         onclick="PF('dlgNovoProduto').show()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem">
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Quantidade:" for="quantidade" styleClass="soft-label"/>
+                                    <p:inputNumber id="quantidade"
+                                                   value="#{emitirPedidoMB.quantidade}"
+                                                   decimalPlaces="4"
+                                                   minValue="0"
+                                                   placeholder="0,00">
+                                        <p:ajax event="blur" listener="#{emitirPedidoMB.recalcularTotalItem}"
+                                                update="form:valorTotalItem"/>
+                                    </p:inputNumber>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Valor Unitário:" styleClass="soft-label"/>
+                                    <h:outputText id="valorUnitario"
+                                                  value="#{emitirPedidoMB.produtoSelecionado.valorVenda}"
+                                                  minValue="0" decimalPlaces="4"/>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Valor Total:" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <div class="ui-inputgroup-addon">R$</div>
+                                        <p:inputNumber id="valorTotalItem"
+                                                       value="#{emitirPedidoMB.valorTotalItem}"
+                                                       minValue="0"
+                                                       decimalPlaces="4"
+                                                       readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end">
+                    <p:commandButton id="btnInserirProduto"
+                                     value="Inserir Produto"
+                                     icon="pi pi-plus"
+                                     style="margin-top: 1rem"
+                                     action="#{emitirPedidoMB.adicionarItem()}"
+                                     process="@form"
+                                     update="@form"/>
+                </div>
 
                 <p:dataTable id="tabelaItens" value="#{emitirPedidoMB.pedidoVenda.itens}"
                              var="item"
@@ -106,39 +142,29 @@
                     </p:column>
                 </p:dataTable>
 
-                <p:commandButton value="Remover Produto"
-                                 icon="pi pi-trash"
-                                 styleClass="ui-button-danger"
-                                 style="margin-top: 1rem"
-                                 action="#{emitirPedidoMB.removerItem()}"
-                                 update="@form"
-                                 disabled="#{emitirPedidoMB.itemSelecionado == null}"/>
-
-                <h:panelGrid columns="2" cellpadding="8" styleClass="ui-fluid" style="margin-top: 2rem">
-
-                    <h:outputLabel value="Valor Total do Pedido:" style="font-weight: bold"/>
-
+                <div style="display: flex; align-items: center; justify-content: right; margin-top: 1rem; gap: 1rem;">
+                    <h:outputLabel value="Valor Total do Pedido:" style="font-size: 1.4rem; font-weight: bold"/>
                     <h:outputText value="#{emitirPedidoMB.pedidoVenda.valorTotal}"
                                   style="font-size: 1.4rem; font-weight: bold">
                         <f:convertNumber type="currency" currencySymbol="R$ "/>
                     </h:outputText>
+                </div>
 
-                </h:panelGrid>
-
-                <h:panelGrid columns="2" cellpadding="10" styleClass="ui-fluid" style="margin-top: 2rem">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
+                    <p:commandButton value="Cancelar"
+                                     styleClass="ui-button-secondary"
+                                     immediate="true"
+                                     process="@this"
+                                     style="min-width: 180px"
+                                     action="/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true"/>
 
                     <p:commandButton value="Salvar Pedido"
                                      icon="pi pi-check"
-                                     styleClass="ui-button-success"
+                                     styleClass="ui-button-primary"
+                                     style="min-width: 180px"
                                      action="#{emitirPedidoMB.emitirPedidoVenda()}"
                                      update="@form"/>
-
-                    <p:commandButton value="Cancelar"
-                                     icon="pi pi-times"
-                                     styleClass="ui-button-secondary"
-                                     immediate="true"
-                                     action="/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true"/>
-                </h:panelGrid>
+                </div>
             </div>
 
             <p:dialog header="Novo Cliente" widgetVar="dlgNovoCliente" modal="true" resizable="false" width="600">
@@ -233,15 +259,17 @@
 
                 <h:panelGrid columns="2" cellpadding="10" style="justify-content: center;">
 
+                    <p:commandButton value="Cancelar"
+                                     icon="pi pi-times"
+                                     type="button"
+                                     styleClass="ui-button-secondary"
+                                     oncomplete="PF('dlgNovoProduto').hide()"/>
+
                     <p:commandButton value="Salvar"
                                      icon="pi pi-check"
                                      action="#{emitirPedidoMB.salvarNovoProduto()}"
                                      update="@form"
-                                     oncomplete="PF('dlgNovoProduto').hide()"/>
-
-                    <p:commandButton value="Cancelar"
-                                     icon="pi pi-times"
-                                     type="button"
+                                     styleClass="ui-button-primary"
                                      oncomplete="PF('dlgNovoProduto').hide()"/>
 
                 </h:panelGrid>

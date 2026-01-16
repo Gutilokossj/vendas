@@ -39,14 +39,16 @@ public class EmitirPedidoMB implements Serializable {
     private Cliente clienteSelecionado;
     private Produto produtoSelecionado;
     private BigDecimal quantidade;
+    private BigDecimal valorTotalItem;
     private PedidoVendaItem itemSelecionado;
+    private List<Produto> produtos;
 
     private Cliente novoCliente = new Cliente();
     private Produto novoProduto = new Produto();
 
     private final PedidoVenda pedidoVenda = new PedidoVenda();
 
-    public List<Cliente> buscarClientes(String filtro){
+    public List<Cliente> buscarClientes(String filtro) {
         return clienteService.buscarPorNomeOuDocumento(filtro);
     }
 
@@ -54,16 +56,44 @@ public class EmitirPedidoMB implements Serializable {
         pedidoVenda.setCliente(clienteSelecionado);
     }
 
-    public List<Produto> buscarProdutos(String filtro){
-        return produtoService.buscarPorNomeParcial(filtro);
+    public void selecionarProduto() {
+
+        if (produtoSelecionado == null || produtoSelecionado.getId() == null) {
+            return;
+        }
+
+        produtoSelecionado = produtoService.buscarPorId(produtoSelecionado.getId());
+
+        if (quantidade == null) {
+            quantidade = BigDecimal.ONE;
+        }
+
+        recalcularTotalItem();
+
+    }
+
+    public void recalcularTotalItem() {
+        if (produtoSelecionado != null
+                && produtoSelecionado.getValorVenda() != null
+                && quantidade != null
+                && quantidade.compareTo(BigDecimal.ZERO) > 0) {
+
+            valorTotalItem = produtoSelecionado.getValorVenda().multiply(quantidade);
+        } else {
+            valorTotalItem = BigDecimal.ZERO;
+        }
     }
 
     public void adicionarItem() {
         try {
+            recalcularTotalItem();
             pedidoVendaService.adicionarItem(pedidoVenda, produtoSelecionado, quantidade);
 
+            //Faço isso pra limpar, depois posso criar um metodo pra isso.
             produtoSelecionado = null;
             quantidade = null;
+            valorTotalItem = null;
+
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
@@ -93,7 +123,7 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
-    public void salvarNovoCliente(){
+    public void salvarNovoCliente() {
         try {
             clienteService.salvar(novoCliente);
             clienteSelecionado = novoCliente;
@@ -107,15 +137,25 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
-    public void salvarNovoProduto(){
-        try{
+    public void salvarNovoProduto() {
+        try {
             produtoService.salvar(novoProduto);
-            produtoSelecionado = novoProduto;
+
+            // BUSCA O PRODUTO COMPLETO DO BANCO
+            produtoSelecionado = produtoService.buscarPorId(novoProduto.getId());
             novoProduto = new Produto();
             Message.info("Produto cadastrado com sucesso!");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
+    }
+
+    public List<Produto> getProdutos() {
+        if (produtos == null) {
+            produtos = produtoService.buscarTodosProdutos();
+        }
+
+        return produtos;
     }
 
     public PedidoVenda getPedidoVenda() {
@@ -168,5 +208,13 @@ public class EmitirPedidoMB implements Serializable {
 
     public void setNovoProduto(Produto novoProduto) {
         this.novoProduto = novoProduto;
+    }
+
+    public BigDecimal getValorTotalItem() {
+        return valorTotalItem;
+    }
+
+    public void setValorTotalItem(BigDecimal valorTotalItem) {
+        this.valorTotalItem = valorTotalItem;
     }
 }
