@@ -26,11 +26,8 @@ public class ClienteService implements Serializable {
     private ClienteDao clienteDao;
 
     public void salvar(Cliente cliente) throws NegocioException {
-
-        if (clienteDao.existeClienteComDocumento(cliente.getDocumento())){
-            throw new NegocioException("Já existe um cliente cadastrado com este documento.");
-        }
-
+        validarCliente(cliente);
+        normalizarCliente(cliente);
         daoGenerico.salvar(cliente);
     }
 
@@ -61,6 +58,26 @@ public class ClienteService implements Serializable {
 
     public List<Cliente> buscarTodosClientes(){
         return daoGenerico.buscarTodos(Cliente.class, "SELECT c FROM Cliente c ORDER BY c.id DESC");
+    }
+
+    public void validarCliente(Cliente cliente) throws NegocioException{
+
+        if (clienteDao.existeClienteComDocumento(cliente.getDocumento())){
+            throw new NegocioException("Já existe um cliente cadastrado com este documento.");
+        }
+    }
+
+    public void normalizarCliente(Cliente cliente){
+        cliente.setNome(cliente.getNome().trim());
+        cliente.setLogradouro(cliente.getLogradouro().trim());
+        cliente.setNumero(cliente.getNumero().trim());
+        cliente.setBairro(cliente.getBairro().trim());
+        cliente.setCep(cliente.getCep().trim());
+        cliente.setCidade(cliente.getCidade().trim());
+        cliente.setCidade(cliente.getCidade().toUpperCase());
+        cliente.setEstado(cliente.getEstado().trim());
+        cliente.setEstado(cliente.getEstado().toUpperCase());
+        cliente.setComplemento(cliente.getComplemento().trim());
     }
 
     public List<Cliente> buscarPorNome(String nome) throws NegocioException {

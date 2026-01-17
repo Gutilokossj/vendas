@@ -477,13 +477,25 @@ h1 {
     text-align: center;
 }
 
-footer {
+.btn-disabled {
+    /*Fiz isso por causa da Docs, apesar de não fazer senitdo, regra adaptada por limitação técnica do framework e melhoria de UX.*/
+    opacity: 0.5;
+    pointer-events: auto; /* IMPORTANTE */
+    cursor: not-allowed;
+}
+
+.main-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+
+.page-footer {
     display: flex;
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center;    /* Centraliza verticalmente (se houver altura) */
     width: 100%;            /* Ocupa a largura total */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-    background-color: var(--bg-light);
     color: #64748b;
     font-size: 0.7rem;
     padding: 1rem;

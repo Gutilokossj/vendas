@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,14 +45,20 @@ public class PedidoVendaItem extends EntidadeBase implements Serializable {
     private Produto produto;
 
     @NotNull(message = "Quantidade deve ser informada")
+    @PositiveOrZero(message = "Quantidade deve ser maior ou igual a zero")
+    @Digits(integer = 10, fraction = 4, message = "Quantidade máxima permitida é 9999999999,9999")
     @Column(nullable = false, precision = 14, scale = 4)
     private BigDecimal quantidade = BigDecimal.ZERO;
 
     @NotNull(message = "Valor unitário deve ser informado")
+    @PositiveOrZero(message = "Valor unitário não pode ser negativo")
+    @Digits(integer = 10, fraction = 4, message = "Valor unitário máximo permitido é 9999999999,9999")
     @Column(nullable = false, precision = 14, scale = 4)
     private BigDecimal valorUnitario = BigDecimal.ZERO;
 
     @NotNull(message = "Valor total deve ser informado")
+    @PositiveOrZero(message = "Valor total não pode ser negativo")
+    @Digits(integer = 10, fraction = 2, message = "Valor total máximo permitido é 9999999999,99")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal valorTotal = BigDecimal.ZERO;
 

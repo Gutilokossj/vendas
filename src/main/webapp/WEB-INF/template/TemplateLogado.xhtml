@@ -136,11 +136,15 @@
                            position="right"/>
             </nav>
         </aside>
+        <div class="main-area">
+            <main class="conteudo" style="flex: 1">
+                <ui:insert name="corpo"/>
+            </main>
 
-        <main class="conteudo" style="flex: 1">
-            <ui:insert name="corpo"/>
-        </main>
-
+            <footer class="page-footer">
+                <h2>© 2025 • Desenvolvido por Gustavo Fernandes</h2>
+            </footer>
+        </div>
     </div>
 
     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -152,9 +156,6 @@
                          icon="pi pi-check"/>
     </p:confirmDialog>
 
-    <footer style="margin-top: 0;">
-        <h2>© 2025 • Desenvolvido por Gustavo Fernandes</h2>
-    </footer>
 
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {

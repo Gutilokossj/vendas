@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @ApplicationScoped
@@ -33,18 +34,18 @@ public class PedidoVendaService implements Serializable {
         }
 
         if(pedidoVenda.getItens().isEmpty()){
-            throw new NegocioException("Pedido deve possuir pelo menos um item!");
+            throw new NegocioException("Pedido deve possuir pelo menos um item inserido!");
         }
     }
 
-    public void inserirCliente(PedidoVenda pedidoVenda, Cliente cliente){
+    public static void inserirCliente(PedidoVenda pedidoVenda, Cliente cliente){
         pedidoVenda.setCliente(cliente);
     }
 
-    public void adicionarItem(PedidoVenda pedidoVenda, Produto produto, BigDecimal quantidade) throws NegocioException {
+    public void adicionarItem(PedidoVenda pedidoVenda, Produto produto, BigDecimal quantidade, BigDecimal valorUnitario) throws NegocioException {
 
         if (produto == null) {
-            throw new NegocioException("Produto deve ser informado!");
+            throw new NegocioException("Algum produto deve ser selecionado!");
         }
 
         if (quantidade == null || quantidade.compareTo(BigDecimal.ZERO) <= 0){
@@ -54,9 +55,9 @@ public class PedidoVendaService implements Serializable {
         PedidoVendaItem item = new PedidoVendaItem();
         item.setProduto(produto);
         item.setQuantidade(quantidade);
-        item.setValorUnitario(produto.getValorVenda());
+        item.setValorUnitario(valorUnitario);
 
-        BigDecimal totalItem = produto.getValorVenda().multiply(quantidade);
+        BigDecimal totalItem = valorUnitario.multiply(quantidade).setScale(2, RoundingMode.HALF_UP);
         item.setValorTotal(totalItem);
 
         pedidoVenda.adicionarItem(item);
@@ -67,7 +68,7 @@ public class PedidoVendaService implements Serializable {
         BigDecimal total = BigDecimal.ZERO;
 
         for(PedidoVendaItem item : pedidoVenda.getItens()){
-            total = total.add(item.getValorTotal());
+            total = total.add(item.getValorTotal().setScale(2, RoundingMode.HALF_UP));
         }
 
         pedidoVenda.setValorTotal(total);

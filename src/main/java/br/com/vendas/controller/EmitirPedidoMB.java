@@ -39,6 +39,7 @@ public class EmitirPedidoMB implements Serializable {
     private Cliente clienteSelecionado;
     private Produto produtoSelecionado;
     private BigDecimal quantidade;
+    private BigDecimal valorUnitario;
     private BigDecimal valorTotalItem;
     private PedidoVendaItem itemSelecionado;
     private List<Produto> produtos;
@@ -53,7 +54,7 @@ public class EmitirPedidoMB implements Serializable {
     }
 
     public void selecionarCliente() {
-        pedidoVenda.setCliente(clienteSelecionado);
+        PedidoVendaService.inserirCliente(pedidoVenda, clienteSelecionado);
     }
 
     public void selecionarProduto() {
@@ -72,9 +73,12 @@ public class EmitirPedidoMB implements Serializable {
                     quantidade = BigDecimal.ONE;
                 }
 
-                if (produtoCompleto.getValorVenda() != null) {
-                    recalcularTotalItem();
+                if (produtoCompleto.getValorVenda() != null){
+                    valorUnitario = produtoCompleto.getValorVenda();
+                } else {
+                    valorUnitario = BigDecimal.ZERO;
                 }
+                recalcularTotalItem();
             }
         } catch (Exception e) {
             Message.error(e.getMessage());
@@ -83,11 +87,11 @@ public class EmitirPedidoMB implements Serializable {
 
     public void recalcularTotalItem() {
         if (produtoSelecionado != null
-                && produtoSelecionado.getValorVenda() != null
+                && valorUnitario != null
                 && quantidade != null
                 && quantidade.compareTo(BigDecimal.ZERO) > 0) {
 
-            valorTotalItem = produtoSelecionado.getValorVenda().multiply(quantidade);
+            valorTotalItem = valorUnitario.multiply(quantidade);
         } else {
             valorTotalItem = BigDecimal.ZERO;
         }
@@ -96,22 +100,27 @@ public class EmitirPedidoMB implements Serializable {
     public void adicionarItem() {
         try {
             recalcularTotalItem();
-            pedidoVendaService.adicionarItem(pedidoVenda, produtoSelecionado, quantidade);
+            pedidoVendaService.adicionarItem(pedidoVenda, produtoSelecionado, quantidade, valorUnitario);
 
-            //Faço isso pra limpar, depois posso criar um metodo pra isso.
-            produtoSelecionado = null;
-            quantidade = null;
-            valorTotalItem = null;
+            limparItemAtual();
 
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
     }
 
+    private void limparItemAtual(){
+        produtoSelecionado = null;
+        quantidade = null;
+        valorUnitario = null;
+        valorTotalItem = null;
+    }
+
     public void removerItem() {
         try {
             pedidoVendaService.removerItem(pedidoVenda, itemSelecionado);
             itemSelecionado = null;
+            recalcularTotalItem();
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
@@ -193,6 +202,14 @@ public class EmitirPedidoMB implements Serializable {
 
     public void setQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public BigDecimal getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(BigDecimal valorUnitario) {
+        this.valorUnitario = valorUnitario;
     }
 
     public PedidoVendaItem getItemSelecionado() {
