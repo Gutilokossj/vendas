@@ -3,33 +3,48 @@ package br.com.vendas.converter;
 import br.com.vendas.model.Cliente;
 import br.com.vendas.service.ClienteService;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-@FacesConverter(value = "clienteConverter", forClass = Cliente.class, managed = true)
-public class ClienteConverter implements Converter<Cliente> {
+@Named("clienteConverter")
+@RequestScoped
+public class ClienteConverter implements Converter<Object> {
 
     @Inject
     private ClienteService clienteService;
 
     @Override
-    public Cliente getAsObject(FacesContext context, UIComponent component, String value) {
+    public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
 
-        return clienteService.buscarPorId(Long.valueOf(value));
+        try {
+            return clienteService.buscarPorId(Long.valueOf(value));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public String getAsString(FacesContext context, UIComponent component, Cliente cliente) {
-        if (cliente == null || cliente.getId() == null) {
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
+        if (value == null) {
             return "";
         }
 
-        return cliente.getId().toString();
+        if (value instanceof Cliente) {
+            Cliente c = (Cliente) value;
+            return c.getId() != null ? c.getId().toString() : "";
+        }
+
+        if (value instanceof Long) {
+            return value.toString();
+        }
+
+        return "";
     }
 }

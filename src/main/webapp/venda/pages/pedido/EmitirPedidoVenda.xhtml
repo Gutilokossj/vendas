@@ -20,15 +20,17 @@
                                     <p:outputLabel value="Cliente:" styleClass="soft-label"/>
                                     <div class="ui-inputgroup">
                                         <p:autoComplete id="cliente" value="#{emitirPedidoMB.clienteSelecionado}"
-                                                        completeMethod="#{emitirPedidoMB.buscarClientes}" var="c"
-                                                        itemLabel="#{c.documento}#{c.nome}"
+                                                        completeMethod="#{emitirPedidoMB.buscarClientes}"
+                                                        var="c"
+                                                        itemLabel="#{empty c.documento ? c.nome : c.nome.concat(' (').concat(c.documento).concat(')')}"
                                                         itemValue="#{c}"
+                                                        converter="#{clienteConverter}"
+                                                        minQueryLength="1"
                                                         forceSelection="true"
                                                         placeholder="Busque pelo nome ou CPF/CNPJ">
                                             <p:ajax event="itemSelect"
                                                     process="@this"
-                                                    listener="#{emitirPedidoMB.selecionarCliente}"
-                                                    update="@form"/>
+                                                    listener="#{emitirPedidoMB.selecionarCliente}"/>
                                         </p:autoComplete>
 
                                         <p:commandButton icon="pi pi-plus-circle"
@@ -43,22 +45,22 @@
                                     <div class="ui-inputgroup">
                                         <p:selectOneMenu id="produto"
                                                          value="#{emitirPedidoMB.produtoSelecionado}"
-                                                         converter="produtoConverter"
+                                                         converter="#{produtoConverter}"
                                                          filter="true"
                                                          filterMatchMode="contains"
                                                          style="width: 100%">
 
-                                            <f:selectItem itemLabel="Selecione um produto" itemValue="#{null}"/>
+                                            <f:selectItem itemLabel="Selecione um produto" noSelectionOption="true"/>
 
                                             <f:selectItems value="#{emitirPedidoMB.produtos}"
                                                            var="p"
                                                            itemLabel="#{p.nome}"
-                                                           itemValue="#{p.id}"/>
+                                                           itemValue="#{p}"/>
 
                                             <p:ajax event="change"
                                                     process="@this"
                                                     listener="#{emitirPedidoMB.selecionarProduto}"
-                                                    update="form:quantidade form:valorUnitario form:valorTotalItem"/>
+                                                    update=":form:quantidade :form:valorUnitario :form:valorTotalItem"/>
                                         </p:selectOneMenu>
 
                                         <p:commandButton icon="pi pi-plus-circle"
@@ -82,10 +84,10 @@
                                     </p:inputNumber>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column">
-                                    <p:outputLabel value="Valor Unitário:" styleClass="soft-label"/>
-                                    <h:outputText id="valorUnitario"
-                                                  value="#{emitirPedidoMB.produtoSelecionado.valorVenda}"
-                                                  minValue="0" decimalPlaces="4"/>
+                                    <p:outputLabel value="Valor Unitário:" for="valorUnitario" styleClass="soft-label"/>
+                                    <p:inputNumber id="valorUnitario"
+                                                   value="#{emitirPedidoMB.produtoSelecionado != null ? emitirPedidoMB.produtoSelecionado.valorVenda : null}"
+                                                   minValue="0" decimalPlaces="4" readonly="true"/>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column">
                                     <p:outputLabel value="Valor Total:" styleClass="soft-label"/>
@@ -108,12 +110,14 @@
                                      icon="pi pi-plus"
                                      style="margin-top: 1rem"
                                      action="#{emitirPedidoMB.adicionarItem()}"
-                                     process="@form"
-                                     update="@form"/>
+                                     process="@this produto quantidade"
+                                     update=":form:tabelaItens :form:produto :form:quantidade :form:valorTotalItem :form:totalPedido"/>
                 </div>
 
-                <p:dataTable id="tabelaItens" value="#{emitirPedidoMB.pedidoVenda.itens}"
+                <p:dataTable id="tabelaItens"
+                             value="#{emitirPedidoMB.pedidoVenda.itens}"
                              var="item"
+                             rowKey="#{item.produto.id}"
                              selection="#{emitirPedidoMB.itemSelecionado}"
                              selectionMode="single"
                              style="margin-top: 2rem"
@@ -142,13 +146,13 @@
                     </p:column>
                 </p:dataTable>
 
-                <div style="display: flex; align-items: center; justify-content: right; margin-top: 1rem; gap: 1rem;">
+                <h:panelGroup id="totalPedido" style="display: flex; align-items: center; justify-content: right; margin-top: 1rem; gap: 1rem;">
                     <h:outputLabel value="Valor Total do Pedido:" style="font-size: 1.4rem; font-weight: bold"/>
                     <h:outputText value="#{emitirPedidoMB.pedidoVenda.valorTotal}"
                                   style="font-size: 1.4rem; font-weight: bold">
                         <f:convertNumber type="currency" currencySymbol="R$ "/>
                     </h:outputText>
-                </div>
+                </h:panelGroup>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
                     <p:commandButton value="Cancelar"
@@ -163,7 +167,7 @@
                                      styleClass="ui-button-primary"
                                      style="min-width: 180px"
                                      action="#{emitirPedidoMB.emitirPedidoVenda()}"
-                                     update="@form"/>
+                                     process="@this"/>
                 </div>
             </div>
 

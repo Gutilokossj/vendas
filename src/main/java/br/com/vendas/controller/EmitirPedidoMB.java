@@ -62,14 +62,23 @@ public class EmitirPedidoMB implements Serializable {
             return;
         }
 
-        produtoSelecionado = produtoService.buscarPorId(produtoSelecionado.getId());
+        try {
+            Produto produtoCompleto = produtoService.buscarPorId(produtoSelecionado.getId());
 
-        if (quantidade == null) {
-            quantidade = BigDecimal.ONE;
+            if (produtoCompleto != null) {
+                this.produtoSelecionado = produtoCompleto;
+
+                if (quantidade == null) {
+                    quantidade = BigDecimal.ONE;
+                }
+
+                if (produtoCompleto.getValorVenda() != null) {
+                    recalcularTotalItem();
+                }
+            }
+        } catch (Exception e) {
+            Message.error(e.getMessage());
         }
-
-        recalcularTotalItem();
-
     }
 
     public void recalcularTotalItem() {
