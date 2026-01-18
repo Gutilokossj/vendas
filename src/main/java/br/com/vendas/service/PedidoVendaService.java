@@ -29,16 +29,16 @@ public class PedidoVendaService implements Serializable {
 
     private void validarPedido(PedidoVenda pedidoVenda) throws NegocioException {
 
-        if(pedidoVenda.getCliente() == null){
+        if (pedidoVenda.getCliente() == null) {
             throw new NegocioException("Pedido deve possuir um cliente vinculado!");
         }
 
-        if(pedidoVenda.getItens().isEmpty()){
+        if (pedidoVenda.getItens().isEmpty()) {
             throw new NegocioException("Pedido deve possuir pelo menos um item inserido!");
         }
     }
 
-    public static void inserirCliente(PedidoVenda pedidoVenda, Cliente cliente){
+    public static void inserirCliente(PedidoVenda pedidoVenda, Cliente cliente) {
         pedidoVenda.setCliente(cliente);
     }
 
@@ -48,8 +48,12 @@ public class PedidoVendaService implements Serializable {
             throw new NegocioException("Algum produto deve ser selecionado!");
         }
 
-        if (quantidade == null || quantidade.compareTo(BigDecimal.ZERO) <= 0){
+        if (quantidade == null || quantidade.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NegocioException("Quantidade deve ser informada e maior que zero!");
+        }
+
+        if (valorUnitario == null) {
+            throw new NegocioException("Valor unitário deve ser informado!");
         }
 
         PedidoVendaItem item = new PedidoVendaItem();
@@ -64,10 +68,28 @@ public class PedidoVendaService implements Serializable {
         calcularTotalPedido(pedidoVenda);
     }
 
-    private void calcularTotalPedido(PedidoVenda pedidoVenda){
+    public void atualizarItem(PedidoVenda pedidoVenda, PedidoVendaItem item) throws NegocioException {
+        if (item.getQuantidade() == null || item.getQuantidade().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new NegocioException("Quantidade deve ser informada e maior que zero!");
+        }
+
+        // Bonificação = ZERO
+        if (item.getValorUnitario() == null) {
+            item.setValorUnitario(BigDecimal.ZERO);
+        }
+
+        BigDecimal totalItem = item.getValorUnitario()
+                .multiply(item.getQuantidade())
+                .setScale(2, RoundingMode.HALF_UP);
+
+        item.setValorTotal(totalItem);
+        calcularTotalPedido(pedidoVenda);
+    }
+
+    private void calcularTotalPedido(PedidoVenda pedidoVenda) {
         BigDecimal total = BigDecimal.ZERO;
 
-        for(PedidoVendaItem item : pedidoVenda.getItens()){
+        for (PedidoVendaItem item : pedidoVenda.getItens()) {
             total = total.add(item.getValorTotal().setScale(2, RoundingMode.HALF_UP));
         }
 
@@ -84,14 +106,14 @@ public class PedidoVendaService implements Serializable {
     }
 
     public void removerPedido(PedidoVenda pedidoParaExcluir, Usuario usuarioLogado) throws NegocioException {
-        if (!usuarioLogado.isAdmin()){
+        if (!usuarioLogado.isAdmin()) {
             throw new NegocioException("Usuario nao tem permissao para excluir pedido!");
         }
 
         daoGenerico.remover(PedidoVenda.class, pedidoParaExcluir.getId());
     }
 
-    public List<PedidoVenda> buscarTodosPedidos(){
+    public List<PedidoVenda> buscarTodosPedidos() {
         return daoGenerico.buscarTodos
                 (PedidoVenda.class, "SELECT p FROM PedidoVenda p ORDER BY p.id DESC");
     }

@@ -490,6 +490,52 @@ h1 {
     flex: 1;
 }
 
+/* mantém espaçamento */
+.ui-row-editor,
+.acao-excluir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.35rem;
+    vertical-align: middle;
+}
+
+
+/* === AÇÕES DE TABELA (PADRÃO) === */
+
+.ui-row-editor,
+.acao-excluir {
+    margin: 0 0.35rem;
+}
+
+/* === EDITAR (LÁPIS) === */
+
+.acao-editar .ui-icon {
+    color: #2196f3;
+}
+
+/* === EXCLUIR (LIXEIRA) === */
+
+.acao-excluir.ui-button {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+}
+
+/* ícone */
+.acao-excluir .pi-trash {
+    color: #e53935;
+    font-size: 1.1rem;
+}
+
+/* hover igual ao rowEditor */
+.acao-excluir:hover {
+    background-color: rgba(229, 57, 53, 0.15) !important;
+}
 
 .page-footer {
     display: flex;

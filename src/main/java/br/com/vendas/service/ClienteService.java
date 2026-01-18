@@ -40,7 +40,7 @@ public class ClienteService implements Serializable {
 
         //Documento do cliente não pode ser alterado
         cliente.setDocumento(clienteBanco.getDocumento());
-
+        normalizarCliente(cliente);
         daoGenerico.salvar(cliente);
     }
 

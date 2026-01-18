@@ -9,6 +9,8 @@ import br.com.vendas.service.PedidoVendaService;
 import br.com.vendas.service.ProdutoService;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.RowEditEvent;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -109,6 +111,18 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
+    public void onRowEdit(RowEditEvent<PedidoVendaItem> event){
+        PedidoVendaItem item = event.getObject();
+
+        try {
+            pedidoVendaService.atualizarItem(pedidoVenda, item);
+            Message.info("Item atualizado com sucesso!");
+        } catch (NegocioException e){
+            FacesContext.getCurrentInstance().validationFailed();
+            Message.error(e.getMessage());
+        }
+    }
+
     private void limparItemAtual(){
         produtoSelecionado = null;
         quantidade = null;
@@ -148,9 +162,11 @@ public class EmitirPedidoMB implements Serializable {
             pedidoVenda.setCliente(novoCliente);
 
             novoCliente = new Cliente();
-
+            PrimeFaces.current().ajax().addCallbackParam("salvo", true);
             Message.info("Cliente cadastado com sucesso!");
         } catch (NegocioException e) {
+            FacesContext.getCurrentInstance().validationFailed();
+            PrimeFaces.current().ajax().addCallbackParam("salvo", false);
             Message.error(e.getMessage());
         }
     }

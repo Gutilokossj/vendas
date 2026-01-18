@@ -23,10 +23,20 @@
                         </p:link>
                     </p:column>
                     <p:column headerText="Valor de Custo" sortBy="#{produtos.valorCusto}">
-                        <h:outputText value="R$ #{produtos.valorCusto}"/>
+                        <h:outputText value="#{produtos.valorCusto}">
+                            <f:convertNumber type="currency"
+                                             currencySymbol="R$ "
+                                             minFractionDigits="2"
+                                             maxFractionDigits="4"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Valor de Venda" sortBy="#{produtos.valorVenda}">
-                        <h:outputText value="R$ #{produtos.valorVenda}"/>
+                        <h:outputText value="#{produtos.valorVenda}">
+                            <f:convertNumber type="currency"
+                                             currencySymbol="R$ "
+                                             minFractionDigits="2"
+                                             maxFractionDigits="4"/>
+                        </h:outputText>
                     </p:column>
                     <p:column>
                         <div style="display: flex; flex-direction: column; align-items: flex-end">
