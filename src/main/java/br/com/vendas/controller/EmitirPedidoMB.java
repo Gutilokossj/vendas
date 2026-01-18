@@ -69,18 +69,7 @@ public class EmitirPedidoMB implements Serializable {
             Produto produtoCompleto = produtoService.buscarPorId(produtoSelecionado.getId());
 
             if (produtoCompleto != null) {
-                this.produtoSelecionado = produtoCompleto;
-
-                if (quantidade == null) {
-                    quantidade = BigDecimal.ONE;
-                }
-
-                if (produtoCompleto.getValorVenda() != null){
-                    valorUnitario = produtoCompleto.getValorVenda();
-                } else {
-                    valorUnitario = BigDecimal.ZERO;
-                }
-                recalcularTotalItem();
+                prepararProdutoSelecionado(produtoSelecionado);
             }
         } catch (Exception e) {
             Message.error(e.getMessage());
@@ -158,15 +147,17 @@ public class EmitirPedidoMB implements Serializable {
     public void salvarNovoCliente() {
         try {
             clienteService.salvar(novoCliente);
+
             clienteSelecionado = novoCliente;
+
             pedidoVenda.setCliente(novoCliente);
 
             novoCliente = new Cliente();
-            PrimeFaces.current().ajax().addCallbackParam("salvo", true);
+            PrimeFaces.current().ajax().addCallbackParam("clienteSalvo", true);
             Message.info("Cliente cadastado com sucesso!");
         } catch (NegocioException e) {
             FacesContext.getCurrentInstance().validationFailed();
-            PrimeFaces.current().ajax().addCallbackParam("salvo", false);
+            PrimeFaces.current().ajax().addCallbackParam("clienteSalvo", false);
             Message.error(e.getMessage());
         }
     }
@@ -175,13 +166,36 @@ public class EmitirPedidoMB implements Serializable {
         try {
             produtoService.salvar(novoProduto);
 
-            // BUSCA O PRODUTO COMPLETO DO BANCO
-            produtoSelecionado = produtoService.buscarPorId(novoProduto.getId());
+            produtoSelecionado = novoProduto;
+
+            prepararProdutoSelecionado(produtoSelecionado);
+
+            produtos = null;
+
             novoProduto = new Produto();
+            PrimeFaces.current().ajax().addCallbackParam("produtoSalvo", true);
             Message.info("Produto cadastrado com sucesso!");
         } catch (NegocioException e) {
+            FacesContext.getCurrentInstance().validationFailed();
+            PrimeFaces.current().ajax().addCallbackParam("produtoSalvo", false);
             Message.error(e.getMessage());
         }
+    }
+
+    private void prepararProdutoSelecionado(Produto produto){
+        this.produtoSelecionado = produto;
+
+        if (quantidade == null){
+            quantidade = BigDecimal.ONE;
+        }
+
+        if (produto.getValorVenda() != null){
+            valorUnitario = produto.getValorVenda();
+        } else {
+            valorUnitario = BigDecimal.ZERO;
+        }
+
+        recalcularTotalItem();
     }
 
     public List<Produto> getProdutos() {

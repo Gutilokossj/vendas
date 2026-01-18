@@ -204,20 +204,20 @@
                     <p:ajax event="rowEditCancel"/>
 
                     <p:column headerText="Ações" style="text-align:center; width:120px" styleClass="col-acoes">
-                            <p:rowEditor icon="pi pi-pencil" styleClass="acao-editar"/>
+                        <p:rowEditor icon="pi pi-pencil" styleClass="acao-editar"/>
 
-                            <p:commandButton action="#{emitirPedidoMB.removerItem}"
-                                             icon="pi pi-trash"
-                                             styleClass="acao-excluir"
-                                             process="@this"
-                                             update=":form:tabelaItens :form:totalPedido"
-                                             immediate="true">
-                                <f:setPropertyActionListener target="#{emitirPedidoMB.itemSelecionado}"
-                                                             value="#{item}"/>
-                                <p:confirm header="Confirmação"
-                                           message="Deseja remover o item?"
-                                           icon="pi pi-exclamation-triangle"/>
-                            </p:commandButton>
+                        <p:commandButton action="#{emitirPedidoMB.removerItem}"
+                                         icon="pi pi-trash"
+                                         styleClass="acao-excluir"
+                                         process="@this"
+                                         update=":form:tabelaItens :form:totalPedido"
+                                         immediate="true">
+                            <f:setPropertyActionListener target="#{emitirPedidoMB.itemSelecionado}"
+                                                         value="#{item}"/>
+                            <p:confirm header="Confirmação"
+                                       message="Deseja remover o item?"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
                     </p:column>
 
                 </p:dataTable>
@@ -248,53 +248,6 @@
                                      update="aviso cliente produto"/>
                 </div>
             </div>
-
-            <p:dialog header="Novo Produto" widgetVar="dlgNovoProduto" modal="true" resizable="false" width="500">
-                <h:panelGrid columns="2" cellpadding="8" styleClass="ui-fluid">
-
-                    <h:outputLabel value="Nome:"/>
-                    <p:inputText value="#{emitirPedidoMB.novoProduto.nome}" required="true"
-                                 requiredMessage="O nome é obrigatório"/>
-
-                    <h:outputLabel value="Preço de Custo"/>
-                    <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorCusto}"
-                                   decimalPlaces="4"
-                                   minValue="0"
-                                   required="true"
-                                   requiredMessage="O preço de custo é obrigatório"
-                                   maxValue="9999999999.9999"
-                                   decimalSeparator=","/>
-
-                    <h:outputLabel value="Valor de Venda:"/>
-                    <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorVenda}"
-                                   decimalPlaces="4"
-                                   minValue="0"
-                                   required="true"
-                                   requiredMessage="O valor de venda é obrigatório"
-                                   maxValue="9999999999.9999"
-                                   decimalSeparator=","/>
-
-                </h:panelGrid>
-
-                <p:separator/>
-
-                <h:panelGrid columns="2" cellpadding="10" style="justify-content: center;">
-
-                    <p:commandButton value="Cancelar"
-                                     icon="pi pi-times"
-                                     type="button"
-                                     styleClass="ui-button-secondary"
-                                     oncomplete="PF('dlgNovoProduto').hide()"/>
-
-                    <p:commandButton value="Salvar"
-                                     icon="pi pi-check"
-                                     action="#{emitirPedidoMB.salvarNovoProduto()}"
-                                     update="@form"
-                                     styleClass="ui-button-primary"
-                                     oncomplete="PF('dlgNovoProduto').hide()"/>
-
-                </h:panelGrid>
-            </p:dialog>
         </h:form>
         <h:form id="formNovoCliente">
             <p:dialog header="Novo Cliente" widgetVar="dlgNovoCliente" modal="true" resizable="false" maxWidth="800">
@@ -410,7 +363,7 @@
                                      process="@form"
                                      styleClass="ui-button-primary"
                                      update="conteudoDialogCliente :form:cliente :form:aviso"
-                                     oncomplete="if (args.salvo) PF('dlgNovoCliente').hide()"/>
+                                     oncomplete="if (args.clienteSalvo) PF('dlgNovoCliente').hide()"/>
                 </div>
             </p:dialog>
 
@@ -437,6 +390,71 @@
 
                 //]]>
             </script>
+        </h:form>
+        <h:form id="formNovoProduto">
+            <p:dialog header="Novo Produto" widgetVar="dlgNovoProduto" modal="true" resizable="false" width="600">
+                <p:outputPanel id="conteudoDialogProduto">
+                    <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 0.5rem">
+                        <div class="col-12 md:col-4"
+                             style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                            <p:accordionPanel multiple="true" scrollIntoView="center" activeIndex="0,1">
+                                <p:tab title="Dados do produto">
+                                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="display: flex; gap: 1.5rem;">
+                                            <div style="flex: 3; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Nome:" styleClass="soft-label"/>
+                                                <p:inputText value="#{emitirPedidoMB.novoProduto.nome}" id="nomeProduto"
+                                                             maxlength="60"
+                                                             placeholder="Infome a descrição do item"
+                                                             required="true"
+                                                             requiredMessage="Nome é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Preço de Custo" styleClass="soft-label"/>
+                                                <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorCusto}"
+                                                               id="valorCusto"
+                                                               decimalPlaces="4"
+                                                               minValue="0"
+                                                               decimalSeparator=","
+                                                               maxValue="9999999999.9999"
+                                                               placeholder="Inform o custo"
+                                                               required="true"
+                                                               requiredMessage="Custo é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Valor de Venda:" styleClass="soft-label"/>
+                                                <p:inputNumber value="#{emitirPedidoMB.novoProduto.valorVenda}"
+                                                               id="valorVenda"
+                                                               decimalPlaces="4"
+                                                               minValue="0"
+                                                               decimalSeparator=","
+                                                               maxValue="9999999999.9999"
+                                                               placeholder="Infomr o valor de venda"
+                                                               required="true"
+                                                               requiredMessage="Preço de venda é obrigatório"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </div>
+                    </div>
+                </p:outputPanel>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
+                    <p:commandButton value="Cancelar"
+                                     styleClass="ui-button-secondary"
+                                     style="max-width: 180px"
+                                     oncomplete="PF('dlgNovoProduto').hide()"/>
+
+                    <p:commandButton action="#{emitirPedidoMB.salvarNovoProduto()}"
+                                     value="Salvar"
+                                     icon="pi pi-box"
+                                     process="@form"
+                                     styleClass="ui-button-primary"
+                                     update="conteudoDialogProduto :form:produto :form:quantidade :form:valorUnitario :form:valorTotalItem :form:btnInserirProduto :form:aviso"
+                                     oncomplete="if (args.produtoSalvo) PF('dlgNovoProduto').hide()"/>
+                </div>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>
