@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.pedido;
 
 import br.com.vendas.model.Cliente;
 import br.com.vendas.model.PedidoVenda;
@@ -12,25 +12,38 @@ import br.com.vendas.util.NegocioException;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-
-@Named("emitirPedidoMB")
+@Named("editarPedidoMB")
 @ViewScoped
-public class EmitirPedidoMB implements Serializable {
+public class EditarPedidoMB implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Inject
     private PedidoVendaService pedidoVendaService;
+
+    private PedidoVenda pedidoVenda;
+    private Long id;
+
+    @PostConstruct
+    public void init() throws NegocioException {
+        if (id != null) {
+            pedidoVenda = pedidoVendaService.buscarPorId(id);
+            clienteSelecionado = pedidoVenda.getCliente();
+        } else {
+            pedidoVenda = new PedidoVenda();
+        }
+    }
 
     @Inject
     private ClienteService clienteService;
@@ -48,8 +61,6 @@ public class EmitirPedidoMB implements Serializable {
 
     private Cliente novoCliente = new Cliente();
     private Produto novoProduto = new Produto();
-
-    private final PedidoVenda pedidoVenda = new PedidoVenda();
 
     public List<Cliente> buscarClientes(String filtro) {
         return clienteService.buscarPorNomeOuDocumento(filtro);
@@ -100,19 +111,19 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
-    public void onRowEdit(RowEditEvent<PedidoVendaItem> event){
+    public void onRowEdit(RowEditEvent<PedidoVendaItem> event) {
         PedidoVendaItem item = event.getObject();
 
         try {
             pedidoVendaService.atualizarItem(pedidoVenda, item);
             Message.info("Item atualizado com sucesso!");
-        } catch (NegocioException e){
+        } catch (NegocioException e) {
             FacesContext.getCurrentInstance().validationFailed();
             Message.error(e.getMessage());
         }
     }
 
-    private void limparItemAtual(){
+    private void limparItemAtual() {
         produtoSelecionado = null;
         quantidade = null;
         valorUnitario = null;
@@ -129,14 +140,14 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
-    public String emitirPedidoVenda() {
+    public String salvarAlteracoes() {
         try {
-            pedidoVendaService.salvarPedido(pedidoVenda);
+            pedidoVendaService.atualizarPedido(pedidoVenda);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Pedido registrado com sucesso!");
+            Message.info("Pedido atualizado com sucesso!");
             return "/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
@@ -182,14 +193,14 @@ public class EmitirPedidoMB implements Serializable {
         }
     }
 
-    private void prepararProdutoSelecionado(Produto produto){
+    private void prepararProdutoSelecionado(Produto produto) {
         this.produtoSelecionado = produto;
 
-        if (quantidade == null){
+        if (quantidade == null) {
             quantidade = BigDecimal.ONE;
         }
 
-        if (produto.getValorVenda() != null){
+        if (produto.getValorVenda() != null) {
             valorUnitario = produto.getValorVenda();
         } else {
             valorUnitario = BigDecimal.ZERO;
@@ -198,11 +209,18 @@ public class EmitirPedidoMB implements Serializable {
         recalcularTotalItem();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<Produto> getProdutos() {
         if (produtos == null) {
             produtos = produtoService.buscarTodosProdutos();
         }
-
         return produtos;
     }
 

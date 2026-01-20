@@ -1,0 +1,464 @@
+<ui:composition template="/WEB-INF/template/TemplateLogado.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="corpo">
+        <f:metadata>
+            <f:viewParam name="id" value="#{editarPedidoMB.id}"/>
+            <f:viewAction action="#{editarPedidoMB.init}"/>
+        </f:metadata>
+        <h:form id="form">
+            <p:growl id="aviso" autoUpdate="true" showDetail="true" life="3000"/>
+            <div class="card">
+                <h1 style="text-align: center; margin-top: 2rem; font-size: 3rem;">Edição Pedido de Venda</h1>
+
+                <div class="grid ui-fluid"
+                     style="display: flex; justify-content: center; margin-top: 3rem; user-select: none">
+                    <div class="col-12 md:col-4"
+                         style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: flex; gap: 1.5rem;">
+                                <div style="flex: 1; display: flex; flex-direction: column;">
+                                    <p:outputLabel value="Cliente:" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <p:autoComplete id="cliente" value="#{editarPedidoMB.clienteSelecionado}"
+                                                        completeMethod="#{editarPedidoMB.buscarClientes}"
+                                                        var="c"
+                                                        itemLabel="#{empty c.documento ? c.nome : c.nome.concat(' (').concat(c.documento).concat(')')}"
+                                                        itemValue="#{c}"
+                                                        converter="#{clienteConverter}"
+                                                        minQueryLength="1"
+                                                        forceSelection="true"
+                                                        placeholder="Busque pelo nome ou CPF/CNPJ"
+                                                        required="true"
+                                                        requiredMessage="Pedido deve possuir um cliente vinculado!">
+                                            <p:ajax event="itemSelect"
+                                                    process="@this"
+                                                    listener="#{editarPedidoMB.selecionarCliente}"/>
+                                        </p:autoComplete>
+
+                                        <p:commandButton id="btnNovoCliente"
+                                                         icon="pi pi-plus-circle"
+                                                         type="button"
+                                                         styleClass="ui-button-primary"
+                                                         title="Novo Cliente"
+                                                         onclick="PF('dlgNovoCliente').show()"/>
+
+                                        <p:tooltip for="btnNovoCliente" value="Cadastrar novo cliente"
+                                                   showEffect="clip"
+                                                   hideEffect="fold"
+                                                   position="left"/>
+                                    </div>
+                                    <p:message for="cliente"/>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column;">
+                                    <p:outputLabel value="Produto:" for="produto" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <p:selectOneMenu id="produto"
+                                                         value="#{editarPedidoMB.produtoSelecionado}"
+                                                         converter="#{produtoConverter}"
+                                                         filter="true"
+                                                         filterMatchMode="contains"
+                                                         style="width: 100%">
+
+                                            <f:selectItem itemLabel="Selecione um produto" noSelectionOption="true"/>
+
+                                            <f:selectItems value="#{editarPedidoMB.produtos}"
+                                                           var="p"
+                                                           itemLabel="#{p.nome}"
+                                                           itemValue="#{p}"/>
+
+                                            <p:ajax event="change"
+                                                    process="@this"
+                                                    listener="#{editarPedidoMB.selecionarProduto}"
+                                                    update=":form:quantidade :form:valorUnitario :form:valorTotalItem :form:btnInserirProduto"/>
+                                        </p:selectOneMenu>
+
+                                        <p:commandButton id="btnNovoProduto"
+                                                         icon="pi pi-plus-circle"
+                                                         type="button"
+                                                         styleClass="ui-button-primary"
+                                                         title="Novo Produto"
+                                                         onclick="PF('dlgNovoProduto').show()"/>
+
+                                        <p:tooltip for="btnNovoProduto" value="Cadastrar novo produto"
+                                                   showEffect="clip"
+                                                   hideEffect="fold"
+                                                   position="left"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem">
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Quantidade:" for="quantidade" styleClass="soft-label"/>
+                                    <p:inputNumber id="quantidade"
+                                                   value="#{editarPedidoMB.quantidade}"
+                                                   minValue="0"
+                                                   maxValue="9999999999.9999"
+                                                   decimalPlaces="4"
+                                                   decimalSeparator=","
+                                                   placeholder="0,00">
+                                        <p:ajax event="blur" listener="#{editarPedidoMB.recalcularTotalItem}"
+                                                update="form:valorTotalItem"/>
+                                    </p:inputNumber>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Valor Unitário:" for="valorUnitario" styleClass="soft-label"/>
+                                    <p:inputNumber id="valorUnitario"
+                                                   value="#{editarPedidoMB.valorUnitario}"
+                                                   minValue="0"
+                                                   maxValue="9999999999.9999"
+                                                   decimalPlaces="4"
+                                                   decimalSeparator=","
+                                                   placeholder="0,00">
+                                        <p:ajax event="blur" listener="#{editarPedidoMB.recalcularTotalItem}"
+                                                update="form:valorTotalItem"/>
+                                    </p:inputNumber>
+                                </div>
+                                <div style="flex: 1; display: flex; flex-direction: column">
+                                    <p:outputLabel value="Valor Total:" styleClass="soft-label"/>
+                                    <div class="ui-inputgroup">
+                                        <div class="ui-inputgroup-addon">R$</div>
+                                        <p:inputNumber id="valorTotalItem"
+                                                       value="#{editarPedidoMB.valorTotalItem}"
+                                                       minValue="0"
+                                                       maxValue="9999999999.99"
+                                                       decimalPlaces="2"
+                                                       decimalSeparator=","
+                                                       placeholder="0,00"
+                                                       readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end">
+                    <p:commandButton id="btnInserirProduto"
+                                     value="Inserir Produto"
+                                     icon="pi pi-plus"
+                                     style="margin-top: 1rem"
+                                     action="#{editarPedidoMB.adicionarItem()}"
+                                     process="@this produto quantidade"
+                                     update=":form:tabelaItens :form:produto :form:quantidade :form:valorUnitario :form:valorTotalItem :form:totalPedido aviso"
+                                     styleClass="#{editarPedidoMB.produtoSelecionado == null ? 'btn-disabled' : ''}"/>
+                </div>
+
+                <p:dataTable id="tabelaItens"
+                             value="#{editarPedidoMB.pedidoVenda.itens}"
+                             var="item"
+                             rowKey="#{item.produto.id}"
+                             style="margin-top: 2rem"
+                             emptyMessage="Nenhum produto inserido no pedido"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="5"
+                             editable="true">
+
+                    <p:column headerText="Produto">
+                        <h:outputText value="#{item.produto.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Quantidade" style="text-align: right">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <p:outputLabel value="#{item.quantidade}">
+                                    <f:convertNumber minFractionDigits="2" maxFractionDigits="4"/>
+                                </p:outputLabel>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputNumber value="#{item.quantidade}" style="width: 100%"
+                                               decimalPlaces="4"
+                                               minValue="0"
+                                               maxValue="9999999999.9999" decimalSeparator=","/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Valor Unitário" style="text-align: right">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <p:outputLabel value="#{item.valorUnitario}">
+                                    <f:convertNumber type="currency" currencySymbol="R$ " minFractionDigits="2"
+                                                     maxFractionDigits="4"/>
+                                </p:outputLabel>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputNumber value="#{item.valorUnitario}" style="width: 100%"
+                                               decimalPlaces="4"
+                                               minValue="0"
+                                               maxValue="9999999999.9999" decimalSeparator=","/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Valor Total" style="text-align: right">
+                        <h:outputText value="#{item.valorTotal}">
+                            <f:convertNumber type="currency" currencySymbol="R$ "/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:ajax event="rowEdit"
+                            listener="#{editarPedidoMB.onRowEdit}"
+                            update=":form:tabelaItens :form:totalPedido :form:aviso"/>
+
+                    <p:ajax event="rowEditCancel"/>
+
+                    <p:column headerText="Ações" style="text-align:center; width:120px" styleClass="col-acoes">
+                        <p:rowEditor icon="pi pi-pencil" styleClass="acao-editar"/>
+
+                        <p:commandButton action="#{editarPedidoMB.removerItem}"
+                                         icon="pi pi-trash"
+                                         styleClass="acao-excluir"
+                                         process="@this"
+                                         update=":form:tabelaItens :form:totalPedido"
+                                         immediate="true">
+                            <f:setPropertyActionListener target="#{editarPedidoMB.itemSelecionado}"
+                                                         value="#{item}"/>
+                            <p:confirm header="Confirmação"
+                                       message="Deseja remover o item?"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+                <h:panelGroup id="totalPedido"
+                              style="display: flex; align-items: center; justify-content: right; margin-top: 1rem; gap: 1rem;">
+                    <h:outputLabel value="Valor Total do Pedido:" style="font-size: 1.4rem; font-weight: bold"/>
+                    <h:outputText value="#{editarPedidoMB.pedidoVenda.valorTotal}"
+                                  style="font-size: 1.4rem; font-weight: bold">
+                        <f:convertNumber type="currency" currencySymbol="R$ "/>
+                    </h:outputText>
+                </h:panelGroup>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
+                    <p:commandButton value="Cancelar"
+                                     styleClass="ui-button-secondary"
+                                     immediate="true"
+                                     process="@this"
+                                     style="min-width: 180px"
+                                     action="/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true"/>
+
+                    <p:commandButton value="Salvar Pedido"
+                                     icon="pi pi-check"
+                                     styleClass="ui-button-primary"
+                                     style="min-width: 180px"
+                                     action="#{editarPedidoMB.salvarAlteracoes()}"
+                                     process="@this cliente produto"
+                                     update="aviso cliente produto"/>
+                </div>
+            </div>
+        </h:form>
+        <h:form id="formNovoCliente">
+            <p:dialog header="Novo Cliente" widgetVar="dlgNovoCliente" modal="true" resizable="false" maxWidth="800">
+                <p:outputPanel id="conteudoDialogCliente">
+                    <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 0.5rem">
+                        <div class="col-12"
+                             style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                            <p:accordionPanel multiple="true" scrollable="true" activeIndex="0,1">
+                                <p:tab title="Dados do Cliente">
+                                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="display: flex; gap: 1.5rem;">
+                                            <div style="flex: 2; display: flex; flex-direction: column">
+                                                <p:outputLabel value="Nome Completo/Razão Social"
+                                                               styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.nome}" id="nome"
+                                                             maxlength="60"
+                                                             placeholder="Informe o nome/razão social" required="true"
+                                                             requiredMessage="O nome/razão social é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column">
+                                                <p:outputLabel value="CPF / CNPJ:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.documento}"
+                                                             id="documento"
+                                                             maxlength="18"
+                                                             placeholder="Informe o CPF/CNPJ" required="true"
+                                                             requiredMessage="CPF/CNPJ é obrigatório"
+                                                             oninput="aplicarMascaraCpfCnpj(this)"/>
+                                            </div>
+                                            <div style="flex: 1.5; display: flex; flex-direction: column">
+                                                <p:outputLabel value="IE/RG:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.inscricaoEstadual}"
+                                                             id="inscricaoEstadual"
+                                                             maxlength="14"
+                                                             placeholder="Informe o IE/RG" required="true"
+                                                             requiredMessage="IE/RG é obrigatório"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:tab>
+                                <p:tab title="Dados de endereço">
+                                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="display: flex; gap: 1.5rem;">
+                                            <div style="flex: 4; display: flex; flex-direction: column">
+                                                <p:outputLabel value="Endereço:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.logradouro}"
+                                                             id="logradouro"
+                                                             maxlength="60"
+                                                             placeholder="Informe o endereço" required="true"
+                                                             requiredMessage="Endereço é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 1; display: flex; flex-direction: column; max-width: 120px">
+                                                <p:outputLabel value="Número:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.numero}" id="numero"
+                                                             maxlength="6"
+                                                             placeholder="N°" required="true"
+                                                             requiredMessage="Número é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column">
+                                                <p:outputLabel value="Bairro:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.bairro}" id="bairro"
+                                                             maxlength="60"
+                                                             placeholder="Informe o bairro" required="true"
+                                                             requiredMessage="Bairro é obrigatório"/>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; gap: 1rem">
+                                            <div style="flex: 0 0 130px; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="CEP:" styleClass="soft-label"/>
+                                                <p:inputMask value="#{editarPedidoMB.novoCliente.cep}" id="CEP"
+                                                             maxlength="9"
+                                                             placeholder="Informe o CEP" mask="99999-999"
+                                                             required="true"
+                                                             requiredMessage="CEP é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column">
+                                                <p:outputLabel value="Cidade:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.cidade}" id="cidade"
+                                                             maxlength="60"
+                                                             placeholder="Informe a cidade" required="true"
+                                                             requiredMessage="Cidade é obrigatória"/>
+                                            </div>
+                                            <div style="flex: 0 0 80px; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Estado:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.estado}" id="estado"
+                                                             maxlength="20"
+                                                             placeholder="UF" required="true"
+                                                             requiredMessage="Estado é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column">
+                                                <p:outputLabel value="Complemento:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoCliente.complemento}"
+                                                             id="complemento"
+                                                             maxlength="60"
+                                                             placeholder="Informe o complemento"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </div>
+                    </div>
+                </p:outputPanel>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
+
+                    <p:commandButton value="Cancelar"
+                                     styleClass="ui-button-secondary"
+                                     style="max-width: 100%"
+                                     oncomplete="PF('dlgNovoCliente').hide()"/>
+
+                    <p:commandButton action="#{editarPedidoMB.salvarNovoCliente()}"
+                                     value="Salvar"
+                                     icon="pi pi-user-plus"
+                                     process="@form"
+                                     styleClass="ui-button-primary"
+                                     update="conteudoDialogCliente :form:cliente :form:aviso"
+                                     oncomplete="if (args.clienteSalvo) PF('dlgNovoCliente').hide()"/>
+                </div>
+            </p:dialog>
+
+            <script type="text/javascript">
+                //<![CDATA[
+                function aplicarMascaraCpfCnpj(input) {
+                    let valor = input.value.replace(/\D/g, '');
+
+                    if (valor.length <= 11) {
+                        // CPF
+                        valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+                        valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+                        valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                    } else {
+                        // CNPJ
+                        valor = valor.replace(/^(\d{2})(\d)/, '$1.$2');
+                        valor = valor.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+                        valor = valor.replace(/\.(\d{3})(\d)/, '.$1/$2');
+                        valor = valor.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+                    }
+
+                    input.value = valor;
+                }
+
+                //]]>
+            </script>
+        </h:form>
+        <h:form id="formNovoProduto">
+            <p:dialog header="Novo Produto" widgetVar="dlgNovoProduto" modal="true" resizable="false" width="600">
+                <p:outputPanel id="conteudoDialogProduto">
+                    <div class="grid ui-fluid" style="display: flex; justify-content: center; margin-top: 0.5rem">
+                        <div class="col-12 md:col-4"
+                             style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                            <p:accordionPanel multiple="true" scrollIntoView="center" activeIndex="0,1">
+                                <p:tab title="Dados do produto">
+                                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="display: flex; gap: 1.5rem;">
+                                            <div style="flex: 3; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Nome:" styleClass="soft-label"/>
+                                                <p:inputText value="#{editarPedidoMB.novoProduto.nome}" id="nomeProduto"
+                                                             maxlength="60"
+                                                             placeholder="Infome a descrição do item"
+                                                             required="true"
+                                                             requiredMessage="Nome é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Preço de Custo" styleClass="soft-label"/>
+                                                <p:inputNumber value="#{editarPedidoMB.novoProduto.valorCusto}"
+                                                               id="valorCusto"
+                                                               decimalPlaces="4"
+                                                               minValue="0"
+                                                               decimalSeparator=","
+                                                               maxValue="9999999999.9999"
+                                                               placeholder="Inform o custo"
+                                                               required="true"
+                                                               requiredMessage="Custo é obrigatório"/>
+                                            </div>
+                                            <div style="flex: 2; display: flex; flex-direction: column;">
+                                                <p:outputLabel value="Valor de Venda:" styleClass="soft-label"/>
+                                                <p:inputNumber value="#{editarPedidoMB.novoProduto.valorVenda}"
+                                                               id="valorVenda"
+                                                               decimalPlaces="4"
+                                                               minValue="0"
+                                                               decimalSeparator=","
+                                                               maxValue="9999999999.9999"
+                                                               placeholder="Infomr o valor de venda"
+                                                               required="true"
+                                                               requiredMessage="Preço de venda é obrigatório"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </div>
+                    </div>
+                </p:outputPanel>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem">
+                    <p:commandButton value="Cancelar"
+                                     styleClass="ui-button-secondary"
+                                     style="max-width: 180px"
+                                     oncomplete="PF('dlgNovoProduto').hide()"/>
+
+                    <p:commandButton action="#{editarPedidoMB.salvarNovoProduto()}"
+                                     value="Salvar"
+                                     icon="pi pi-box"
+                                     process="@form"
+                                     styleClass="ui-button-primary"
+                                     update="conteudoDialogProduto :form:produto :form:quantidade :form:valorUnitario :form:valorTotalItem :form:btnInserirProduto :form:aviso"
+                                     oncomplete="if (args.produtoSalvo) PF('dlgNovoProduto').hide()"/>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

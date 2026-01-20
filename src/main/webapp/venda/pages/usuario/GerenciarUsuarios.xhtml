@@ -120,7 +120,7 @@
                                 <p:commandButton action="#{gerenciarUsuariosMB.salvarAlteracoes}"
                                                  value="Atualizar Usuário!"
                                                  icon="pi pi-check"
-                                                 process="@form"
+                                                 process=":formDialog"
                                                  update=":formDialog:conteudoDialog :form"
                                                  ajax="true"
                                                  oncomplete="if (args.salvo) PF('dlgEditar').hide();"/>
@@ -139,6 +139,7 @@
                 <p:outputPanel id="conteudoSenha">
                     <div class="senha-container">
                         <p:commandButton icon="pi pi-copy"
+                                         type="button"
                                          title="Copiar senha"
                                          onclick="copiarSenhaJS()"
                                          styleClass="ui-button-text ui-button-secondary"/>
@@ -163,7 +164,7 @@
                         detail: 'Senha copiada!',
                         severity: 'info'
                     });
-                }, 3000);
+                }, 200);
                 });
                 }
             </h:outputScript>

@@ -1,10 +1,12 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.usuario;
 
 import br.com.vendas.model.Usuario;
 import br.com.vendas.service.UsuarioService;
+import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -12,9 +14,9 @@ import javax.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Named("cadastroUsuarioMB")
+@Named("alterarSenhaMB")
 @ViewScoped
-public class CadastroUsuarioMB implements Serializable {
+public class AlterarSenhaMB implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -22,26 +24,39 @@ public class CadastroUsuarioMB implements Serializable {
     @Inject
     private UsuarioService usuarioService;
 
-    private final Usuario usuario = new Usuario(); //Lembre-se manter o objeto como atributo da classe e não local!
-    private String confirmarSenha;
+    @Inject
+    private SessaoUsuario sessaoUsuario;
 
-    public String cadastrarUsuario() {
+    private String novaSenha;
+    private String confirmarSenha;
+    private Usuario usuario;
+
+    @PostConstruct
+    public void init() {
+        usuario = sessaoUsuario.getUsuarioLogado();
+    }
+
+    public String salvarAlteracoes() {
         try {
-            usuarioService.salvar(usuario, confirmarSenha);
+            usuarioService.atualizarSenha(usuario, novaSenha, confirmarSenha);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
                     .setKeepMessages(true);
-            Message.info("Usuario:\n" + usuario.getLogin() + ", cadastrado com sucesso!");
-            return "Login.xhtml?faces-redirect=true";
+            Message.info("Senha atualizada com sucesso!");
+            return "/venda/pages/DashboardVendas.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());
             return null;
         }
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getNovaSenha() {
+        return novaSenha;
+    }
+
+    public void setNovaSenha(String novaSenha) {
+        this.novaSenha = novaSenha;
     }
 
     public String getConfirmarSenha() {

@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.cliente;
 
 import br.com.vendas.model.Cliente;
 import br.com.vendas.service.ClienteService;

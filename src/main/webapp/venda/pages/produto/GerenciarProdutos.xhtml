@@ -38,15 +38,14 @@
                                              maxFractionDigits="4"/>
                         </h:outputText>
                     </p:column>
-                    <p:column>
+                    <p:column rendered="#{sessaoUsuario.usuarioLogado.admin}">
                         <div style="display: flex; flex-direction: column; align-items: flex-end">
                             <p:commandButton action="#{gerenciarProdutoMB.excluirProduto()}"
                                              update="@form"
                                              process="@this"
                                              id="btnExcluir"
                                              icon="pi pi-trash"
-                                             styleClass="ui-button-danger"
-                                             disabled="#{!sessaoUsuario.usuarioLogado.admin}">
+                                             styleClass="ui-button-danger">
                                 <f:setPropertyActionListener target="#{gerenciarProdutoMB.produtoSelecionado}"
                                                              value="#{produtos}"/>
                                 <p:confirm header="Confirmação - Exclusão Produtos"

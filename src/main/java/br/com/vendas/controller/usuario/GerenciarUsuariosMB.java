@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.usuario;
 
 import br.com.vendas.model.Usuario;
 import br.com.vendas.service.UsuarioService;
@@ -8,7 +8,6 @@ import br.com.vendas.util.NegocioException;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,7 +40,6 @@ public class GerenciarUsuariosMB implements Serializable {
     public void salvarAlteracoes() {
         try {
             usuarioService.atualizarUsuario(usuarioSelecionado);
-
             Message.info("Usuario:\n" + usuarioSelecionado.getLogin() + ", atualizado com sucesso!");
             PrimeFaces.current().ajax().addCallbackParam("salvo", true);
         } catch (NegocioException e) {
@@ -68,13 +66,13 @@ public class GerenciarUsuariosMB implements Serializable {
 
             usuarioSelecionado.setAdmin(novoStatusAdmin);
 
-            Message.info("Permissão de usuário: "+ getUsuarioSelecionado().getLogin() +", Alterada com sucesso!");
+            Message.info("Permissão de usuário: " + getUsuarioSelecionado().getLogin() + ", Alterada com sucesso!");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
     }
 
-    public void resetarSenha(){
+    public void resetarSenha() {
         try {
             senhaGerada = usuarioService.resetarSenha(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
             Message.info("Senha resetada com sucesso!");

@@ -31,22 +31,24 @@
                     <p:column headerText="Cidade" sortBy="#{clientes.cidade}">
                         <h:outputText value="#{clientes.cidade}"/>
                     </p:column>
-                    <p:column>
+                    <p:column rendered="#{sessaoUsuario.usuarioLogado.admin}">
                         <div style="display: flex; flex-direction: column; align-items: flex-end">
-                            <p:commandButton action="#{gerenciarClienteMB.excluirCliente()}"
-                                             update="@form"
-                                             process="@this"
-                                             id="btnExcluir"
-                                             icon="pi pi-trash"
-                                             styleClass="ui-button-danger"
-                                             disabled="#{!sessaoUsuario.usuarioLogado.admin}">
-                                <f:setPropertyActionListener target="#{gerenciarClienteMB.clienteSelecionado}"
-                                                             value="#{clientes}"/>
-                                <p:confirm header="Confirmação - Exclusão Cliente"
-                                           message="Deseja realmente excluir o cliente?"
-                                           icon="pi pi-exclamation-triangle"/>
-                            </p:commandButton>
-                            <p:tooltip for="btnExcluir" value="Excluir Cliente"
+                            <p:outputPanel id="wrapperExcluir">
+                                <p:commandButton action="#{gerenciarClienteMB.excluirCliente()}"
+                                                 update="@form"
+                                                 process="@this"
+                                                 id="btnExcluir"
+                                                 icon="pi pi-trash"
+                                                 styleClass="ui-button-danger">
+                                    <f:setPropertyActionListener target="#{gerenciarClienteMB.clienteSelecionado}"
+                                                                 value="#{clientes}"/>
+                                    <p:confirm header="Confirmação - Exclusão Cliente"
+                                               message="Deseja realmente excluir o cliente?"
+                                               icon="pi pi-exclamation-triangle"/>
+                                </p:commandButton>
+                            </p:outputPanel>
+
+                            <p:tooltip for="wrapperExcluir" value="Excluir Cliente"
                                        showEffect="clip"
                                        hideEffect="fold"
                                        position="top"/>

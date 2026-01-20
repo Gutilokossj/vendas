@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.auth;
 
 import br.com.vendas.model.Usuario;
 import br.com.vendas.service.UsuarioService;

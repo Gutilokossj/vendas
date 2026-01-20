@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.produto;
 
 import br.com.vendas.model.Produto;
 import br.com.vendas.service.ProdutoService;

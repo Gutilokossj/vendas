@@ -1,6 +1,7 @@
 package br.com.vendas.service;
 
 import br.com.vendas.dao.GenericDao;
+import br.com.vendas.dao.PedidoDAO;
 import br.com.vendas.model.*;
 import br.com.vendas.util.NegocioException;
 
@@ -21,10 +22,25 @@ public class PedidoVendaService implements Serializable {
     @Inject
     private GenericDao<PedidoVenda> daoGenerico;
 
+    @Inject
+    private PedidoDAO pedidoDAO;
+
     public void salvarPedido(PedidoVenda pedidovenda) throws NegocioException {
         validarPedido(pedidovenda);
         calcularTotalPedido(pedidovenda);
         daoGenerico.salvar(pedidovenda);
+    }
+
+    public void atualizarPedido(PedidoVenda pedidoVenda) throws NegocioException {
+        PedidoVenda pedidoBanco = buscarPorId(pedidoVenda.getId());
+
+        if(pedidoBanco == null){
+            throw new NegocioException("Pedido nao encontrado!");
+        }
+
+        validarPedido(pedidoVenda);
+        calcularTotalPedido(pedidoVenda);
+        daoGenerico.salvar(pedidoVenda);
     }
 
     private void validarPedido(PedidoVenda pedidoVenda) throws NegocioException {
@@ -113,9 +129,49 @@ public class PedidoVendaService implements Serializable {
         daoGenerico.remover(PedidoVenda.class, pedidoParaExcluir.getId());
     }
 
+    public PedidoVenda duplicarPedido(PedidoVenda pedidoVendaOriginal) throws NegocioException {
+
+        if (pedidoVendaOriginal == null || pedidoVendaOriginal.getId() == null) {
+            throw new NegocioException("Pedido não informado para duplicar!");
+        }
+
+        PedidoVenda pedidoCompleto = pedidoDAO.buscarPedidoPorId(pedidoVendaOriginal.getId());
+
+        PedidoVenda novoPedido = new PedidoVenda();
+
+        novoPedido.setCliente(pedidoCompleto.getCliente());
+
+        for (PedidoVendaItem itemOriginal : pedidoCompleto.getItens()) {
+
+            PedidoVendaItem novoItem = new PedidoVendaItem();
+            novoItem.setProduto(itemOriginal.getProduto());
+            novoItem.setQuantidade(itemOriginal.getQuantidade());
+            novoItem.setValorUnitario(itemOriginal.getValorUnitario());
+
+            BigDecimal totalItem = itemOriginal.getValorUnitario()
+                    .multiply(itemOriginal.getQuantidade())
+                    .setScale(2, RoundingMode.HALF_UP);
+
+            novoItem.setValorTotal(totalItem);
+            novoPedido.adicionarItem(novoItem);
+        }
+
+        calcularTotalPedido(novoPedido);
+        daoGenerico.salvar(novoPedido);
+        return novoPedido;
+    }
+
     public List<PedidoVenda> buscarTodosPedidos() {
         return daoGenerico.buscarTodos
                 (PedidoVenda.class, "SELECT p FROM PedidoVenda p ORDER BY p.id DESC");
+    }
+
+    public PedidoVenda buscarPorId(Long id) throws NegocioException {
+
+        if (id == null) {
+            throw new NegocioException("Id do pedido não informado!");
+        }
+        return pedidoDAO.buscarPedidoPorId(id);
     }
 
 }

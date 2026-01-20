@@ -13,7 +13,60 @@
                 <div style="display: flex; flex-direction: column; align-items: flex-end">
                     <p:button value="Emitir Pedido" outcome="/venda/pages/pedido/EmitirPedidoVenda.xhtml"/>
                 </div>
-                <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Pedidos de venda</h1>
+                <h1 style="text-align: center; background-color: #f5f5f5; padding: 1rem">Gerenciamento de pedidos</h1>
+                <p:dataTable id="tabelaPedidos" var="pedidos" paginator="true" paginatorPosition="bottom" rows="10"
+                             value="#{gerenciarPedidoMB.pedidosVenda}">
+                    <p:column headerText="Cód. Pedido" sortBy="#{pedidos.id}">
+                        <p:link value="#{pedidos.id}"
+                                outcome="/venda/pages/pedido/EditarPedidoVenda.xhtml">
+                            <f:param name="id" value="#{pedidos.id}"/>
+                        </p:link>
+                    </p:column>
+                    <p:column headerText="Cliente" sortBy="#{pedidos.cliente.nome}">
+                        <p:link value="#{pedidos.cliente.nome}"
+                                outcome="/venda/pages/pedido/EditarPedidoVenda.xhtml">
+                            <f:param name="id" value="#{pedidos.id}"/>
+                        </p:link>
+                    </p:column>
+                    <p:column headerText="Valor Total" sortBy="#{pedidos.valorTotal}">
+                        <h:outputText value="#{pedidos.valorTotal}">
+                            <f:convertNumber type="currency"
+                                             currencySymbol="R$ "
+                                             decimalPlaces="2"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end">
+                            <p:menuButton value="Opções" icon="pi pi-bars">
+                                <p:menuitem action="#{gerenciarPedidoMB.duplicarPedido}"
+                                            id="btnDuplicar"
+                                            value="Duplicar Pedido"
+                                            update="@form"
+                                            process="@this"
+                                            icon="pi pi-copy">
+                                    <f:setPropertyActionListener target="#{gerenciarPedidoMB.pedidoVendaSelecionado}"
+                                                                 value="#{pedidos}"/>
+                                    <p:confirm header="Duplicar Pedido"
+                                               message="Deseja duplicar o pedido #{pedidos.id}?"
+                                               icon="pi pi-exclamation-triangle"/>
+                                </p:menuitem>
+                                <p:menuitem rendered="#{sessaoUsuario.usuarioLogado.admin}"
+                                            action="#{gerenciarPedidoMB.excluirPedido}"
+                                            id="btnExcluir"
+                                            value="Excluir Pedido"
+                                            update="@form"
+                                            process="@this"
+                                            icon="pi pi-trash">
+                                    <f:setPropertyActionListener target="#{gerenciarPedidoMB.pedidoVendaSelecionado}"
+                                                                 value="#{pedidos}"/>
+                                    <p:confirm header="Excluir Pedido"
+                                               message="Certeza que deseja excluir o pedido #{pedidos.id}?"
+                                               icon="pi pi-exclamation-triangle"/>
+                                </p:menuitem>
+                            </p:menuButton>
+                        </div>
+                    </p:column>
+                </p:dataTable>
             </div>
         </h:form>
     </ui:define>

@@ -1,4 +1,4 @@
-package br.com.vendas.controller;
+package br.com.vendas.controller.pedido;
 
 import br.com.vendas.model.PedidoVenda;
 import br.com.vendas.service.PedidoVendaService;
@@ -41,6 +41,22 @@ public class GerenciarPedidoMB implements Serializable {
             pedidoVendaService.removerPedido(pedidoVendaSelecionado, sessaoUsuario.getUsuarioLogado());
             pedidosVenda.remove(pedidoVendaSelecionado);
             Message.info("Pedido:\n" +  idPedidoExcluido + ", excluído com sucesso!");
+        } catch (NegocioException e) {
+            Message.error(e.getMessage());
+        }
+    }
+
+    public void duplicarPedido(){
+
+        if (pedidoVendaSelecionado == null || pedidoVendaSelecionado.getId() == null) {
+            Message.error("Pedido não informado para duplicar!"); //Deixei aqui pro segurança por enquanto!
+            return;
+        }
+
+        try {
+            PedidoVenda pedidoDuplicado = pedidoVendaService.duplicarPedido(pedidoVendaSelecionado);
+            pedidosVenda.add(0, pedidoDuplicado);
+            Message.info("Pedido duplicado com sucesso! Novo ID: " + pedidoDuplicado.getId());
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
