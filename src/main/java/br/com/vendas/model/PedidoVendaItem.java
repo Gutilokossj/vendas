@@ -23,24 +23,6 @@ public class PedidoVendaItem extends EntidadeBase implements Serializable {
     @ManyToOne(optional = false)
     private PedidoVenda pedidoVenda;
 
-    /*
-    O que faz optional = false (explicação simples)
-
-    Significa:
-    Esse relacionamento é obrigatório.
-
-    Na prática:
-    Um PedidoVendaItem não pode existir sem:
-    um PedidoVenda
-    um Produto
-
-    No banco:
-    Gera uma FK NOT NULL
-
-    No Java:
-    O Hibernate não permite persistir se estiver null
-     */
-
     @ManyToOne(optional = false)
     private Produto produto;
 

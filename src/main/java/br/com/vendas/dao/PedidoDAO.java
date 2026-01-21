@@ -5,6 +5,7 @@ import br.com.vendas.model.PedidoVenda;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.List;
 
 @ApplicationScoped
@@ -51,11 +52,43 @@ public class PedidoDAO {
         var query = em.createQuery(jpql, PedidoVenda.class)
                 .setParameter("nome", "%" + nome.trim().toLowerCase() + "%");
 
-        if (!nome.contains("%")){
+        if (!nome.contains("%")) {
             query.setMaxResults(20);
         }
 
         return query.getResultList();
+    }
+
+    public void removerPedido(Long id) {
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            if (!tx.isActive()) {
+                tx.begin();
+            }
+
+            PedidoVenda pedido = em.createQuery(
+                            "SELECT p FROM PedidoVenda p " +
+                                    "LEFT JOIN FETCH p.itens " +
+                                    "WHERE p.id = :id", PedidoVenda.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+            if (pedido == null) {
+                return;
+            }
+
+            em.remove(pedido);
+            tx.commit();
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        }
     }
 
 }

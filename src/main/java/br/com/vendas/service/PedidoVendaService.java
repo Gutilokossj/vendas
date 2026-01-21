@@ -126,7 +126,7 @@ public class PedidoVendaService implements Serializable {
             throw new NegocioException("Usuario nao tem permissao para excluir pedido!");
         }
 
-        daoGenerico.remover(PedidoVenda.class, pedidoParaExcluir.getId());
+        pedidoDAO.removerPedido(pedidoParaExcluir.getId());
     }
 
     public PedidoVenda duplicarPedido(PedidoVenda pedidoVendaOriginal) throws NegocioException {
