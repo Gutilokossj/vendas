@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
@@ -19,6 +20,10 @@ public class Usuario extends EntidadeBase implements Serializable {
 
     @NotBlank(message = "Nome é um campo obrigatório, não pode ser nulo!")
     @Size(min = 3, max = 40, message = "Nome deve ter entre 3 e 40 caracteres")
+    @Pattern(
+            regexp = "^[A-Za-zÀ-ÿ ]+$",
+            message = "Nome deve conter apenas letras"
+    )
     @Column(nullable = false,length = 40)
     private String nome;
 

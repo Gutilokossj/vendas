@@ -27,6 +27,7 @@ public class UsuarioService implements Serializable {
     public void salvar(Usuario usuario, String confirmarSenha) throws NegocioException {
 
         validarCamposObrigatorios(usuario);
+        validarNome(usuario);
         validarSenhaConfirmacao(usuario.getSenha(), confirmarSenha);
         usuario.setLogin(normalizarLogin(usuario.getLogin()));
         validarLoginExistente(usuario);
@@ -34,6 +35,7 @@ public class UsuarioService implements Serializable {
     }
 
     public void atualizarUsuario(Usuario usuario) throws NegocioException {
+        validarNome(usuario);
         usuario.setLogin(normalizarLogin(usuario.getLogin()));
         validarLoginExistente(usuario);
         usuarioDao.atualizar(usuario);
@@ -75,6 +77,18 @@ public class UsuarioService implements Serializable {
         }
     }
 
+    private void validarNome(Usuario usuario) throws NegocioException {
+        String nome = usuario.getNome();
+
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new NegocioException("Nome é obrigatório!");
+        }
+
+        if (!nome.matches("^[A-Za-zÀ-ÿ ]+$")) {
+            throw new NegocioException("Nome deve conter apenas letras");
+        }
+    }
+
     private void validarSenhaConfirmacao(String senha, String confirmarSenha) throws NegocioException {
         if (senha == null || !senha.equals(confirmarSenha)) {
             throw new NegocioException("A nova senha não confere com a confirmação!\n por favor verifique!");
@@ -88,11 +102,11 @@ public class UsuarioService implements Serializable {
     }
 
     public void validarSenha(String novaSenha) throws NegocioException {
-        if(novaSenha == null || novaSenha.trim().isEmpty()){
+        if (novaSenha == null || novaSenha.trim().isEmpty()) {
             throw new NegocioException("Nova senha é obrigatória!");
         }
 
-        if(novaSenha.length() < 5 || novaSenha.length() > 20){
+        if (novaSenha.length() < 5 || novaSenha.length() > 20) {
             throw new NegocioException("Nova senha deve ter entre 5 a 20 caracteres");
         }
     }
@@ -105,15 +119,15 @@ public class UsuarioService implements Serializable {
             throw new NegocioException("Usuário ou senha inválidos!");
         }
 
-        if(!usuario.isAtivo()){
+        if (!usuario.isAtivo()) {
             throw new NegocioException("Usuário inativo. Entre em contato com o administrador!");
         }
 
         return usuario;
     }
 
-    public List<Usuario> listarUsuarios(boolean mostrarInativos){
-        if (mostrarInativos){
+    public List<Usuario> listarUsuarios(boolean mostrarInativos) {
+        if (mostrarInativos) {
             return daoGenerico.buscarTodos(
                     Usuario.class,
                     "SELECT u FROM Usuario u ORDER BY u.id DESC"
@@ -124,7 +138,7 @@ public class UsuarioService implements Serializable {
     }
 
     public void alterarStatus(Usuario usuarioParaAlterar, Usuario usuariolLogado, boolean ativo) throws NegocioException {
-        if (!usuariolLogado.isAdmin()){
+        if (!usuariolLogado.isAdmin()) {
             throw new NegocioException("Somente administradores podem alterar o status de ativo/inativo!");
         }
 
@@ -136,17 +150,17 @@ public class UsuarioService implements Serializable {
         usuarioDao.atualizar(usuarioParaAlterar);
     }
 
-    public void alterarPermissaoAdmin(Usuario usuarioParaAlterar, Usuario usuarioLogado, boolean admin) throws NegocioException{
+    public void alterarPermissaoAdmin(Usuario usuarioParaAlterar, Usuario usuarioLogado, boolean admin) throws NegocioException {
 
         if (!usuarioParaAlterar.isAtivo()) {
             throw new NegocioException("Não é possível alterar permissão admin de um usuário inativo!");
         }
 
-        if(!usuarioLogado.isAdmin()){
+        if (!usuarioLogado.isAdmin()) {
             throw new NegocioException("Somente administradores podem tornar usuários administradores!");
         }
 
-        if (usuarioParaAlterar.equals(usuarioLogado)){
+        if (usuarioParaAlterar.equals(usuarioLogado)) {
             throw new NegocioException("Não é permitido alterar seu próprio perfil de administrador!");
         }
 
@@ -159,11 +173,11 @@ public class UsuarioService implements Serializable {
             throw new NegocioException("Não é possível resetar senha de um usuário inativo!");
         }
 
-        if (!usuarioLogado.isAdmin()){
+        if (!usuarioLogado.isAdmin()) {
             throw new NegocioException("Somente administradores podem resetar senhas");
         }
 
-        if (usuarioParaResetar.getId().equals(usuarioLogado.getId())){
+        if (usuarioParaResetar.getId().equals(usuarioLogado.getId())) {
             throw new NegocioException("Não é possível resetar a própria senha!");
         }
 
@@ -174,18 +188,18 @@ public class UsuarioService implements Serializable {
         return novaSenha;
     }
 
-    private String gerarSenhaAleatoria(){
+    private String gerarSenhaAleatoria() {
         String caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789@#";
         SecureRandom random = new SecureRandom();
 
         StringBuilder senha = new StringBuilder();
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 8; i++) {
             senha.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
         return senha.toString();
     }
 
-    private String normalizarLogin(String login){
+    private String normalizarLogin(String login) {
         return login == null ? null : login.trim().toLowerCase();
     }
 }
