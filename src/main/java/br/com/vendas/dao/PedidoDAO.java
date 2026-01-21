@@ -48,10 +48,14 @@ public class PedidoDAO {
                     ORDER BY p.id DESC
                 """;
 
-        return em.createQuery(jpql, PedidoVenda.class)
-                .setParameter("nome", "%" + nome.trim().toLowerCase() + "%")
-                .setMaxResults(20)
-                .getResultList();
+        var query = em.createQuery(jpql, PedidoVenda.class)
+                .setParameter("nome", "%" + nome.trim().toLowerCase() + "%");
+
+        if (!nome.contains("%")){
+            query.setMaxResults(20);
+        }
+
+        return query.getResultList();
     }
 
 }

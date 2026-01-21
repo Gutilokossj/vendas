@@ -24,10 +24,15 @@ public class ClienteDao {
 
     public List<Cliente> buscarPorNomeOuDocumento(String filtro){
         String jpql = "SELECT c FROM Cliente c WHERE LOWER (c.nome) LIKE LOWER (:filtro) OR LOWER (c.documento) LIKE LOWER (:filtro) ORDER BY c.nome";
-        return em.createQuery(jpql, Cliente.class)
-                .setParameter("filtro", "%" + filtro + "%")
-                .setMaxResults(10)
-                .getResultList();
+
+        var query = em.createQuery(jpql, Cliente.class)
+                .setParameter("filtro", "%" + filtro + "%");
+
+        if (filtro != null && !filtro.trim().isEmpty() && !filtro.contains("%")){
+            query.setMaxResults(20);
+        }
+
+        return query.getResultList();
     }
 
     public Cliente buscarPorId(Long id){
