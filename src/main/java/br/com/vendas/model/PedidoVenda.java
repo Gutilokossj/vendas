@@ -27,7 +27,7 @@ public class PedidoVenda extends EntidadeBase implements Serializable {
 
     public void adicionarItem(PedidoVendaItem item){
         item.setPedidoVenda(this);
-        this.itens.add(item);
+        this.itens.add(0, item);
     }
 
     public void removerItem(PedidoVendaItem item){
