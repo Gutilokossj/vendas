@@ -27,6 +27,11 @@ public class UsuarioDao {
         return em.find(Usuario.class, id);
     }
 
+    public List<Usuario> buscarAtivos(){
+        String jpql = "SELECT u FROM Usuario u WHERE u.ativo = true ORDER BY u.id DESC";
+        return  em.createQuery(jpql, Usuario.class).getResultList();
+    }
+
     public boolean existeLogin(String login){
         String jpql = "SELECT COUNT(u) FROM Usuario u WHERE u.login = :login";
         Long count = em.createQuery(jpql, Long.class)

@@ -16,6 +16,20 @@
                          style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 500px">
 
                         <div style="display: flex; flex-direction: column;">
+                            <p:outputLabel value="Senha Atual" styleClass="soft-label"/>
+                            <div class="ui-inputgroup">
+                                <div class="ui-inputgroup-addon">
+                                    <i class="pi pi-lock"></i>
+                                </div>
+                                <p:password value="#{alterarSenhaMB.senhaAtual}" type="password" id="senhaAtual"
+                                            maxlength="20"
+                                            required="true"
+                                            requiredMessage="Senha atual é obrigatório!"
+                                            placeholder="Digite sua senha atual" toggleMask="true" redisplay="true"/>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column;">
                             <p:outputLabel value="Senha" styleClass="soft-label"/>
                             <div class="ui-inputgroup">
                                 <div class="ui-inputgroup-addon">

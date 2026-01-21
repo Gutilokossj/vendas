@@ -28,19 +28,23 @@ public class UsuarioService implements Serializable {
 
         validarCamposObrigatorios(usuario);
         validarSenhaConfirmacao(usuario.getSenha(), confirmarSenha);
+        usuario.setLogin(normalizarLogin(usuario.getLogin()));
         validarLoginExistente(usuario);
         daoGenerico.salvar(usuario);
     }
 
     public void atualizarUsuario(Usuario usuario) throws NegocioException {
+        usuario.setLogin(normalizarLogin(usuario.getLogin()));
         validarLoginExistente(usuario);
         usuarioDao.atualizar(usuario);
     }
 
-    public void atualizarSenha(Usuario usuario, String novaSenha, String confirmarSenha) throws NegocioException {
+    public void atualizarSenha(Usuario usuario, String senhaAtual, String novaSenha, String confirmarSenha) throws NegocioException {
+
         validarSenha(novaSenha);
-        usuario.setSenha(novaSenha);
         validarSenhaConfirmacao(novaSenha, confirmarSenha);
+        validarSenhaAtual(senhaAtual, usuario);
+        usuario.setSenha(novaSenha);
         usuarioDao.atualizar(usuario);
     }
 
@@ -55,7 +59,7 @@ public class UsuarioService implements Serializable {
 
     private void validarLoginExistente(Usuario usuario) throws NegocioException {
 
-        // Criação de usuário (novo usuário)
+
         if (usuario.getId() == null) {
             if (usuarioDao.existeLogin(usuario.getLogin())) {
                 throw new NegocioException("Usuário já cadastrado!");
@@ -63,7 +67,7 @@ public class UsuarioService implements Serializable {
             return;
         }
 
-        // Edição de usuário
+
         Usuario usuarioComMesmoLogin = usuarioDao.buscarPorLogin(usuario.getLogin());
 
         if (usuarioComMesmoLogin != null && !usuarioComMesmoLogin.equals(usuario)) {
@@ -73,7 +77,13 @@ public class UsuarioService implements Serializable {
 
     private void validarSenhaConfirmacao(String senha, String confirmarSenha) throws NegocioException {
         if (senha == null || !senha.equals(confirmarSenha)) {
-            throw new NegocioException("As senhas não conferem. Verifique e tente novamente.");
+            throw new NegocioException("A nova senha não confere com a confirmação!\n por favor verifique!");
+        }
+    }
+
+    private void validarSenhaAtual(String senhaAtual, Usuario usuario) throws NegocioException {
+        if (senhaAtual == null || senhaAtual.trim().isEmpty() || !usuario.getSenha().equals(senhaAtual)) {
+            throw new NegocioException("Senha atual não confere! \n por favor verifique!");
         }
     }
 
@@ -88,34 +98,49 @@ public class UsuarioService implements Serializable {
     }
 
     public Usuario logar(String login, String senha) throws NegocioException {
+        login = normalizarLogin(login);
         Usuario usuario = usuarioDao.buscarPorLogin(login);
 
         if (usuario == null || !usuario.getSenha().equals(senha)) {
             throw new NegocioException("Usuário ou senha inválidos!");
         }
 
+        if(!usuario.isAtivo()){
+            throw new NegocioException("Usuário inativo. Entre em contato com o administrador!");
+        }
+
         return usuario;
     }
 
-
-    public void remover(Usuario usuarioParaExcluir, Usuario usuarioLogado) throws NegocioException {
-        if (!usuarioLogado.isAdmin()) {
-            throw new NegocioException("Somente administradores podem excluir usuários!");
+    public List<Usuario> listarUsuarios(boolean mostrarInativos){
+        if (mostrarInativos){
+            return daoGenerico.buscarTodos(
+                    Usuario.class,
+                    "SELECT u FROM Usuario u ORDER BY u.id DESC"
+            );
         }
 
-        if (usuarioParaExcluir.equals(usuarioLogado)){
-            throw new NegocioException("Não é permitido excluir seu próprio perfil de usuário!");
-        }
-
-        daoGenerico.remover(Usuario.class, usuarioParaExcluir.getId());
+        return usuarioDao.buscarAtivos();
     }
 
-    public List<Usuario> buscarTodosUsuarios() {
-        return daoGenerico.buscarTodos
-                (Usuario.class, "SELECT u FROM Usuario u ORDER BY u.id DESC");
+    public void alterarStatus(Usuario usuarioParaAlterar, Usuario usuariolLogado, boolean ativo) throws NegocioException {
+        if (!usuariolLogado.isAdmin()){
+            throw new NegocioException("Somente administradores podem alterar o status de ativo/inativo!");
+        }
+
+        if (usuarioParaAlterar.equals(usuariolLogado)) {
+            throw new NegocioException("Não é permitido alterar seu próprio status de ativo/inativo!");
+        }
+
+        usuarioParaAlterar.setAtivo(ativo);
+        usuarioDao.atualizar(usuarioParaAlterar);
     }
 
     public void alterarPermissaoAdmin(Usuario usuarioParaAlterar, Usuario usuarioLogado, boolean admin) throws NegocioException{
+
+        if (!usuarioParaAlterar.isAtivo()) {
+            throw new NegocioException("Não é possível alterar permissão admin de um usuário inativo!");
+        }
 
         if(!usuarioLogado.isAdmin()){
             throw new NegocioException("Somente administradores podem tornar usuários administradores!");
@@ -129,6 +154,11 @@ public class UsuarioService implements Serializable {
     }
 
     public String resetarSenha(Usuario usuarioParaResetar, Usuario usuarioLogado) throws NegocioException {
+
+        if (!usuarioParaResetar.isAtivo()) {
+            throw new NegocioException("Não é possível resetar senha de um usuário inativo!");
+        }
+
         if (!usuarioLogado.isAdmin()){
             throw new NegocioException("Somente administradores podem resetar senhas");
         }
@@ -153,5 +183,9 @@ public class UsuarioService implements Serializable {
             senha.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
         return senha.toString();
+    }
+
+    private String normalizarLogin(String login){
+        return login == null ? null : login.trim().toLowerCase();
     }
 }

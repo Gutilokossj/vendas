@@ -11,6 +11,12 @@
                 <p:growl id="aviso" widgetVar="growlAviso" autoUpdate="true" closable="true" life="3000"
                          appendTo="@(body)"/>
                 <p:messages globalOnly="true" closable="true"/>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem; flex-direction: row; align-items: center;">
+                    <p:selectBooleanCheckbox value="#{gerenciarUsuariosMB.mostrarInativos}">
+                        <p:ajax listener="#{gerenciarUsuariosMB.listar}" update="tabelaUsuarios"/>
+                    </p:selectBooleanCheckbox>
+                    <p:outputLabel value="Mostrar usuários inativos" style="margin-left: 0.5rem; font-weight: bold; font-size: 1rem"/>
+                </div>
                 <h1 class="tituloPagina">Gerenciamento de usuários</h1>
                 <p:dataTable id="tabelaUsuarios" var="usuarios" paginator="true" paginatorPosition="bottom" rows="10"
                              value="#{gerenciarUsuariosMB.usuarios}">
@@ -20,9 +26,10 @@
                     <p:column headerText="Nome Completo" sortBy="#{usuarios.nome}">
                         <h:outputText value="#{usuarios.nome}"/>
                     </p:column>
-                    <p:column headerText="Ações e pemirssões" sortBy="#{usuarios.admin}">
-                        <div style="display: flex; gap: 1rem">
-                            <p:commandButton icon="pi pi-lock" value="Resetar Senha"
+                    <p:column headerText="Senha/Edição" style="text-align: right;">
+                        <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+                            <p:commandButton icon="pi pi-lock"
+                                             id="btnResetarSenha"
                                              action="#{gerenciarUsuariosMB.resetarSenha}"
                                              process="@this"
                                              update=":formDialog:conteudoSenha @form">
@@ -35,6 +42,8 @@
                                            message="Deseja resetar a senha do usuário?">
                                 </p:confirm>
                             </p:commandButton>
+                            <p:tooltip for="btnResetarSenha" value="Resetar Senha" showEffect="clip" hideEffect="fold"
+                                       position="top"/>
 
                             <p:commandButton process="@this"
                                              update=":formDialog:dlgEditar"
@@ -46,36 +55,38 @@
                             </p:commandButton>
                             <p:tooltip for="btnEditar" value="Editar Usuário" showEffect="clip" hideEffect="fold"
                                        position="top"/>
-
-                            <p:commandButton action="#{gerenciarUsuariosMB.excluirUsuario}"
+                        </div>
+                    </p:column>
+                    <p:column headerText="Admin/Status" sortBy="#{usuarios.admin}" style="text-align: right">
+                        <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+                            <p:commandButton id="btnAdmin"
+                                             action="#{gerenciarUsuariosMB.alterarAdmin}"
                                              update="@form"
                                              process="@this"
-                                             id="btnExcluir" icon="pi pi-trash"
-                                             styleClass="ui-button-danger">
+                                             icon="#{usuarios.admin ? 'pi pi-star-fill' : 'pi pi-star'}"
+                                             class="ui-button-warning">
                                 <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
                                                              value="#{usuarios}"/>
-                                <p:confirm header="Confirmação - Exclusão Usuário"
-                                           message="Deseja realmente excluir o usuário?"
-                                           icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
-                            <p:tooltip for="btnExcluir" value="Excluir Usuário" showEffect="clip" hideEffect="fold"
+                            <p:tooltip for="btnAdmin" value="Altera Permissão" showEffect="clip"
+                                       hideEffect="fold"
                                        position="top"/>
-                            <p:column headerText="Permissão (admin)">
-                                <div style="display: flex; gap: 1rem; ">
-                                    <p:commandButton id="btnAdmin"
-                                                     action="#{gerenciarUsuariosMB.alterarAdmin}"
-                                                     update="@form"
-                                                     process="@this"
-                                                     icon="#{usuarios.admin ? 'pi pi-star-fill' : 'pi pi-star'}"
-                                                     class="ui-button-warning">
-                                        <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
-                                                                     value="#{usuarios}"/>
-                                    </p:commandButton>
-                                    <p:tooltip for="btnAdmin" value="Altera Permissão" showEffect="clip"
-                                               hideEffect="fold"
-                                               position="top"/>
-                                </div>
-                            </p:column>
+                            <p:commandButton action="#{gerenciarUsuariosMB.alterarStatus(usuarios, !usuarios.ativo)}"
+                                             update="@form"
+                                             process="@this"
+                                             icon="#{usuarios.ativo ? 'pi pi-ban' : 'pi pi-check'}"
+                                             id="btnStatus"
+                                             styleClass="#{usuarios.ativo ? 'ui-button-danger' : 'ui-button-success'}">
+                                <f:setPropertyActionListener target="#{gerenciarUsuariosMB.usuarioSelecionado}"
+                                                             value="#{usuarios}"/>
+                                <p:confirm
+                                        header="#{usuarios.ativo ? 'Confirmação - Inativar usuário?' : 'Confirmação - Ativar usuário?'}"
+                                        message="#{usuarios.ativo ? 'Deseja inativar o usuário?' : 'Deseja ativar o usuário?'}"
+                                        icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:tooltip for="btnStatus" value="#{usuarios.ativo ? 'Inativar usuário' : 'Ativar usuário'}"
+                                       showEffect="clip" hideEffect="fold"
+                                       position="top"/>
                         </div>
                     </p:column>
                 </p:dataTable>
@@ -156,14 +167,14 @@
 
                 navigator.clipboard.writeText(senhaEl.innerText)
                 .then(() => {
-                    PF('dlgSenhaGerada').hide();
+                PF('dlgSenhaGerada').hide();
 
                 setTimeout(() => {
-                    PF('growlAviso').renderMessage({
-                        summary: 'Sucesso',
-                        detail: 'Senha copiada!',
-                        severity: 'info'
-                    });
+                PF('growlAviso').renderMessage({
+                summary: 'Sucesso',
+                detail: 'Senha copiada!',
+                severity: 'info'
+                });
                 }, 200);
                 });
                 }

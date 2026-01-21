@@ -29,6 +29,7 @@ public class AlterarSenhaMB implements Serializable {
 
     private String novaSenha;
     private String confirmarSenha;
+    private String senhaAtual;
     private Usuario usuario;
 
     @PostConstruct
@@ -38,7 +39,7 @@ public class AlterarSenhaMB implements Serializable {
 
     public String salvarAlteracoes() {
         try {
-            usuarioService.atualizarSenha(usuario, novaSenha, confirmarSenha);
+            usuarioService.atualizarSenha(usuario, senhaAtual, novaSenha, confirmarSenha);
             FacesContext.getCurrentInstance()
                     .getExternalContext()
                     .getFlash()
@@ -65,5 +66,13 @@ public class AlterarSenhaMB implements Serializable {
 
     public void setConfirmarSenha(String confirmarSenha) {
         this.confirmarSenha = confirmarSenha;
+    }
+
+    public String getSenhaAtual() {
+        return senhaAtual;
+    }
+
+    public void setSenhaAtual(String senhaAtual) {
+        this.senhaAtual = senhaAtual;
     }
 }

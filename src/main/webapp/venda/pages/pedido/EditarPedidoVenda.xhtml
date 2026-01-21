@@ -243,13 +243,27 @@
                                      style="min-width: 180px"
                                      action="/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true"/>
 
-                    <p:commandButton value="Salvar Pedido"
-                                     icon="pi pi-check"
-                                     styleClass="ui-button-primary"
-                                     style="min-width: 180px"
-                                     action="#{editarPedidoMB.salvarAlteracoes()}"
-                                     process="@this cliente produto"
-                                     update="aviso cliente produto"/>
+                    <div style="display: flex; gap: 1rem">
+                        <p:commandButton value="Excluir Pedido"
+                                         icon="pi pi-trash"
+                                         styleClass="ui-button-danger"
+                                         rendered="#{sessaoUsuario.usuarioLogado.admin}"
+                                         action="#{editarPedidoMB.excluirPedido}"
+                                         process="@this">
+
+                            <p:confirm header="Confirmação"
+                                       message="Deseja realmente excluir este pedido?"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+
+                        <p:commandButton value="Salvar Pedido"
+                                         icon="pi pi-check"
+                                         styleClass="ui-button-primary"
+                                         style="min-width: 180px"
+                                         action="#{editarPedidoMB.salvarAlteracoes()}"
+                                         process="@this cliente produto"
+                                         update="aviso cliente produto"/>
+                    </div>
                 </div>
             </div>
         </h:form>

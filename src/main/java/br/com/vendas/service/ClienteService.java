@@ -26,6 +26,7 @@ public class ClienteService implements Serializable {
     private ClienteDao clienteDao;
 
     public void salvar(Cliente cliente) throws NegocioException {
+        validarDocumento(cliente.getDocumento());
         validarCliente(cliente);
         normalizarCliente(cliente);
         daoGenerico.salvar(cliente);
@@ -67,6 +68,15 @@ public class ClienteService implements Serializable {
         }
     }
 
+    private void validarDocumento(String documento) throws NegocioException{
+
+        String somenteNumeros = documento.replaceAll("\\D", "");
+
+        if (somenteNumeros.length() != 11 && somenteNumeros.length() != 14) {
+            throw new NegocioException("Documento inválido! Informe um CPF ou CNPJ válido");
+        }
+    }
+
     public void normalizarCliente(Cliente cliente){
         cliente.setNome(cliente.getNome().trim());
         cliente.setLogradouro(cliente.getLogradouro().trim());
@@ -78,17 +88,6 @@ public class ClienteService implements Serializable {
         cliente.setEstado(cliente.getEstado().trim());
         cliente.setEstado(cliente.getEstado().toUpperCase());
         cliente.setComplemento(cliente.getComplemento().trim());
-    }
-
-    public List<Cliente> buscarPorNome(String nome) throws NegocioException {
-
-        List<Cliente> clientes = clienteDao.buscarPorNome(nome);
-
-        if(clientes.isEmpty()){
-            throw new NegocioException("Nenhum cliente encontrado com este nome!");
-        }
-
-        return clientes;
     }
 
     public List<Cliente> buscarPorNomeOuDocumento(String filtro) {

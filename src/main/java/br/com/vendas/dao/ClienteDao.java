@@ -22,14 +22,6 @@ public class ClienteDao {
         return count > 0;
     }
 
-    public List<Cliente> buscarPorNome(String nome){
-        return em.createQuery(
-                "SELECT c FROM Cliente c WHERE c.nome = :nome ORDER BY c.id",
-                        Cliente.class)
-                .setParameter("nome", nome)
-                .getResultList();
-    }
-
     public List<Cliente> buscarPorNomeOuDocumento(String filtro){
         String jpql = "SELECT c FROM Cliente c WHERE LOWER (c.nome) LIKE LOWER (:filtro) OR LOWER (c.documento) LIKE LOWER (:filtro) ORDER BY c.nome";
         return em.createQuery(jpql, Cliente.class)

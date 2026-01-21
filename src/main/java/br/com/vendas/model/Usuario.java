@@ -35,6 +35,9 @@ public class Usuario extends EntidadeBase implements Serializable {
     @Column(nullable = false)
     private boolean admin = false;
 
+    @Column(nullable = false)
+    private boolean ativo = true;
+
     public String getNome() {
         return nome;
     }
@@ -65,5 +68,13 @@ public class Usuario extends EntidadeBase implements Serializable {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 }

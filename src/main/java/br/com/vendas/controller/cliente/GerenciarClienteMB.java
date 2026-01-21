@@ -29,12 +29,20 @@ public class GerenciarClienteMB implements Serializable {
 
     private List<Cliente> clientes;
     private Cliente clienteSelecionado;
+    private String filtro;
 
     @PostConstruct
     public void init() {
-        clientes = clienteService.buscarTodosClientes();
+        clientes = List.of();
     }
 
+    public void buscarClientes(){
+        clientes = clienteService.buscarPorNomeOuDocumento(filtro);
+
+        if(clientes.isEmpty()){
+            Message.warning("Nenhum cliente encontrado para o filtro informado!");
+        }
+    }
 
     public void excluirCliente(){
         try{
@@ -57,5 +65,13 @@ public class GerenciarClienteMB implements Serializable {
 
     public void setClienteSelecionado(Cliente clienteSelecionado) {
         this.clienteSelecionado = clienteSelecionado;
+    }
+
+    public String getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(String filtro) {
+        this.filtro = filtro;
     }
 }

@@ -29,12 +29,13 @@ public class GerenciarUsuariosMB implements Serializable {
     private SessaoUsuario sessaoUsuario;
 
     private List<Usuario> usuarios;
+    private boolean mostrarInativos;
     private Usuario usuarioSelecionado;
     private String senhaGerada;
 
     @PostConstruct
     public void init() {
-        usuarios = usuarioService.buscarTodosUsuarios();
+        listar();
     }
 
     public void salvarAlteracoes() {
@@ -48,12 +49,12 @@ public class GerenciarUsuariosMB implements Serializable {
         }
     }
 
-    public void excluirUsuario() {
+    public void alterarStatus(Usuario usuario, boolean ativo){
         try {
-            String nomeUsuarioExcluido = usuarioSelecionado.getLogin();
-            usuarioService.remover(usuarioSelecionado, sessaoUsuario.getUsuarioLogado());
-            usuarios.remove(usuarioSelecionado);
-            Message.info("Usuario:\n" + nomeUsuarioExcluido + ", excluído com sucesso!");
+            usuarioService.alterarStatus(usuario, sessaoUsuario.getUsuarioLogado(), ativo);
+            listar();
+            String status = ativo ? "ativado" : "inativado";
+            Message.info("Usuário: " + usuario.getLogin() + " " + status + ", com sucesso!");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
@@ -82,6 +83,10 @@ public class GerenciarUsuariosMB implements Serializable {
         }
     }
 
+    public void listar(){
+        usuarios = usuarioService.listarUsuarios(mostrarInativos);
+    }
+
     public Usuario getUsuarioSelecionado() {
         return usuarioSelecionado;
     }
@@ -96,5 +101,13 @@ public class GerenciarUsuariosMB implements Serializable {
 
     public String getSenhaGerada() {
         return senhaGerada;
+    }
+
+    public boolean isMostrarInativos() {
+        return mostrarInativos;
+    }
+
+    public void setMostrarInativos(boolean mostrarInativos) {
+        this.mostrarInativos = mostrarInativos;
     }
 }

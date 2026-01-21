@@ -6,11 +6,58 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="corpo">
-        <div class="card">
-            <p:growl id="aviso" autoUpdate="true" closable="true" life="2000" />
-            <p:messages globalOnly="true" closable="true"/>
-            <h1 class="tituloPagina">Home</h1>
-        </div>
+        <h:form>
+            <div class="card">
+                <p:growl id="aviso" autoUpdate="true" closable="true" life="2000"/>
+                <p:messages globalOnly="true" closable="true"/>
+                <h1 class="tituloPagina">Home</h1>
+                <div style="display: flex; flex-direction: column; align-items: flex-end">
+                    <p:commandButton id="btnDashboard"
+                                     value="#{homeMB.dashboardCarregado ? 'Ocultar Dashboard' : 'Visualizar Dashboard'}"
+                                     icon="#{homeMB.dashboardCarregado ? 'pi pi-eye-slash' : 'pi pi-chart-bar'}"
+                                     action="#{homeMB.alternarDashboard}"
+                                     update="@form"
+                                     process="@this"/>
+                </div>
+                <h:panelGroup id="dashboard" rendered="#{homeMB.dashboardCarregado}">
 
+                    <div style="display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap;">
+                        <p:panel header="Usuários"
+                                 style="flex: 1; min-width: 280px; font-size: 1.5rem ;font-weight: bold">
+                            <div style="display: flex; justify-content: center">
+                                <p:panel header="Usuários Ativos" style="text-align: center; width: 100%">
+                                    <h3>#{homeMB.totalUsuariosAtivos}</h3>
+                                </p:panel>
+                            </div>
+                        </p:panel>
+                        <p:panel header="Cadastros"
+                                 style="flex: 1; min-width: 280px; font-size: 1.5rem; font-weight: bold">
+                            <div style="display: flex; gap: 1rem">
+                                <p:panel header="Clientes" style="flex: 1; text-align: center">
+                                    <h3>#{homeMB.totalClientes}</h3>
+                                </p:panel>
+
+                                <p:panel header="Produtos" style="flex: 1; text-align: center">
+                                    <h3>#{homeMB.totalProdutos}</h3>
+                                </p:panel>
+                            </div>
+                        </p:panel>
+                        <p:panel header="Vendas"
+                                 style="flex: 1; min-width: 280px; font-size: 1.5rem ;font-weight: bold">
+                            <div style="display: flex; justify-content: center">
+                                <p:panel header="Total de Vendas" style="text-align: center; width: 100%">
+                                    <h3>
+                                        <h:outputText value="#{homeMB.totalVendas}"
+                                                      style="font-size: 1.3rem; color: #4AD957">
+                                            <f:convertNumber type="currency" currencySymbol="R$ "/>
+                                        </h:outputText>
+                                    </h3>
+                                </p:panel>
+                            </div>
+                        </p:panel>
+                    </div>
+                </h:panelGroup>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

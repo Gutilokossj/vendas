@@ -29,10 +29,19 @@ public class GerenciarProdutoMB implements Serializable {
 
     private List<Produto> produtos;
     private Produto produtoSelecionado;
+    private String filtro;
 
     @PostConstruct
     public void init(){
-        produtos = produtoService.buscarTodosProdutos();
+        produtos = List.of();
+    }
+
+    public void buscarProdutos(){
+        produtos = produtoService.buscarPorNomeParcial(filtro);
+
+        if(produtos.isEmpty()){
+            Message.warning("Nenhum produto encontrado para o filtro informado!");
+        }
     }
 
     public void excluirProduto(){
@@ -56,5 +65,13 @@ public class GerenciarProdutoMB implements Serializable {
 
     public void setProdutoSelecionado(Produto produtoSelecionado) {
         this.produtoSelecionado = produtoSelecionado;
+    }
+
+    public String getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(String filtro) {
+        this.filtro = filtro;
     }
 }

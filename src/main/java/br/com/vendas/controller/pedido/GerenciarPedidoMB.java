@@ -1,5 +1,6 @@
 package br.com.vendas.controller.pedido;
 
+import br.com.vendas.enums.TipoBuscaPedido;
 import br.com.vendas.model.PedidoVenda;
 import br.com.vendas.service.PedidoVendaService;
 import br.com.vendas.session.SessaoUsuario;
@@ -29,24 +30,58 @@ public class GerenciarPedidoMB implements Serializable {
 
     private List<PedidoVenda> pedidosVenda;
     private PedidoVenda pedidoVendaSelecionado;
+    private String filtro;
+    private TipoBuscaPedido tipoBusca = TipoBuscaPedido.ID;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         pedidosVenda = pedidoVendaService.buscarTodosPedidos();
     }
 
-    public void excluirPedido(){
+    public void buscarPedidos() {
+        try {
+
+            if (filtro == null || filtro.trim().isEmpty()) {
+                Message.warning("Informe um valor para realizar a busca.");
+                pedidosVenda = pedidoVendaService.buscarTodosPedidos();
+                return;
+            }
+
+            switch (tipoBusca) {
+                case ID -> pedidosVenda = pedidoVendaService.buscarPorIdConsulta(filtro);
+                case NOME_CLIENTE -> pedidosVenda = pedidoVendaService.buscarPorNomeCliente(filtro);
+            }
+
+            if (pedidosVenda.isEmpty()) {
+                if (tipoBusca == TipoBuscaPedido.ID) {
+                    Message.warning("Nenhum pedido encontrado para o ID informado!");
+                } else {
+                    Message.warning("Nenhum pedido encontrado para o nome do cliente informado!");
+                }
+            }
+
+        } catch (NegocioException e) {
+            Message.error(e.getMessage());
+            pedidosVenda = List.of();
+        }
+    }
+
+    public TipoBuscaPedido[] getTiposBusca() {
+        return TipoBuscaPedido.values();
+    }
+
+    public void excluirPedido() {
         try {
             String idPedidoExcluido = String.valueOf(pedidoVendaSelecionado.getId());
             pedidoVendaService.removerPedido(pedidoVendaSelecionado, sessaoUsuario.getUsuarioLogado());
             pedidosVenda.remove(pedidoVendaSelecionado);
-            Message.info("Pedido:\n" +  idPedidoExcluido + ", excluído com sucesso!");
+            Message.info("Pedido:\n" + idPedidoExcluido + ", excluído com sucesso!");
         } catch (NegocioException e) {
             Message.error(e.getMessage());
         }
     }
 
-    public void duplicarPedido(){
+    public void duplicarPedido() {
 
         if (pedidoVendaSelecionado == null || pedidoVendaSelecionado.getId() == null) {
             Message.error("Pedido não informado para duplicar!"); //Deixei aqui pro segurança por enquanto!
@@ -72,5 +107,21 @@ public class GerenciarPedidoMB implements Serializable {
 
     public void setPedidoVendaSelecionado(PedidoVenda pedidoVendaSelecionado) {
         this.pedidoVendaSelecionado = pedidoVendaSelecionado;
+    }
+
+    public String getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(String filtro) {
+        this.filtro = filtro;
+    }
+
+    public TipoBuscaPedido getTipoBusca() {
+        return tipoBusca;
+    }
+
+    public void setTipoBusca(TipoBuscaPedido tipoBusca) {
+        this.tipoBusca = tipoBusca;
     }
 }

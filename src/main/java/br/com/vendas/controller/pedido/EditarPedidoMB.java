@@ -7,6 +7,7 @@ import br.com.vendas.model.Produto;
 import br.com.vendas.service.ClienteService;
 import br.com.vendas.service.PedidoVendaService;
 import br.com.vendas.service.ProdutoService;
+import br.com.vendas.session.SessaoUsuario;
 import br.com.vendas.util.Message;
 import br.com.vendas.util.NegocioException;
 import org.primefaces.PrimeFaces;
@@ -31,6 +32,9 @@ public class EditarPedidoMB implements Serializable {
 
     @Inject
     private PedidoVendaService pedidoVendaService;
+
+    @Inject
+    private SessaoUsuario sessaoUsuario;
 
     private PedidoVenda pedidoVenda;
     private Long id;
@@ -148,6 +152,19 @@ public class EditarPedidoMB implements Serializable {
                     .getFlash()
                     .setKeepMessages(true);
             Message.info("Pedido atualizado com sucesso!");
+            return "/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true";
+        } catch (NegocioException e) {
+            Message.error(e.getMessage());
+            return null;
+        }
+    }
+
+    public String excluirPedido() {
+        try {
+            pedidoVendaService.removerPedido(pedidoVenda, sessaoUsuario.getUsuarioLogado());
+            FacesContext.getCurrentInstance().getExternalContext().getFlash()
+                    .setKeepMessages(true);
+            Message.info("Pedido excluído com sucesso!");
             return "/venda/pages/pedido/GerenciarPedidos.xhtml?faces-redirect=true";
         } catch (NegocioException e) {
             Message.error(e.getMessage());

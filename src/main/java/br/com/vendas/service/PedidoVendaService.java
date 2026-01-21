@@ -34,7 +34,7 @@ public class PedidoVendaService implements Serializable {
     public void atualizarPedido(PedidoVenda pedidoVenda) throws NegocioException {
         PedidoVenda pedidoBanco = buscarPorId(pedidoVenda.getId());
 
-        if(pedidoBanco == null){
+        if (pedidoBanco == null) {
             throw new NegocioException("Pedido nao encontrado!");
         }
 
@@ -172,6 +172,27 @@ public class PedidoVendaService implements Serializable {
             throw new NegocioException("Id do pedido não informado!");
         }
         return pedidoDAO.buscarPedidoPorId(id);
+    }
+
+    public List<PedidoVenda> buscarPorIdConsulta(String filtro) throws NegocioException {
+        if (filtro == null || filtro.trim().isEmpty()) {
+            return List.of();
+        }
+        try {
+            Long id = Long.valueOf(filtro.trim());
+            PedidoVenda pedido = pedidoDAO.buscarPedidoPorIdConsulta(id);
+
+            return pedido != null ? List.of(pedido) : List.of();
+        } catch (NumberFormatException e) {
+            throw new NegocioException("Informe um ID de pedido válido");
+        }
+    }
+
+    public List<PedidoVenda> buscarPorNomeCliente(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            return List.of();
+        }
+        return pedidoDAO.buscarPorNomeCliente(nome);
     }
 
 }
