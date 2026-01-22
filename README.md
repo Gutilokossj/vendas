@@ -86,3 +86,8 @@ O frontend foi mantido mais de forma mais simples, sem grande foco em estilizaç
 Existem pastas e arquivos não utilizados, que serviram apenas como referência de estudos anteriores e podem ser desconsiderados. <br>
 
 **Eu não levo em consideração todas as regras de interface do PDF, pois utilizei aquilo apenas como ideia, como exemplo.**
+
+* Curiosidade, tem 67 commits, mas muitos deles são do outro projeto que estava estudando, esse aqui começou neste commit: <br>
+<img width="1348" height="134" alt="image" src="https://github.com/user-attachments/assets/2e5a5a60-3fe1-4196-be88-e939b12970b6" />
+
+
