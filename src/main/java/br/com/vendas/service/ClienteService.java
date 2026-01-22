@@ -57,10 +57,6 @@ public class ClienteService implements Serializable {
         daoGenerico.remover(Cliente.class, clienteParaExcluir.getId());
     }
 
-    public List<Cliente> buscarTodosClientes(){
-        return daoGenerico.buscarTodos(Cliente.class, "SELECT c FROM Cliente c ORDER BY c.id DESC");
-    }
-
     public void validarCliente(Cliente cliente) throws NegocioException{
 
         if (clienteDao.existeClienteComDocumento(cliente.getDocumento())){

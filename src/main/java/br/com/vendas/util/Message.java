@@ -19,9 +19,4 @@ public class Message {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, text, null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
-    public static void fatal(String text) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, text, null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
 }

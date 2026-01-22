@@ -23,8 +23,4 @@ public class SessaoUsuario implements Serializable {
     public void setUsuarioLogado(Usuario usuarioLogado) {
         this.usuarioLogado = usuarioLogado;
     }
-
-    public void logout(){
-        usuarioLogado = null;
-    }
 }

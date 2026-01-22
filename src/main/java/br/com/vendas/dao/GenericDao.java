@@ -60,15 +60,6 @@ public class GenericDao<T extends EntidadeBase> implements Serializable {
         }
     }
 
-    public Long buscarCount(String jpql, Object... params) {
-        var query = manager.createQuery(jpql, Long.class);
-
-        for (int i = 0; i < params.length; i += 2) {
-            query.setParameter(params[i].toString(), params[i + 1]);
-        }
-        return query.getSingleResult();
-    }
-
     public List<T> buscarTodos(Class<T> clazz, String jpql) {
         return manager.createQuery(jpql, clazz).getResultList();
     }
