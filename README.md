@@ -29,8 +29,10 @@ Antes de executar o projeto, é necessário:
 -----------------------
 ⚙️ Configuração do Banco de Dados
 
-* Criar o banco de dados desta forma:
+* Criar o banco de dados desta forma: <br>
+```sql
 CREATE DATABASE vendas;
+```
 
 * Configurar o persistence.xml
 * Configure a conexão com o MariaDB e Hibernate no arquivo persistence.xml
